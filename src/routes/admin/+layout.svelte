@@ -4,6 +4,7 @@
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { page } from '$app/state';
+  import Darkmode from '$lib/components/sidebars/darkmode.svelte';
 
   const { children } = $props();
 
@@ -24,7 +25,11 @@
       <Sidebar.Trigger class="-ml-1" />
       <Separator orientation="vertical" class="mr-2 h-4" />
 
-      <span class="text-sm font-medium">{detectPage}</span>
+      <div class="flex w-full items-center justify-between">
+        <span class="text-sm font-medium">{detectPage}</span>
+
+        <Darkmode />
+      </div>
     </header>
     <div class="flex flex-1 flex-col gap-4 p-4">
       {@render children()}
