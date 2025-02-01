@@ -3,7 +3,6 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import { useSidebar } from '$lib/components/ui/sidebar/index.js';
-  import BadgeCheck from 'lucide-svelte/icons/badge-check';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import Settings from 'lucide-svelte/icons/settings';
   import LogOut from 'lucide-svelte/icons/log-out';

@@ -3,7 +3,18 @@
   import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
+  import { page } from '$app/state';
+
   const { children } = $props();
+
+  const detectPage = $derived.by(() => {
+    if (page.url.pathname === '/admin') return 'Subjects';
+    else if (page.url.pathname === '/admin/sections') return 'Sections';
+    else if (page.url.pathname === '/admin/departments') return 'Departments';
+    else if (page.url.pathname === '/admin/schedules') return 'Schedules';
+    else if (page.url.pathname === '/admin/accounts') return 'Accounts';
+    else return 'Account Settings';
+  });
 </script>
 
 <Sidebar.Provider>
@@ -12,22 +23,10 @@
     <header class="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
       <Sidebar.Trigger class="-ml-1" />
       <Separator orientation="vertical" class="mr-2 h-4" />
-      <Breadcrumb.Root>
-        <Breadcrumb.List>
-          <Breadcrumb.Item class="hidden md:block">
-            <Breadcrumb.Link href="#">Building Your Application</Breadcrumb.Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Separator class="hidden md:block" />
-          <Breadcrumb.Item>
-            <Breadcrumb.Page>Data Fetching</Breadcrumb.Page>
-          </Breadcrumb.Item>
-        </Breadcrumb.List>
-      </Breadcrumb.Root>
+
+      <span class="text-sm font-medium">{detectPage}</span>
     </header>
     <div class="flex flex-1 flex-col gap-4 p-4">
-      <!-- {#each Array.from({ length: 24 }) as _, index (index)}
-				<div class="bg-muted/50 aspect-video h-12 w-full rounded-lg"></div>
-			{/each} -->
       {@render children()}
     </div>
   </Sidebar.Inset>
