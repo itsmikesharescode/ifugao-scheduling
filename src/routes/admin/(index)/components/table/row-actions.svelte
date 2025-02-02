@@ -29,8 +29,8 @@
   <DropdownMenu.Content class="w-[160px]" align="end">
     <DropdownMenu.Item
       onclick={() => {
-        tableState.showUpdate = true;
         tableState.setActiveRow(row.original);
+        tableState.showUpdate = true;
       }}
     >
       Edit
@@ -39,6 +39,7 @@
     <DropdownMenu.Separator />
     <DropdownMenu.Item
       onclick={() => {
+        tableState.setActiveRow(row.original);
         tableState.showDelete = true;
       }}
     >
