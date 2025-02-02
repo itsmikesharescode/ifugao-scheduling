@@ -3,13 +3,13 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createDepartmentSchema } from './components/create-department/schema';
 import { fail } from '@sveltejs/kit';
-import { editSubjectSchema } from './components/edit-subject/schema';
+import { editDepartmentSchema } from './components/edit-department/schema';
 import { deleteSubjectSchema } from './components/delete-subject/schema';
 
 export const load: PageServerLoad = async () => {
   return {
     createDepartmentForm: await superValidate(zod(createDepartmentSchema)),
-    editSubjectForm: await superValidate(zod(editSubjectSchema)),
+    editDepartmentForm: await superValidate(zod(editDepartmentSchema)),
     deleteSubjectForm: await superValidate(zod(deleteSubjectSchema))
   };
 };
@@ -23,8 +23,8 @@ export const actions: Actions = {
     console.log(form.data);
   },
 
-  editSubjectEvent: async ({ request }) => {
-    const form = await superValidate(request, zod(editSubjectSchema));
+  editDepartmentEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(editDepartmentSchema));
 
     if (!form.valid) return fail(400, { form });
 

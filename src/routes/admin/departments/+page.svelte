@@ -1,8 +1,7 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateDepartment from './components/create-department/create-department.svelte';
-  import DeleteSubject from './components/delete-subject/delete-subject.svelte';
-  import EditSubject from './components/edit-subject/edit-subject.svelte';
+  import EditDepartment from './components/edit-department/edit-department.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
 
@@ -44,6 +43,8 @@
   <CreateDepartment createDepartmentForm={data.createDepartmentForm} />
   <DataTable data={generateMockData(60)} {columns} />
 </main>
+
+<EditDepartment editDepartmentForm={data.editDepartmentForm} />
 
 <!-- <EditSubject editSubjectForm={data.editSubjectForm} />
 <DeleteSubject deleteSubjectForm={data.deleteSubjectForm} /> -->
