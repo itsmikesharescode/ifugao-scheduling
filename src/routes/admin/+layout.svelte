@@ -10,11 +10,11 @@
 
   const detectPage = $derived.by(() => {
     if (page.url.pathname === '/admin') return 'Subjects';
-    else if (page.url.pathname === '/admin/sections') return 'Sections';
-    else if (page.url.pathname === '/admin/departments') return 'Departments';
-    else if (page.url.pathname === '/admin/schedules') return 'Schedules';
-    else if (page.url.pathname === '/admin/accounts') return 'Accounts';
-    else return 'Account Settings';
+
+    const [_, segment] = page.url.pathname.split('/admin/');
+    const formatted = segment?.split('-').join(' ');
+
+    return formatted ? formatted[0].toUpperCase() + formatted.slice(1) : 'Account Settings';
   });
 </script>
 
