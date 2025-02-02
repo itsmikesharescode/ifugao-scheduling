@@ -105,7 +105,4 @@
   </div>
 </div>
 
-<ConfirmDelete
-  bind:open
-  selectedRows={table.getFilteredSelectedRowModel().rows.map((item) => item.original)}
-/>
+<ConfirmDelete bind:open selectedRows={table} />
