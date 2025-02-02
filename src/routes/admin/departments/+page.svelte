@@ -11,23 +11,30 @@
   initTableState();
 
   const generateMockData = (count: number) => {
-    const subjects = [
+    const departments = [
       { code: 'GEO', name: 'Geometry' },
-      { MAT: 'MAT', name: 'Mathematics' },
-      { PHY: 'PHY', name: 'Physics' },
-      { CHE: 'CHE', name: 'Chemistry' },
-      { BIO: 'BIO', name: 'Biology' }
+      { code: 'MAT', name: 'Mathematics' },
+      { code: 'PHY', name: 'Physics' },
+      { code: 'CHE', name: 'Chemistry' },
+      { code: 'BIO', name: 'Biology' }
     ];
 
+    const getRandomColor = () =>
+      '#' +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0');
+
     return Array.from({ length: count }, (_, i) => {
-      const subject = subjects[Math.floor(Math.random() * subjects.length)];
+      const department = departments[Math.floor(Math.random() * departments.length)];
       return {
         id: i,
         created_at: new Date(
           Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
         ).toISOString(),
-        course_code: `${subject.code}${Math.floor(100 + Math.random() * 900)}`,
-        name: `${subject.name} ${['Fundamentals', 'Principles', 'Advanced', 'Applied'][Math.floor(Math.random() * 4)]}`
+        department_code: `${department.code}${Math.floor(100 + Math.random() * 900)}`,
+        name: `${department.name} ${['Computer', 'Engineering', 'Linguistics', 'Calesthenics'][Math.floor(Math.random() * 4)]}`,
+        color: getRandomColor()
       };
     });
   };
@@ -38,5 +45,5 @@
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
-<EditSubject editSubjectForm={data.editSubjectForm} />
-<DeleteSubject deleteSubjectForm={data.deleteSubjectForm} />
+<!-- <EditSubject editSubjectForm={data.editSubjectForm} />
+<DeleteSubject deleteSubjectForm={data.deleteSubjectForm} /> -->

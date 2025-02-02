@@ -1,8 +1,8 @@
 import { getContext, setContext } from 'svelte';
-import type { SubjectPageSchema } from './schema';
+import type { DepartmentPageSchema } from './schema';
 
 class TableState {
-  #activeRow = $state<SubjectPageSchema | null>(null);
+  #activeRow = $state<DepartmentPageSchema | null>(null);
   showUpdate = $state(false);
   showDelete = $state(false);
 
@@ -10,7 +10,7 @@ class TableState {
     return this.#activeRow;
   }
 
-  setActiveRow(row: SubjectPageSchema | null) {
+  setActiveRow(row: DepartmentPageSchema | null) {
     this.#activeRow = row;
   }
 }
