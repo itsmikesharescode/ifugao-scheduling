@@ -35,9 +35,8 @@ export const columns: ColumnDef<SubjectPageSchema>[] = [
     },
     cell: ({ row }) => {
       const idSnippet = createRawSnippet<[string]>((getId) => {
-        const id = getId();
         return {
-          render: () => `<div class="w-[80px]">${id}</div>`
+          render: () => `<div class="w-[80px]">${getId()}</div>`
         };
       });
 
@@ -57,9 +56,8 @@ export const columns: ColumnDef<SubjectPageSchema>[] = [
     },
     cell: ({ row }) => {
       const courseCodeSnip = createRawSnippet<[string]>((getCourseCode) => {
-        const id = getCourseCode();
         return {
-          render: () => `<div class="w-[80px]">${id}</div>`
+          render: () => `<div class="w-[80px]">${getCourseCode()}</div>`
         };
       });
 
@@ -79,9 +77,8 @@ export const columns: ColumnDef<SubjectPageSchema>[] = [
     },
     cell: ({ row }) => {
       const nameSnip = createRawSnippet<[string]>((getName) => {
-        const id = getName();
         return {
-          render: () => `<div class="w-full">${id}</div>`
+          render: () => `<div class="w-full">${getName()}</div>`
         };
       });
 

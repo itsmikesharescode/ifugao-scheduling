@@ -9,8 +9,12 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
+  import { useTableState } from './state.svelte';
+  import type { SubjectPageSchema } from './schema';
 
-  let { row }: { row: Row<TData> } = $props();
+  let { row }: { row: Row<SubjectPageSchema> } = $props();
+
+  const tableState = useTableState();
 </script>
 
 <DropdownMenu.Root>
@@ -23,12 +27,21 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-[160px]" align="end">
-    <DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.showUpdate = true;
+        tableState.setActiveRow(row.original);
+      }}
+    >
       Edit
       <FilePenLine class="ml-auto" />
     </DropdownMenu.Item>
     <DropdownMenu.Separator />
-    <DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.showDelete = true;
+      }}
+    >
       <span class="text-destructive">Delete</span>
       <FileX2 class="ml-auto text-destructive" />
     </DropdownMenu.Item>
