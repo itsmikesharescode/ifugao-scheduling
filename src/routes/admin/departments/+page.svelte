@@ -1,6 +1,7 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateDepartment from './components/create-department/create-department.svelte';
+  import DeleteDepartment from './components/delete-department/delete-department.svelte';
   import EditDepartment from './components/edit-department/edit-department.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
@@ -45,6 +46,4 @@
 </main>
 
 <EditDepartment editDepartmentForm={data.editDepartmentForm} />
-
-<!-- <EditSubject editSubjectForm={data.editSubjectForm} />
-<DeleteSubject deleteSubjectForm={data.deleteSubjectForm} /> -->
+<DeleteDepartment deleteDepartmentForm={data.deleteDepartmentForm} />

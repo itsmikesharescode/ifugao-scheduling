@@ -2,22 +2,22 @@
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Loader from 'lucide-svelte/icons/loader';
   import { toast } from 'svelte-sonner';
-  import { deleteSubjectSchema, type DeleteSubjectSchema } from './schema';
+  import { deleteDepartmentSchema, type DeleteDepartmentSchema } from './schema';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { useTableState } from '../table/state.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
 
   interface Props {
-    deleteSubjectForm: SuperValidated<Infer<DeleteSubjectSchema>>;
+    deleteDepartmentForm: SuperValidated<Infer<DeleteDepartmentSchema>>;
   }
 
-  const { deleteSubjectForm }: Props = $props();
+  const { deleteDepartmentForm }: Props = $props();
 
   const tableState = useTableState();
 
-  const form = superForm(deleteSubjectForm, {
-    validators: zodClient(deleteSubjectSchema),
+  const form = superForm(deleteDepartmentForm, {
+    validators: zodClient(deleteDepartmentSchema),
     id: crypto.randomUUID(),
     onUpdate: ({ result }) => {
       const { status, data } = result;
@@ -49,12 +49,12 @@
     <AlertDialog.Header>
       <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
       <AlertDialog.Description>
-        This action cannot be undone. This will permanently delete the subject from our database.
+        This action cannot be undone. This will permanently delete the department from our database.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
       <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-      <form method="post" action="?/deleteSubjectEvent" use:enhance>
+      <form method="post" action="?/deleteDepartmentEvent" use:enhance>
         <input name="id" type="hidden" bind:value={$formData.id} />
         <Button disabled={$submitting} type="submit" variant="destructive" class="relative">
           {#if $submitting}
