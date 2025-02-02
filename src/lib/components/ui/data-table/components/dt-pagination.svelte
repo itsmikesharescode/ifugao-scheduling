@@ -14,12 +14,14 @@
   let { table }: { table: Table<TData> } = $props();
 </script>
 
-<div class="flex flex-wrap items-center justify-between px-2">
+<div class="sticky bottom-2 flex flex-wrap items-center justify-between px-2">
   <div class="flex-1 text-sm text-muted-foreground">
-    {table.getFilteredSelectedRowModel().rows.length} of
-    {table.getFilteredRowModel().rows.length} row(s) selected.
+    <span class="bg-background">
+      {table.getFilteredSelectedRowModel().rows.length} of
+      {table.getFilteredRowModel().rows.length} row(s) selected.
+    </span>
   </div>
-  <div class="flex items-start">
+  <div class="flex items-start bg-background">
     <div class="flex flex-wrap items-center space-x-2">
       <p class="text-sm font-medium">Rows per page</p>
       <Select.Root

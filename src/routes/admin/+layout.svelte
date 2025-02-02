@@ -21,7 +21,9 @@
 <Sidebar.Provider>
   <AdminSidebar />
   <Sidebar.Inset class="min-w-0">
-    <header class="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
+    <header
+      class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4"
+    >
       <Sidebar.Trigger class="-ml-1" />
       <Separator orientation="vertical" class="mr-2 h-4" />
 
