@@ -7,6 +7,8 @@
   import * as Popover from '$lib/components/ui/popover/index.js';
   import CalendarFold from 'lucide-svelte/icons/calendar-fold';
 
+  //NOTE: must always have a type single or multiple when intantiating
+
   type Props = WithoutChildrenOrChild<CalendarPrimitive.RootProps> & {
     dateString: string;
     title?: string;
