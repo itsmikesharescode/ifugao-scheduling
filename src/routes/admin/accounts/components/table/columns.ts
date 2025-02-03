@@ -10,6 +10,29 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     id: 'actions',
     cell: ({ row }) => renderComponent(RowActions<AccountsPageSchema>, { row })
   },
+
+  {
+    accessorKey: 'operational',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
+        column,
+        title: 'Operational'
+      });
+    },
+    cell: ({ row }) => {
+      const operationalSnip = createRawSnippet<[string]>((getOperational) => {
+        return {
+          render: () =>
+            `<div class="w-[80px] ${getOperational() === 'activated' ? 'text-green-600' : 'text-red-600'}">${getOperational()}</div>`
+        };
+      });
+
+      return renderSnippet(operationalSnip, row.getValue('operational'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
   {
     accessorKey: 'avatar',
     header: ({ column }) => {

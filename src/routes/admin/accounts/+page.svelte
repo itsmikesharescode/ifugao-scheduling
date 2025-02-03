@@ -43,7 +43,8 @@
         birth_date: birthDate.toISOString().split('T')[0],
         academic_rank: academicRanks[Math.floor(Math.random() * academicRanks.length)],
         department: department,
-        status: ['COS', 'TOP', 'RUP'][Math.floor(Math.random() * 3)]
+        status: ['COS', 'TOP', 'RUP'][Math.floor(Math.random() * 3)],
+        operational: ['activated', 'pending'][Math.floor(Math.random() * 2)]
       };
     });
   };

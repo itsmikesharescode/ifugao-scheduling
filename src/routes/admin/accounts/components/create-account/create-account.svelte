@@ -56,6 +56,16 @@
       <form method="POST" action="?/createAccountEvent" use:enhance class="max-h-[80dvh] px-6">
         <div class="grid md:grid-cols-2 md:gap-4 lg:grid-cols-3">
           <div class="">
+            <Form.Field {form} name="email">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Email</Form.Label>
+                  <Input {...props} bind:value={$formData.email} placeholder="Enter email" />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
             <Form.Field {form} name="firstname">
               <Form.Control>
                 {#snippet children({ props })}
@@ -79,16 +89,6 @@
                     bind:value={$formData.middlename}
                     placeholder="Enter middle name"
                   />
-                {/snippet}
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
-
-            <Form.Field {form} name="lastname">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Last Name</Form.Label>
-                  <Input {...props} bind:value={$formData.lastname} placeholder="Enter last name" />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -148,6 +148,18 @@
               <Form.FieldErrors />
             </Form.Field>
 
+            <Form.Field {form} name="gender">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Gender</Form.Label>
+                  <Input {...props} bind:value={$formData.gender} placeholder="Enter gender" />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+          </div>
+
+          <div class="">
             <Form.Field {form} name="status">
               <Form.Control>
                 {#snippet children({ props })}
@@ -157,9 +169,7 @@
               </Form.Control>
               <Form.FieldErrors />
             </Form.Field>
-          </div>
 
-          <div class="">
             <Form.Field {form} name="password">
               <Form.Control>
                 {#snippet children({ props })}

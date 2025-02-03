@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const createAccountSchema = z
   .object({
+    email: z.string().email('Must enter a valid email.'),
     firstname: z.string().min(1, 'Must enter first name.'),
     middlename: z.string().min(1, 'Must enter middle name.'),
     lastname: z.string().min(1, 'Must enter last name.'),

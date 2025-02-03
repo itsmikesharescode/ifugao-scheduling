@@ -11,7 +11,8 @@ export const accountsPageSchema = z.object({
   department: z.string(),
   status: z.string(),
   gender: z.string(),
-  birth_date: z.string()
+  birth_date: z.string(),
+  operational: z.string()
 });
 
 export type AccountsPageSchema = z.output<typeof accountsPageSchema>;
