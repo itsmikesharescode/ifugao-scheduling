@@ -45,7 +45,8 @@
         gender: genders[Math.floor(Math.random() * genders.length)],
         birth_date: birthDate.toISOString().split('T')[0],
         academic_rank: academicRanks[Math.floor(Math.random() * academicRanks.length)],
-        department: department,
+        department_name: department,
+        department_id: i,
         status: ['COS', 'TOP', 'RUP'][Math.floor(Math.random() * 3)],
         operational: ['activated', 'pending'][Math.floor(Math.random() * 2)]
       };
