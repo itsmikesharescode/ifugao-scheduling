@@ -10,6 +10,7 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+  import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
 
   interface Props {
     createAccountForm: SuperValidated<Infer<CreateAccountSchema>>;
@@ -110,10 +111,10 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Birth Date</Form.Label>
-                  <Input
-                    {...props}
-                    bind:value={$formData.birth_date}
-                    placeholder="Enter birth date"
+                  <CalendarPicker
+                    type="single"
+                    bind:dateString={$formData.birth_date}
+                    title="Select Birth Date"
                   />
                 {/snippet}
               </Form.Control>

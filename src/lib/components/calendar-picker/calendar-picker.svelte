@@ -3,11 +3,9 @@
   import { DateFormatter, getLocalTimeZone, type DateValue } from '@internationalized/date';
   import * as Calendar from '$lib/components/ui/calendar/index.js';
   import * as Select from '$lib/components/ui/select/index.js';
-  import { cn } from '$lib/utils.js';
   import * as Popover from '$lib/components/ui/popover/index.js';
+  import { cn } from '$lib/utils.js';
   import CalendarFold from 'lucide-svelte/icons/calendar-fold';
-
-  //NOTE: must always have a type single or multiple when intantiating
 
   type Props = WithoutChildrenOrChild<CalendarPrimitive.RootProps> & {
     dateString: string;
@@ -20,6 +18,9 @@
     class: className,
     ...restProps
   }: Props = $props();
+
+  let value = $state<DateValue | DateValue[] | undefined>();
+  let placeholder = $state<DateValue | undefined>();
 
   const monthOptions = [
     'January',
@@ -35,9 +36,6 @@
     'November',
     'December'
   ].map((month, i) => ({ value: i + 1, label: month }));
-
-  let value = $state<DateValue | DateValue[] | undefined>();
-  let placeholder = $state<DateValue | undefined>();
 
   const monthFmt = new DateFormatter('en-US', {
     month: 'long'
@@ -113,7 +111,6 @@
                 if (!v || !placeholder) return;
                 if (v === `${placeholder?.year}`) return;
                 placeholder = placeholder.set({ year: Number.parseInt(v) });
-                dateString = String(placeholder);
               }}
             >
               <Select.Trigger aria-label="Select year" class="w-[40%]">
@@ -143,14 +140,15 @@
                 {#each month.weeks as weekDates}
                   <Calendar.GridRow class="mt-2 w-full">
                     {#each weekDates as date}
-                      <Calendar.Cell {date} month={month.value}>
-                        <Calendar.Day
-                          onclick={() => {
-                            placeholder = date;
-                            dateString = String(date);
-                            open = false;
-                          }}
-                        />
+                      <Calendar.Cell
+                        {date}
+                        month={month.value}
+                        onclick={() => {
+                          dateString = String(value);
+                          open = false;
+                        }}
+                      >
+                        <Calendar.Day />
                       </Calendar.Cell>
                     {/each}
                   </Calendar.GridRow>
