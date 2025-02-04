@@ -11,6 +11,7 @@
   import { toast } from 'svelte-sonner';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
+  import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
 
   interface Props {
     createAccountForm: SuperValidated<Infer<CreateAccountSchema>>;
@@ -153,7 +154,14 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Gender</Form.Label>
-                  <Input {...props} bind:value={$formData.gender} placeholder="Enter gender" />
+                  <SelectPicker
+                    selections={[
+                      { id: crypto.randomUUID(), name: 'Male', value: 'Male' },
+                      { id: crypto.randomUUID(), name: 'Female', value: 'Female' }
+                    ]}
+                    bind:selected={$formData.gender}
+                    placeholder="Select gender"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
