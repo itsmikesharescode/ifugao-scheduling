@@ -122,6 +122,23 @@
               <Form.FieldErrors />
             </Form.Field>
 
+            <Form.Field {form} name="gender">
+              <Form.Control>
+                {#snippet children({ props })}
+                  <Form.Label>Gender</Form.Label>
+                  <SelectPicker
+                    selections={[
+                      { id: crypto.randomUUID(), name: 'Male', value: 'Male' },
+                      { id: crypto.randomUUID(), name: 'Female', value: 'Female' }
+                    ]}
+                    bind:selected={$formData.gender}
+                    placeholder="Select gender"
+                  />
+                {/snippet}
+              </Form.Control>
+              <Form.FieldErrors />
+            </Form.Field>
+
             <Form.Field {form} name="academic_rank">
               <Form.Control>
                 {#snippet children({ props })}
@@ -144,23 +161,6 @@
                     {...props}
                     bind:value={$formData.department}
                     placeholder="Enter department"
-                  />
-                {/snippet}
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
-
-            <Form.Field {form} name="gender">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <Form.Label>Gender</Form.Label>
-                  <SelectPicker
-                    selections={[
-                      { id: crypto.randomUUID(), name: 'Male', value: 'Male' },
-                      { id: crypto.randomUUID(), name: 'Female', value: 'Female' }
-                    ]}
-                    bind:selected={$formData.gender}
-                    placeholder="Select gender"
                   />
                 {/snippet}
               </Form.Control>

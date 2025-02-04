@@ -7,7 +7,7 @@ import {
   editEmailSchema,
   editInformationSchema,
   editPasswordSchema
-} from './components/edit-account/schema';
+} from './components/edit-account/components/schema';
 
 export const load: PageServerLoad = async () => {
   return {
@@ -37,7 +37,7 @@ export const actions: Actions = {
 
   editInformationEvent: async ({ request }) => {
     const form = await superValidate(request, zod(editInformationSchema));
-
+    console.log(form.data);
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);

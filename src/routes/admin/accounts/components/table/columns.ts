@@ -56,6 +56,27 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
   },
 
   {
+    accessorKey: 'email',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
+        column,
+        title: 'Email'
+      });
+    },
+    cell: ({ row }) => {
+      const emailSnip = createRawSnippet<[string]>((getEmail) => {
+        return {
+          render: () => `<div class="max-w-fit">${getEmail()}</div>`
+        };
+      });
+
+      return renderSnippet(emailSnip, row.getValue('email'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'firstname',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {

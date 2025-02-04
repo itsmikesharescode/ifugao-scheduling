@@ -1,6 +1,7 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateAccount from './components/create-account/create-account.svelte';
+  import EditAccount from './components/edit-account/edit-account.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
 
@@ -55,5 +56,8 @@
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
-<!-- <EditSubject editSubjectForm={data.editSubjectForm} />
-<DeleteSubject deleteSubjectForm={data.deleteSubjectForm} /> -->
+<EditAccount
+  editEmailForm={data.editEmailForm}
+  editInformationForm={data.editInformationForm}
+  editPasswordForm={data.editPasswordForm}
+/>
