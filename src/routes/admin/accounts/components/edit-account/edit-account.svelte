@@ -23,14 +23,15 @@
   const tableState = useTableState();
 </script>
 
-<Dialog.Root bind:open={tableState.showUpdate}>
+<Dialog.Root
+  bind:open={tableState.showUpdate}
+  onOpenChange={() => {
+    tableState.showUpdate = false;
+  }}
+>
   <Dialog.Content class="flex max-h-screen max-w-7xl flex-col p-0">
     <Dialog.Header class="px-6 pt-6">
       <Dialog.Title>Edit Account</Dialog.Title>
-      <!-- <Dialog.Description>
-        This action cannot be undone. This will permanently delete your account and remove your data
-        from our servers.
-      </Dialog.Description> -->
     </Dialog.Header>
     <ScrollArea class="">
       <div class="grid max-h-[80dvh] gap-2 px-6 pb-6 md:grid-cols-[1fr,2fr] md:gap-4">

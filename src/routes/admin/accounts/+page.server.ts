@@ -8,10 +8,12 @@ import {
   editInformationSchema,
   editPasswordSchema
 } from './components/edit-account/components/schema';
+import { editOperationalSchema } from './components/edit-operational/schema';
 
 export const load: PageServerLoad = async () => {
   return {
     createAccountForm: await superValidate(zod(createAccountSchema)),
+    editOperationalForm: await superValidate(zod(editOperationalSchema)),
     editEmailForm: await superValidate(zod(editEmailSchema)),
     editInformationForm: await superValidate(zod(editInformationSchema)),
     editPasswordForm: await superValidate(zod(editPasswordSchema))
@@ -21,6 +23,14 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
   createAccountEvent: async ({ request }) => {
     const form = await superValidate(request, zod(createAccountSchema));
+
+    if (!form.valid) return fail(400, { form });
+
+    console.log(form.data);
+  },
+
+  editOperationalEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(editOperationalSchema));
 
     if (!form.valid) return fail(400, { form });
 

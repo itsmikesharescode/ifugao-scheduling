@@ -51,9 +51,9 @@
       $formData.lastname = activeRow?.lastname ?? '';
       $formData.academic_rank = activeRow?.academic_rank ?? '';
       $formData.department = activeRow?.department ?? '';
-      $formData.status = activeRow?.status ?? '';
       $formData.gender = activeRow?.gender ?? '';
       $formData.birth_date = activeRow?.birth_date ?? '';
+      $formData.status = activeRow?.status ?? '';
 
       return () => {
         form.reset();
@@ -154,6 +154,16 @@
               bind:value={$formData.department}
               placeholder="Enter new department"
             />
+          {/snippet}
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="status">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Status</Form.Label>
+            <Input {...props} bind:value={$formData.status} placeholder="Enter new status" />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />

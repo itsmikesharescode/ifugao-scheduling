@@ -30,6 +30,16 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
+        tableState.showOperational = true;
+      }}
+    >
+      Operational
+      <FilePenLine class="ml-auto" />
+    </DropdownMenu.Item>
+
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
         tableState.showUpdate = true;
       }}
     >

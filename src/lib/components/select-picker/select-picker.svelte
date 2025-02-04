@@ -18,18 +18,18 @@
   let { selected = $bindable(), selections, placeholder = 'Select something' }: Props = $props();
 
   const triggerContent = $derived(
-    selections.find((item) => item.name === selected)?.name ?? placeholder
+    selections.find((item) => item.name.toLocaleLowerCase() === selected.toLocaleLowerCase())
   );
 </script>
 
 <Select.Root type="single" name={placeholder} bind:value={selected}>
   <Select.Trigger>
-    {triggerContent}
+    {triggerContent?.name || placeholder}
   </Select.Trigger>
   <Select.Content>
     <Select.Group>
       {#each selections as select}
-        <Select.Item value={select.name} label={select.name} />
+        <Select.Item value={select.value} label={select.name} />
       {/each}
     </Select.Group>
   </Select.Content>

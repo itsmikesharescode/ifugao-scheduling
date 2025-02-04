@@ -5,6 +5,7 @@ class TableState {
   #activeRow = $state<AccountsPageSchema | null>(null);
   showUpdate = $state(false);
   showDelete = $state(false);
+  showOperational = $state(false);
 
   getActiveRow() {
     return this.#activeRow;

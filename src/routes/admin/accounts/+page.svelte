@@ -2,6 +2,7 @@
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateAccount from './components/create-account/create-account.svelte';
   import EditAccount from './components/edit-account/edit-account.svelte';
+  import EditOperational from './components/edit-operational/edit-operational.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
 
@@ -61,3 +62,5 @@
   editInformationForm={data.editInformationForm}
   editPasswordForm={data.editPasswordForm}
 />
+
+<EditOperational editOperationalForm={data.editOperationalForm} />
