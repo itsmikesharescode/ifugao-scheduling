@@ -1,6 +1,7 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateAccount from './components/create-account/create-account.svelte';
+  import DeleteAccount from './components/delete-account/delete-account.svelte';
   import EditAccount from './components/edit-account/edit-account.svelte';
   import EditOperational from './components/edit-operational/edit-operational.svelte';
   import { columns } from './components/table/columns';
@@ -64,3 +65,4 @@
 />
 
 <EditOperational editOperationalForm={data.editOperationalForm} />
+<DeleteAccount deleteAccountForm={data.deleteAccountForm} />

@@ -39,6 +39,7 @@
   $effect(() => {
     if (tableState.showDelete) {
       $formData.user_id = tableState.getActiveRow()?.user_id ?? '';
+      $formData.avatar = tableState.getActiveRow()?.avatar ?? 'sasdasdasd-samplepath';
       return () => form.reset();
     }
   });
@@ -54,8 +55,9 @@
     </AlertDialog.Header>
     <AlertDialog.Footer>
       <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-      <form method="post" action="?/deleteSubjectEvent" use:enhance>
+      <form method="post" action="?/deleteAccountEvent" use:enhance>
         <input name="user_id" type="hidden" bind:value={$formData.user_id} />
+        <input name="avatar" type="hidden" bind:value={$formData.avatar} />
         <Button disabled={$submitting} type="submit" variant="destructive" class="relative">
           {#if $submitting}
             <div
