@@ -12,6 +12,9 @@
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
+  import DepartmentPicker, {
+    sampleDeps
+  } from '$lib/components/select-picker/department-picker.svelte';
 
   interface Props {
     createAccountForm: SuperValidated<Infer<CreateAccountSchema>>;
@@ -153,15 +156,16 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="department">
+            <Form.Field {form} name="department_id">
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Department</Form.Label>
-                  <Input
-                    {...props}
-                    bind:value={$formData.department}
-                    placeholder="Enter department"
+                  <DepartmentPicker
+                    bind:selected_id={$formData.department_id}
+                    departments={sampleDeps}
                   />
+
+                  <input name={props.name} type="hidden" bind:value={$formData.department_id} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />

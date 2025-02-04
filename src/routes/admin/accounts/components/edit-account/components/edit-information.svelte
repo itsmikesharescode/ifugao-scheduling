@@ -10,6 +10,9 @@
   import { useTableState } from '../../table/state.svelte';
   import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
+  import DepartmentPicker, {
+    sampleDeps
+  } from '$lib/components/select-picker/department-picker.svelte';
 
   interface Props {
     editInformationForm: SuperValidated<Infer<EditInformationSchema>>;
@@ -50,7 +53,7 @@
       $formData.middlename = activeRow?.middlename ?? '';
       $formData.lastname = activeRow?.lastname ?? '';
       $formData.academic_rank = activeRow?.academic_rank ?? '';
-      $formData.department = activeRow?.department ?? '';
+      $formData.department_id = activeRow?.department_id ?? 0;
       $formData.gender = activeRow?.gender ?? '';
       $formData.birth_date = activeRow?.birth_date ?? '';
       $formData.status = activeRow?.status ?? '';
@@ -145,13 +148,15 @@
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Field {form} name="department">
+      <Form.Field {form} name="department_id">
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Department</Form.Label>
-            <Input
-              {...props}
-              bind:value={$formData.department}
+            <DepartmentPicker bind:selected_id={$formData.department_id} departments={sampleDeps} />
+            <input
+              name={props.name}
+              type="hidden"
+              bind:value={$formData.department_id}
               placeholder="Enter new department"
             />
           {/snippet}

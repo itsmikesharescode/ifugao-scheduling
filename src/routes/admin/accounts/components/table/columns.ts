@@ -203,7 +203,7 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
   },
 
   {
-    accessorKey: 'department',
+    accessorKey: 'department_name',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
@@ -217,7 +217,7 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
         };
       });
 
-      return renderSnippet(departmentSnip, row.getValue('department'));
+      return renderSnippet(departmentSnip, row.getValue('department_name'));
     },
     enableSorting: true,
     enableHiding: true
