@@ -1,5 +1,5 @@
 import { z } from 'zod';
-
+//note: we only need department_name for displaying to avoid extra db calls via department_id
 export const accountsPageSchema = z.object({
   user_id: z.string(),
   avatar: z.string(),
