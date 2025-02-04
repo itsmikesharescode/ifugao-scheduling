@@ -1,8 +1,8 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import CreateSubject from './components/create-subject/create-subject.svelte';
-  import DeleteSubject from './components/delete-subject/delete-subject.svelte';
-  import EditSubject from './components/edit-subject/edit-subject.svelte';
+  import CreateSection from './components/create-section/create-section.svelte';
+  import EditSection from './components/edit-section/edit-section.svelte';
+  import DeleteSection from './components/delete-section/delete-section.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
 
@@ -26,7 +26,6 @@
         created_at: new Date(
           Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
         ).toISOString(),
-        course_code: `${subject.code}${Math.floor(100 + Math.random() * 900)}`,
         name: `${subject.name} ${['Fundamentals', 'Principles', 'Advanced', 'Applied'][Math.floor(Math.random() * 4)]}`
       };
     });
@@ -34,9 +33,9 @@
 </script>
 
 <main>
-  <CreateSubject createSubjectForm={data.createSubjectForm} />
+  <CreateSection createSectionForm={data.createSectionForm} />
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
-<EditSubject editSubjectForm={data.editSubjectForm} />
-<DeleteSubject deleteSubjectForm={data.deleteSubjectForm} />
+<EditSection editSectionForm={data.editSectionForm} />
+<DeleteSection deleteSectionForm={data.deleteSectionForm} />

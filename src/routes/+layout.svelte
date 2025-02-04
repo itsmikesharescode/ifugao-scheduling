@@ -10,6 +10,7 @@
   import '@fontsource/prompt/800.css';
   import '@fontsource/prompt/900.css';
   import { invalidate } from '$app/navigation';
+  import { ModeWatcher } from 'mode-watcher';
 
   let { data, children } = $props();
   let { session, supabase } = $derived(data);
@@ -38,6 +39,7 @@
   });
 </script>
 
+<ModeWatcher />
 {@render children()}
 
 <style>
