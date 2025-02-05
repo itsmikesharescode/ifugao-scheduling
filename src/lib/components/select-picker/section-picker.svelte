@@ -1,61 +1,20 @@
 <script lang="ts" module>
-  export type Subject = {
+  export type Section = {
     id: number;
-    code: string;
     name: string;
   };
   //must only expose id
-  export const sampleSubs = [
-    {
-      id: 0,
-      code: 'MENS101',
-      name: 'Solid Mensuration'
-    },
-    {
-      id: 1,
-      code: 'DIFFEQ202',
-      name: 'Differential Equations'
-    },
-    {
-      id: 2,
-      code: 'THERMO301',
-      name: 'Thermodynamics'
-    },
-    {
-      id: 3,
-      code: 'ORGCHEM401',
-      name: 'Organic Chemistry'
-    },
-    {
-      id: 4,
-      code: 'LOGIC210',
-      name: 'Digital Logic Design'
-    },
-    {
-      id: 5,
-      code: 'FLUIDM320',
-      name: 'Fluid Mechanics'
-    },
-    {
-      id: 6,
-      code: 'COMPARCH405',
-      name: 'Computer Architecture'
-    },
-    {
-      id: 7,
-      code: 'DATASTR250',
-      name: 'Data Structures'
-    },
-    {
-      id: 8,
-      code: 'CIRCUIT101',
-      name: 'Electrical Circuits'
-    },
-    {
-      id: 9,
-      code: 'SOFTDES310',
-      name: 'Software Design'
-    }
+  export const sampleSecs = [
+    { id: 0, name: 'BSCS-A-M' },
+    { id: 1, name: 'BSCC-B-A' },
+    { id: 2, name: 'BSIT-C-E' },
+    { id: 3, name: 'BSCpE-D-M' },
+    { id: 4, name: 'BSIS-E-A' },
+    { id: 5, name: 'BSCS-F-E' },
+    { id: 6, name: 'BSCC-G-M' },
+    { id: 7, name: 'BSIT-H-A' },
+    { id: 8, name: 'BSCpE-I-E' },
+    { id: 9, name: 'BSIS-J-M' }
   ];
 </script>
 
@@ -69,16 +28,16 @@
   import { cn } from '$lib/utils.js';
 
   interface Props {
-    subjects: Subject[];
+    sections: Section[];
     selected_id: number;
   }
 
-  let { selected_id = $bindable(), subjects }: Props = $props();
+  let { selected_id = $bindable(), sections }: Props = $props();
 
   let open = $state(false);
   let triggerRef = $state<HTMLButtonElement>(null!);
 
-  const selectedValue = $derived(subjects.find((item) => item.id === selected_id));
+  const selectedValue = $derived(sections.find((item) => item.id === selected_id));
 
   // We want to refocus the trigger button when the user selects
   // an item from the list so users can continue navigating the
@@ -106,7 +65,7 @@
             {
               'text-muted-foreground': !selectedValue?.name
             }
-          ]}>{selectedValue?.code || 'Select a department...'}</span
+          ]}>{selectedValue?.name || 'Select a section...'}</span
         >
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
@@ -114,26 +73,21 @@
   </Popover.Trigger>
   <Popover.Content class="p-0">
     <Command.Root>
-      <Command.Input placeholder="Search subject..." />
+      <Command.Input placeholder="Search section..." />
       <Command.List>
-        <Command.Empty>No subject found.</Command.Empty>
+        <Command.Empty>No section found.</Command.Empty>
         <Command.Group>
-          {#each subjects as subject}
+          {#each sections as section}
             <Command.Item
-              value={subject.name}
+              value={section.name}
               onSelect={() => {
-                selected_id = subject.id;
+                selected_id = section.id;
                 closeAndFocusTrigger();
               }}
             >
-              <Check class={cn('mr-2 size-4', selected_id !== subject.id && 'text-transparent')} />
+              <Check class={cn('mr-2 size-4', selected_id !== section.id && 'text-transparent')} />
               <div class="flex flex-col">
-                <div class="flex items-center gap-1">
-                  <span class="text-sm font-medium">
-                    {subject.code}
-                  </span>
-                </div>
-                <span class="text-xs text-muted-foreground">{subject.name}</span>
+                <span class="text-sm">{section.name}</span>
               </div>
             </Command.Item>
           {/each}
