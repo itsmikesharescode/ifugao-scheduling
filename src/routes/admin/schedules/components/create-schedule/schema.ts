@@ -15,12 +15,16 @@ const loadProfSchema = z.object({
     .refine((data) => data.lecture + data.lab > 0, {
       message: 'Total hours must be greater than 0'
     }),
-  schedule: z.string().min(1, 'Please select a schedule batch')
+  schedule: z.object({
+    batch: z.string().min(1, 'Must select batch.'),
+    color: z.string().min(1, 'Must select color.')
+  })
 });
 
 export const createScheduleSchema = z.object({
   semester: z.string().min(1, 'Please select a semester'),
   school_year: z.string().min(1, 'Please select a school year'),
+  department_id: z.number().min(0, 'Department cannot be negative'),
   dynamic_form: z
     .array(loadProfSchema)
     .min(1, 'At least one subject entry is required')
