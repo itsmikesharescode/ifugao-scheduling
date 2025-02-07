@@ -29,6 +29,7 @@
   const form = superForm(createScheduleForm, {
     validators: zodClient(createScheduleSchema),
     id: crypto.randomUUID(),
+    dataType: 'json',
     onUpdate: ({ result }) => {
       const { status, data } = result;
 
@@ -58,11 +59,7 @@
         section_id: 0,
         subject_id: 0,
         units: 0,
-        num_of_hours: { lecture: 0, lab: 0 },
-        schedule: {
-          batch: '',
-          color: ''
-        }
+        num_of_hours: { lecture: 0, lab: 0 }
       }
     ];
 
@@ -91,11 +88,7 @@
           section_id: 0,
           subject_id: 0,
           units: 0,
-          num_of_hours: { lecture: 0, lab: 0 },
-          schedule: {
-            batch: '',
-            color: ''
-          }
+          num_of_hours: { lecture: 0, lab: 0 }
         }
       ];
 
@@ -238,7 +231,9 @@
                     </Form.Control>
                     <Form.FieldErrors />
                   </Form.Field>
+                </div>
 
+                <div class="">
                   <Form.Field {form} name={`dynamic_form[${index}].units`}>
                     <Form.Control>
                       {#snippet children({ props })}
@@ -253,9 +248,7 @@
                     </Form.Control>
                     <Form.FieldErrors />
                   </Form.Field>
-                </div>
 
-                <div class="">
                   <Form.Field {form} name={`dynamic_form[${index}].num_of_hours.lecture`}>
                     <Form.Control>
                       {#snippet children({ props })}
@@ -280,43 +273,6 @@
                           {...props}
                           bind:value={$formData.dynamic_form[index].num_of_hours.lab}
                           placeholder="Enter laboratory hours"
-                        />
-                      {/snippet}
-                    </Form.Control>
-                    <Form.FieldErrors />
-                  </Form.Field>
-
-                  <Form.Field {form} name={`dynamic_form[${index}].schedule.batch`}>
-                    <Form.Control>
-                      {#snippet children({ props })}
-                        <Form.Label>Batch</Form.Label>
-                        <SelectPicker
-                          placeholder="Select batch"
-                          selections={[
-                            { id: crypto.randomUUID(), name: 'First Batch', value: 'First Batch' },
-                            { id: crypto.randomUUID(), name: 'Second Batch', value: 'Second Batch' }
-                          ]}
-                          bind:selected={$formData.dynamic_form[index].schedule.batch}
-                        />
-                        <input
-                          name={props.name}
-                          type="hidden"
-                          bind:value={$formData.dynamic_form[index].schedule.batch}
-                        />
-                      {/snippet}
-                    </Form.Control>
-                    <Form.FieldErrors />
-                  </Form.Field>
-
-                  <Form.Field {form} name={`dynamic_form[${index}].schedule.color`}>
-                    <Form.Control>
-                      {#snippet children({ props })}
-                        <Form.Label>Batch Color</Form.Label>
-                        <Input
-                          type="color"
-                          {...props}
-                          bind:value={$formData.dynamic_form[index].schedule.color}
-                          placeholder="Enter batch color"
                         />
                       {/snippet}
                     </Form.Control>

@@ -17,7 +17,6 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
   createScheduleEvent: async ({ request }) => {
     const form = await superValidate(request, zod(createScheduleSchema));
-    console.log(form.data);
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);

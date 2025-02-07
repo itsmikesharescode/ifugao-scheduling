@@ -14,11 +14,7 @@ const loadProfSchema = z.object({
     })
     .refine((data) => data.lecture + data.lab > 0, {
       message: 'Total hours must be greater than 0'
-    }),
-  schedule: z.object({
-    batch: z.string().min(1, 'Must select batch.'),
-    color: z.string().min(1, 'Must select color.')
-  })
+    })
 });
 
 export const createScheduleSchema = z.object({
