@@ -1,12 +1,10 @@
 <script lang="ts">
-  import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
-  import Plus from 'lucide-svelte/icons/plus';
   import Trash2 from 'lucide-svelte/icons/trash-2';
   import Loader from 'lucide-svelte/icons/loader';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
-  import { createScheduleSchema, type CreateScheduleSchema } from './schema';
+  import { editScheduleSchema, type EditScheduleSchema } from './schema';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
@@ -18,16 +16,18 @@
   import DepartmentPicker, {
     sampleDeps
   } from '$lib/components/select-picker/department-picker.svelte';
+  import { useTableState } from '../table/state.svelte';
+
   interface Props {
-    createScheduleForm: SuperValidated<Infer<CreateScheduleSchema>>;
+    editScheduleForm: SuperValidated<Infer<EditScheduleSchema>>;
   }
 
-  const { createScheduleForm }: Props = $props();
+  const { editScheduleForm }: Props = $props();
 
-  let open = $state(false);
+  const tableState = useTableState();
 
-  const form = superForm(createScheduleForm, {
-    validators: zodClient(createScheduleSchema),
+  const form = superForm(editScheduleForm, {
+    validators: zodClient(editScheduleSchema),
     id: crypto.randomUUID(),
     dataType: 'json',
     onUpdate: ({ result }) => {
@@ -36,6 +36,8 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          tableState.setActiveRow(null);
+          tableState.showUpdate = false;
           break;
 
         case 401:
@@ -79,39 +81,33 @@
   };
 
   $effect(() => {
-    if (open) {
-      $formData.dynamic_form = [
-        {
-          code: '',
-          section_id: 0,
-          subject_id: 0,
-          units: 0,
-          num_of_hours: { lecture: 0, lab: 0 }
-        }
-      ];
-
-      return () => {};
+    if (tableState.showUpdate) {
+      const activeTable = tableState.getActiveRow();
+      if (!activeTable) return;
+      $formData.department_id = activeTable.department_id;
+      $formData.dynamic_form = activeTable.dynamic_form;
+      $formData.id = activeTable.id;
+      $formData.school_year = activeTable.school_year;
+      $formData.semester = activeTable.semester;
+      $formData.user_id = activeTable.user_id;
     }
   });
 </script>
 
 <Dialog.Root
-  bind:open
+  open={tableState.showUpdate}
   onOpenChange={() => {
     form.reset();
+    tableState.showUpdate = false;
   }}
 >
-  <Dialog.Trigger class={buttonVariants({ variant: 'default', size: 'sm' })}>
-    Create Schedule
-    <Plus class="ml-auto" />
-  </Dialog.Trigger>
   <Dialog.Content class="max-h-screen max-w-7xl p-0">
     <Dialog.Header class="px-6 pt-6">
-      <Dialog.Title>Create Schedule</Dialog.Title>
-      <Dialog.Description>Kindly answer the field to create a schedule.</Dialog.Description>
+      <Dialog.Title>Edit Schedule</Dialog.Title>
+      <Dialog.Description>Kindly answer the field to edit the schedule.</Dialog.Description>
     </Dialog.Header>
 
-    <form method="POST" action="?/createScheduleEvent" use:enhance class="flex flex-col gap-4">
+    <form method="POST" action="?/editScheduleEvent" use:enhance class="flex flex-col gap-4">
       <div class="grid grid-cols-3 items-center gap-4 px-6">
         <Form.Field {form} name="semester">
           <Form.Control>

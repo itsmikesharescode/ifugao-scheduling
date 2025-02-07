@@ -1,8 +1,8 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateDepartment from './components/create-schedule/create-schedule.svelte';
-  import DeleteDepartment from './components/delete-department/delete-department.svelte';
-  import EditDepartment from './components/edit-department/edit-department.svelte';
+
+  import EditSchedule from './components/edit-schedule/edit-schedule.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
 
@@ -34,14 +34,14 @@
         user_fullname: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${
           lastNames[Math.floor(Math.random() * lastNames.length)]
         }`,
-        department_id: Math.floor(1 + Math.random() * 999),
+        department_id: Math.floor(1 + Math.random() * 10),
         department_name: department.name,
         semester: semesters[Math.floor(Math.random() * semesters.length)],
         school_year: `${startYear}-${startYear + 1}`,
         dynamic_form: Array.from({ length: 1 + Math.floor(Math.random() * 3) }, () => ({
-          code: `${department.code}${Math.floor(100 + Math.random() * 900)}`,
-          section_id: Math.floor(1 + Math.random() * 999),
-          subject_id: Math.floor(1 + Math.random() * 999),
+          code: `${department.code}${Math.floor(100 + Math.random() * 10)}`,
+          section_id: Math.floor(1 + Math.random() * 10),
+          subject_id: Math.floor(1 + Math.random() * 10),
           units: Math.floor(1 + Math.random() * 4),
           num_of_hours: {
             lecture: Math.floor(1 + Math.random() * 3),
@@ -62,5 +62,4 @@
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
-<EditDepartment editDepartmentForm={data.editDepartmentForm} />
-<DeleteDepartment deleteDepartmentForm={data.deleteDepartmentForm} />
+<EditSchedule editScheduleForm={data.editScheduleForm} />
