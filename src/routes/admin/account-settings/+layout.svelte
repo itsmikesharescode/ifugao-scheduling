@@ -18,12 +18,12 @@
   ];
 </script>
 
-<main class="grid grid-cols-[auto,1fr] gap-4">
+<main class="grid gap-4 md:grid-cols-[auto,1fr]">
   <nav class="flex max-h-fit flex-col gap-2 border-l-2 p-4">
     {#each links as link}
       <a
         href={link.href}
-        class="rounded-lg px-4 py-1 font-sans text-sm transition-all hover:bg-secondary hover:text-primary
+        class="max-w-fit rounded-lg px-4 py-1 font-sans text-sm transition-all hover:bg-secondary hover:text-primary
         {page.url.pathname === link.href ? 'bg-secondary text-primary' : 'text-muted-foreground'}"
         >{link.name}</a
       >
