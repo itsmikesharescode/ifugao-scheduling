@@ -4,11 +4,13 @@
 
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
+  import PrinterCheck from 'lucide-svelte/icons/printer-check';
+  import FilePenLine from 'lucide-svelte/icons/file-pen-line';
+  import Maximize2 from 'lucide-svelte/icons/maximize-2';
+  import FileX2 from 'lucide-svelte/icons/file-x-2';
   import type { Row } from '@tanstack/table-core';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import FilePenLine from 'lucide-svelte/icons/file-pen-line';
-  import FileX2 from 'lucide-svelte/icons/file-x-2';
   import { useTableState } from './state.svelte';
   import type { SchedulePageSchema } from './schema';
 
@@ -27,6 +29,25 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-[160px]" align="end">
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.showUpdate = true;
+      }}
+    >
+      View Form
+      <Maximize2 class="ml-auto" />
+    </DropdownMenu.Item>
+    <!-- <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        tableState.showUpdate = true;
+      }}
+    >
+      Teaching Form
+      <PrinterCheck class="ml-auto" />
+    </DropdownMenu.Item> -->
+    <DropdownMenu.Separator />
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
