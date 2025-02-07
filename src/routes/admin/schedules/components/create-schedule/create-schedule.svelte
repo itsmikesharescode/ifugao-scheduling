@@ -18,6 +18,7 @@
   import DepartmentPicker, {
     sampleDeps
   } from '$lib/components/select-picker/department-picker.svelte';
+  import { flip } from 'svelte/animate';
   interface Props {
     createScheduleForm: SuperValidated<Infer<CreateScheduleSchema>>;
   }
@@ -169,7 +170,7 @@
 
       <div class="max-h-[80dvh] overflow-auto px-6" bind:this={ref}>
         <div class="flex flex-col gap-4">
-          {#each $formData.dynamic_form as _, index}
+          {#each $formData.dynamic_form as _, index (index)}
             <div class="rounded-lg border-2 bg-secondary/50 p-4">
               <div class="flex items-center justify-between p-2">
                 <span class="text-base font-semibold">Form # {index + 1}</span>

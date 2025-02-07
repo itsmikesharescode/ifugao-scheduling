@@ -1,11 +1,11 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
-import type { DepartmentPageSchema } from './schema';
+import type { SchedulePageSchema } from './schema';
 import { DTCheckbox, DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
 import RowActions from './row-actions.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 
-export const columns: ColumnDef<DepartmentPageSchema>[] = [
+export const columns: ColumnDef<SchedulePageSchema>[] = [
   {
     id: 'select',
     header: ({ table }) =>
@@ -28,7 +28,7 @@ export const columns: ColumnDef<DepartmentPageSchema>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
-      return renderComponent(DTColumnHeader<DepartmentPageSchema, unknown>, {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
         title: 'ID'
       });
@@ -47,64 +47,84 @@ export const columns: ColumnDef<DepartmentPageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_code',
+    accessorKey: 'department_name',
     header: ({ column }) => {
-      return renderComponent(DTColumnHeader<DepartmentPageSchema, unknown>, {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
-        title: 'Department Code'
+        title: 'Department'
       });
     },
     cell: ({ row }) => {
-      const departmentCodeSnip = createRawSnippet<[string]>((getDepCode) => {
+      const depNameCodeSnip = createRawSnippet<[string]>((getDepName) => {
         return {
-          render: () => `<div class="w-[80px]">${getDepCode()}</div>`
+          render: () => `<div class="w-[80px]">${getDepName()}</div>`
         };
       });
 
-      return renderSnippet(departmentCodeSnip, row.getValue('department_code'));
+      return renderSnippet(depNameCodeSnip, row.getValue('department_name'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'name',
+    accessorKey: 'user_fullname',
     header: ({ column }) => {
-      return renderComponent(DTColumnHeader<DepartmentPageSchema, unknown>, {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
-        title: 'Course Name'
+        title: 'FullName'
       });
     },
     cell: ({ row }) => {
-      const nameSnip = createRawSnippet<[string]>((getName) => {
+      const userFullnameSnip = createRawSnippet<[string]>((getUserFullname) => {
         return {
-          render: () => `<div class="w-full">${getName()}</div>`
+          render: () => `<div class="w-full">${getUserFullname()}</div>`
         };
       });
 
-      return renderSnippet(nameSnip, row.getValue('name'));
+      return renderSnippet(userFullnameSnip, row.getValue('user_fullname'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'color',
+    accessorKey: 'semester',
     header: ({ column }) => {
-      return renderComponent(DTColumnHeader<DepartmentPageSchema, unknown>, {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
-        title: 'Department Color'
+        title: 'Semester'
       });
     },
     cell: ({ row }) => {
-      const colorSnip = createRawSnippet<[string]>((getColor) => {
+      const semesterSnip = createRawSnippet<[string]>((getSemester) => {
         return {
-          render: () =>
-            `<div class="size-5 rounded-full" style="background-color: ${getColor()}"></div>`
+          render: () => `<div class="w-full">${getSemester()}</div>`
         };
       });
 
-      return renderSnippet(colorSnip, row.getValue('color'));
+      return renderSnippet(semesterSnip, row.getValue('semester'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'school_year',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
+        column,
+        title: 'School Year'
+      });
+    },
+    cell: ({ row }) => {
+      const schoolYearSnip = createRawSnippet<[string]>((getSchoolYear) => {
+        return {
+          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+        };
+      });
+
+      return renderSnippet(schoolYearSnip, row.getValue('school_year'));
     },
     enableSorting: true,
     enableHiding: true
@@ -112,6 +132,6 @@ export const columns: ColumnDef<DepartmentPageSchema>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => renderComponent(RowActions<DepartmentPageSchema>, { row })
+    cell: ({ row }) => renderComponent(RowActions<SchedulePageSchema>, { row })
   }
 ];

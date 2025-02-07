@@ -18,6 +18,7 @@ const loadProfSchema = z.object({
 });
 
 export const createScheduleSchema = z.object({
+  user_id: z.string(),
   semester: z.string().min(1, 'Please select a semester'),
   school_year: z.string().min(1, 'Please select a school year'),
   department_id: z.number().min(0, 'Department cannot be negative'),

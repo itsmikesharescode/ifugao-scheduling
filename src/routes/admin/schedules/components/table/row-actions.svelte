@@ -10,9 +10,9 @@
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
   import { useTableState } from './state.svelte';
-  import type { DepartmentPageSchema } from './schema';
+  import type { SchedulePageSchema } from './schema';
 
-  let { row }: { row: Row<DepartmentPageSchema> } = $props();
+  let { row }: { row: Row<SchedulePageSchema> } = $props();
 
   const tableState = useTableState();
 </script>
