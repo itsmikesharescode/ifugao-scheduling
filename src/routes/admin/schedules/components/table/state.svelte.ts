@@ -3,6 +3,7 @@ import type { SchedulePageSchema } from './schema';
 
 class TableState {
   #activeRow = $state<SchedulePageSchema | null>(null);
+  showView = $state(false);
   showUpdate = $state(false);
   showDelete = $state(false);
 

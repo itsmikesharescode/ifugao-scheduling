@@ -32,21 +32,12 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.showUpdate = true;
+        tableState.showView = true;
       }}
     >
       View Form
       <Maximize2 class="ml-auto" />
     </DropdownMenu.Item>
-    <!-- <DropdownMenu.Item
-      onclick={() => {
-        tableState.setActiveRow(row.original);
-        tableState.showUpdate = true;
-      }}
-    >
-      Teaching Form
-      <PrinterCheck class="ml-auto" />
-    </DropdownMenu.Item> -->
     <DropdownMenu.Separator />
     <DropdownMenu.Item
       onclick={() => {

@@ -11,6 +11,8 @@ declare global {
     }
     interface PageData {
       session: Session | null;
+      user?: User | null;
+      supabase?: SupabaseClient | undefined;
     }
     // interface PageState {}
     // interface Platform {}

@@ -2,8 +2,8 @@
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateDepartment from './components/create-schedule/create-schedule.svelte';
   import DeleteSchedule from './components/delete-schedule/delete-schedule.svelte';
-
   import EditSchedule from './components/edit-schedule/edit-schedule.svelte';
+  import ViewSchedule from './components/view-schedule/view-schedule.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
 
@@ -63,5 +63,6 @@
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
+<ViewSchedule />
 <EditSchedule editScheduleForm={data.editScheduleForm} />
 <DeleteSchedule deleteScheduleForm={data.deleteScheduleForm} />
