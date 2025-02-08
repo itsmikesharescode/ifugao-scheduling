@@ -4,6 +4,7 @@
   import { page } from '$app/state';
   import * as Table from '$lib/components/ui/table/index.js';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+  import PrintTeachingForm from './components/print-teaching-form.svelte';
   const tableState = useTableState();
 
   const activeRow = $derived(tableState.getActiveRow());
@@ -64,38 +65,41 @@
           </div>
         </div>
       </div>
-
-      <ScrollArea class="max-h-[80dvh]">
-        <div class="rounded-lg border-2 p-4">
-          <Table.Root>
-            <!-- <Table.Caption>A list of your recent invoices.</Table.Caption> -->
-            <Table.Header>
-              <Table.Row>
-                <Table.Head class="w-[100px]">Code</Table.Head>
-                <Table.Head>Section</Table.Head>
-                <Table.Head>Course Code</Table.Head>
-                <Table.Head class="">Course Description</Table.Head>
-                <Table.Head class="">No. Units</Table.Head>
-                <Table.Head class="">Lecture</Table.Head>
-                <Table.Head class="">Laboratory</Table.Head>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {#each activeRow?.dynamic_form ?? [] as form}
-                <Table.Row>
-                  <Table.Cell class="font-medium">{form.code}</Table.Cell>
-                  <Table.Cell class="font-medium">{form.section_id}</Table.Cell>
-                  <Table.Cell class="font-medium">{form.subject_id}</Table.Cell>
-                  <Table.Cell class="font-medium">{form.subject_id}</Table.Cell>
-                  <Table.Cell class="font-medium">{form.units}</Table.Cell>
-                  <Table.Cell class="font-medium">{form.num_of_hours.lecture}</Table.Cell>
-                  <Table.Cell class="font-medium">{form.num_of_hours.lab}</Table.Cell>
-                </Table.Row>
-              {/each}
-            </Table.Body>
-          </Table.Root>
-        </div>
-      </ScrollArea>
     </Dialog.Header>
+
+    <ScrollArea class="max-h-[80dvh]">
+      <div class="rounded-lg border-2 p-4">
+        <Table.Root>
+          <!-- <Table.Caption>A list of your recent invoices.</Table.Caption> -->
+          <Table.Header>
+            <Table.Row>
+              <Table.Head class="w-[100px]">Code</Table.Head>
+              <Table.Head>Section</Table.Head>
+              <Table.Head>Course Code</Table.Head>
+              <Table.Head class="">Course Description</Table.Head>
+              <Table.Head class="">No. Units</Table.Head>
+              <Table.Head class="">Lecture</Table.Head>
+              <Table.Head class="">Laboratory</Table.Head>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {#each activeRow?.dynamic_form ?? [] as form}
+              <Table.Row>
+                <Table.Cell class="font-medium">{form.code}</Table.Cell>
+                <Table.Cell class="font-medium">{form.section_id}</Table.Cell>
+                <Table.Cell class="font-medium">{form.subject_id}</Table.Cell>
+                <Table.Cell class="font-medium">{form.subject_id}</Table.Cell>
+                <Table.Cell class="font-medium">{form.units}</Table.Cell>
+                <Table.Cell class="font-medium">{form.num_of_hours.lecture}</Table.Cell>
+                <Table.Cell class="font-medium">{form.num_of_hours.lab}</Table.Cell>
+              </Table.Row>
+            {/each}
+          </Table.Body>
+        </Table.Root>
+      </div>
+    </ScrollArea>
+    <div class="flex justify-end">
+      <PrintTeachingForm />
+    </div>
   </Dialog.Content>
 </Dialog.Root>
