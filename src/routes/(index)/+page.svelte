@@ -10,11 +10,7 @@
 </script>
 
 <main class="flex min-h-screen flex-col items-center justify-center gap-5 p-20">
-  <enhanced:img
-    src="./components/assets/logo.png"
-    alt="systemlogo"
-    class="size-32 rounded-lg object-cover"
-  />
+  <img src="./favicon.png" alt="" class="size-32 rounded-lg object-cover" />
   {#if urlParams === 'register'}
     <Register registerForm={data.registerForm} />
   {:else if urlParams === 'forgot-password'}

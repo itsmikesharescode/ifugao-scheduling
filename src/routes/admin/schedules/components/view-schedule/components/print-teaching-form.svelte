@@ -4,10 +4,9 @@
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import PrinterCheck from 'lucide-svelte/icons/printer-check';
   import Printer from 'lucide-svelte/icons/printer';
+  import { useTableState } from '../../table/state.svelte';
 
-  interface Props {
-    printingProps: any;
-  }
+  const tableState = useTableState();
 
   let open = $state(false);
 
