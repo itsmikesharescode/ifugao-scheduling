@@ -121,7 +121,7 @@
       </div>
     </ScrollArea>
     <div class="flex justify-end">
-      <PrintTeachingForm />
+      <PrintTeachingForm {heading} />
     </div>
   </Dialog.Content>
 </Dialog.Root>
