@@ -15,6 +15,16 @@
     if (!page.data.supabase) return null;
     //query user information
   };
+
+  const calculateUnits = () => {
+    if (!activeRow) return 0;
+    return activeRow.dynamic_form.map((item) => item.units).reduce((p, c) => p + c);
+  };
+
+  const calculateHours = (type: 'lecture' | 'lab') => {
+    if (!activeRow) return 0;
+    return activeRow.dynamic_form.map((item) => item.num_of_hours[type]).reduce((p, c) => p + c);
+  };
 </script>
 
 {#snippet heading({ title, description }: { title: string; description: string })}
@@ -96,6 +106,18 @@
             {/each}
           </Table.Body>
         </Table.Root>
+
+        <div class="flex flex-col p-4">
+          {@render heading({ title: 'Total Units:', description: String(calculateUnits()) })}
+          {@render heading({
+            title: 'Total Lecture Hours:',
+            description: String(calculateHours('lecture'))
+          })}
+          {@render heading({
+            title: 'Total Laboratory Hours:',
+            description: String(calculateHours('lab'))
+          })}
+        </div>
       </div>
     </ScrollArea>
     <div class="flex justify-end">
