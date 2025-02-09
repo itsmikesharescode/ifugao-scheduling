@@ -2,19 +2,20 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { toast } from 'svelte-sonner';
-  import { updateEmailSchema, type UpdateEmailSchema } from './schema';
+  import { updateProfileSchema, type UpdateProfileSchema } from './schema';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+  import ProfileUploader from '$lib/components/profile-uploader/profile-uploader.svelte';
 
   interface Props {
-    updateEmailForm: SuperValidated<Infer<UpdateEmailSchema>>;
+    updateProfileForm: SuperValidated<Infer<UpdateProfileSchema>>;
   }
 
-  const { updateEmailForm }: Props = $props();
+  const { updateProfileForm }: Props = $props();
 
-  const form = superForm(updateEmailForm, {
-    validators: zodClient(updateEmailSchema),
+  const form = superForm(updateProfileForm, {
+    validators: zodClient(updateProfileSchema),
     id: crypto.randomUUID(),
     onUpdate: ({ result }) => {
       const { status, data } = result;
@@ -34,12 +35,18 @@
 </script>
 
 <div class="flex flex-col gap-10">
-  <form method="POST" action="?/updateEmailEvent" use:enhance>
-    <Form.Field {form} name="email">
+  <form method="POST" action="?/updateProfileEvent" enctype="multipart/form-data" use:enhance>
+    <Form.Field {form} name="profile">
       <Form.Control>
         {#snippet children({ props })}
-          <Form.Label>Email</Form.Label>
-          <Input {...props} bind:value={$formData.email} placeholder="Enter your new email" />
+          <Form.Label>Profile Photo</Form.Label>
+          <!-- <Input
+            type="password"
+            {...props}
+            bind:value={$formData.profile}
+            placeholder="Enter your new password"
+          /> -->
+          <ProfileUploader name={props.name} bind:photo={$formData.profile} />
         {/snippet}
       </Form.Control>
 
@@ -53,12 +60,14 @@
             <LoaderCircle class="animate-spin" />
           </div>
         {/if}
-        Update Email
+        Update Profile
       </Form.Button>
     </div>
   </form>
 
-  <span class="text-center text-xs text-muted-foreground">
-    A confirmation email will be sent to your old email to allow the change to the new email.
-  </span>
+  <div class="space-y-1 rounded-lg bg-muted/20 p-3 text-center text-xs text-muted-foreground">
+    <p>🖼️ Accepted formats: JPG, PNG, WebP</p>
+    <p>✅ Recommended: Square ratio, max 1024x1024px</p>
+    <p>❌ Not allowed: Images larger than 2MB</p>
+  </div>
 </div>

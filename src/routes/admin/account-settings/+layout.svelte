@@ -8,6 +8,10 @@
       href: '/admin/account-settings'
     },
     {
+      name: 'Profile Picture',
+      href: '/admin/account-settings/update-profile'
+    },
+    {
       name: 'Update Email',
       href: '/admin/account-settings/update-email'
     },
