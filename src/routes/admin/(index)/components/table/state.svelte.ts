@@ -3,7 +3,6 @@ import type { SubjectPageSchema } from './schema';
 
 class TableState {
   #activeRow = $state<SubjectPageSchema | null>(null);
-  showUpdate = $state(false);
   showDelete = $state(false);
 
   getActiveRow() {
