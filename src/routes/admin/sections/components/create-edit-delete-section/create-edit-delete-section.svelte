@@ -59,7 +59,7 @@
     delete: deleteSectionForm
   };
 
-  const form = superForm(forms[mode], {
+  const form = superForm(forms[mode] as any, {
     validators: zodClient(schemas[mode]),
     id: formIds[mode],
     onUpdate: ({ result }) => {

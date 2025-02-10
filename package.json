@@ -25,7 +25,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.20",
-    "bits-ui": "^1.0.0-next.89",
+    "bits-ui": "^1.0.0-next.91",
     "clsx": "^2.1.1",
     "embla-carousel-svelte": "^8.5.2",
     "eslint": "^9.20.0",
@@ -36,7 +36,7 @@
     "lucide-svelte": "^0.473.0",
     "mode-watcher": "^0.5.1",
     "paneforge": "^1.0.0-next.2",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.0",
     "prettier-plugin-svelte": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "svelte": "^5.19.9",
@@ -57,6 +57,7 @@
     "@fontsource/prompt": "^5.1.1",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",
-    "@sveltejs/enhanced-img": "^0.4.4"
+    "@sveltejs/enhanced-img": "^0.4.4",
+    "@tanstack/table-core": "^8.20.5"
   }
 }

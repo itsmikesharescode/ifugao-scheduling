@@ -58,7 +58,7 @@
 
   let tableState = useTableState();
 
-  const form = superForm(forms[mode], {
+  const form = superForm(forms[mode] as any, {
     validators: zodClient(schemas[mode]),
     id: formIds[mode],
     onUpdate: ({ result }) => {
@@ -129,11 +129,10 @@
         })}
       </Dialog.Title>
       <Dialog.Description>
-        Kindly answer the field to
         {@render modeTemplate({
-          createMsg: 'create a subject.',
-          editMsg: 'edit a subject.',
-          deleteMsg: 'delete this subject'
+          createMsg: 'Kindly answer the field to create a subject.',
+          editMsg: 'Kindly answer the field to edit a subject.',
+          deleteMsg: 'Press delete to delete this subject'
         })}
       </Dialog.Description>
     </Dialog.Header>
