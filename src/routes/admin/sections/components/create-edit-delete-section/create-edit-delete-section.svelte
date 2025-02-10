@@ -1,62 +1,63 @@
 <script lang="ts" module>
+  import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
+  import Plus from 'lucide-svelte/icons/plus';
   import Loader from 'lucide-svelte/icons/loader';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
-
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
   import { useTableState } from '../table/state.svelte';
   import { goto } from '$app/navigation';
+  import {
+    createSectionSchema,
+    editSectionSchema,
+    deleteSectionSchema,
+    type CreateSectionSchema,
+    type DeleteSectionSchema,
+    type EditSectionSchema
+  } from './schema';
+  import { urlParamReducer } from '$lib/utils';
   import { page } from '$app/state';
 
   interface Props {
+    createSectionForm: SuperValidated<Infer<CreateSectionSchema>>;
+    editSectionForm: SuperValidated<Infer<EditSectionSchema>>;
+    deleteSectionForm: SuperValidated<Infer<DeleteSectionSchema>>;
     open: boolean;
-    createSubjectForm: SuperValidated<Infer<CreateSubjectSchema>>;
-    editSubjectForm: SuperValidated<Infer<EditSubjectSchema>>;
-    deleteSubjectForm: SuperValidated<Infer<DeleteSubjectSchema>>;
     mode: 'create' | 'edit' | 'delete';
   }
-  import {
-    createSubjectSchema,
-    deleteSubjectSchema,
-    editSubjectSchema,
-    type CreateSubjectSchema,
-    type DeleteSubjectSchema,
-    type EditSubjectSchema
-  } from './schema';
-  import { urlParamReducer } from '$lib/utils';
 
   const schemas = {
-    create: createSubjectSchema,
-    edit: editSubjectSchema,
-    delete: deleteSubjectSchema
+    create: createSectionSchema,
+    edit: editSectionSchema,
+    delete: deleteSectionSchema
   };
 
   const formIds = {
-    create: 'create-subject-form',
-    edit: 'edit-subject-form',
-    delete: 'delete-subject-form'
+    create: 'create-section-form',
+    edit: 'edit-section-form',
+    delete: 'delete-section-form'
   };
 
   const endPoints = {
-    create: '?/createSubjectEvent',
-    edit: '?/editSubjectEvent',
-    delete: '?/deleteSubjectEvent'
+    create: '?/createSectionEvent',
+    edit: '?/editSectionEvent',
+    delete: '?/deleteSectionEvent'
   };
 </script>
 
 <script lang="ts">
-  const { open, createSubjectForm, editSubjectForm, deleteSubjectForm, mode }: Props = $props();
+  const { open, mode, createSectionForm, editSectionForm, deleteSectionForm }: Props = $props();
+
+  const tableState = useTableState();
 
   const forms = {
-    create: createSubjectForm,
-    edit: editSubjectForm,
-    delete: deleteSubjectForm
+    create: createSectionForm,
+    edit: editSectionForm,
+    delete: deleteSectionForm
   };
-
-  let tableState = useTableState();
 
   const form = superForm(forms[mode], {
     validators: zodClient(schemas[mode]),
@@ -74,7 +75,7 @@
           break;
       }
     }
-  } satisfies Parameters<typeof superForm>[1]);
+  });
 
   const { form: formData, enhance, submitting } = form;
 
@@ -84,7 +85,6 @@
     if (mode !== 'create') {
       const activeRow = tableState.getActiveRow();
       if (activeRow) {
-        $formData.course_code = activeRow.course_code;
         $formData.name = activeRow.name;
         return () => {};
       }
@@ -123,17 +123,16 @@
     <Dialog.Header>
       <Dialog.Title>
         {@render modeTemplate({
-          createMsg: 'Create Subject',
-          editMsg: 'Edit Subject',
-          deleteMsg: 'Delete This Subject?'
+          createMsg: 'Create Section',
+          editMsg: 'Edit Section',
+          deleteMsg: 'Delete Section'
         })}
       </Dialog.Title>
       <Dialog.Description>
-        Kindly answer the field to
         {@render modeTemplate({
-          createMsg: 'create a subject.',
-          editMsg: 'edit a subject.',
-          deleteMsg: 'delete this subject'
+          createMsg: 'Kindly answer the field to create a section.',
+          editMsg: 'Kindly answer the field to edit a section.',
+          deleteMsg: 'Press delete to delete a section.'
         })}
       </Dialog.Description>
     </Dialog.Header>
@@ -144,25 +143,11 @@
       {/if}
 
       {#if mode !== 'delete'}
-        <Form.Field {form} name="course_code">
-          <Form.Control>
-            {#snippet children({ props })}
-              <Form.Label>Course Code</Form.Label>
-              <Input
-                {...props}
-                bind:value={$formData.course_code}
-                placeholder="Enter course code"
-              />
-            {/snippet}
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
-
         <Form.Field {form} name="name">
           <Form.Control>
             {#snippet children({ props })}
-              <Form.Label>Course Name</Form.Label>
-              <Input {...props} bind:value={$formData.name} placeholder="Enter course name" />
+              <Form.Label>Section Name</Form.Label>
+              <Input {...props} bind:value={$formData.name} placeholder="Enter section name" />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />
@@ -176,7 +161,11 @@
               <Loader class="animate-spin" />
             </div>
           {/if}
-          {@render modeTemplate({ createMsg: 'Create', editMsg: 'Edit', deleteMsg: 'Delete' })}
+          {@render modeTemplate({
+            createMsg: 'Create',
+            editMsg: 'Edit',
+            deleteMsg: 'Delete'
+          })}
         </Form.Button>
       </div>
     </form>

@@ -1,10 +1,12 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import CreateSection from './components/create-section/create-section.svelte';
-  import EditSection from './components/edit-section/edit-section.svelte';
-  import DeleteSection from './components/delete-section/delete-section.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
+  import CreateEditDeleteSection from './components/create-edit-delete-section/create-edit-delete-section.svelte';
+  import { page } from '$app/state';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import Plus from 'lucide-svelte/icons/plus';
+  import { urlParamStacker } from '$lib/utils';
 
   const { data } = $props();
 
@@ -30,12 +32,23 @@
       };
     });
   };
+
+  const detectMode = $derived(page.url.searchParams.get('mode')) as 'create' | 'edit' | 'delete';
 </script>
 
 <main>
-  <CreateSection createSectionForm={data.createSectionForm} />
+  <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+    Create
+    <Plus />
+  </Button>
   <DataTable data={generateMockData(60)} {columns} />
 </main>
-
-<EditSection editSectionForm={data.editSectionForm} />
-<DeleteSection deleteSectionForm={data.deleteSectionForm} />
+{#if detectMode}
+  <CreateEditDeleteSection
+    open={!!detectMode}
+    createSectionForm={data.createSectionForm}
+    editSectionForm={data.editSectionForm}
+    deleteSectionForm={data.deleteSectionForm}
+    mode={detectMode}
+  />
+{/if}
