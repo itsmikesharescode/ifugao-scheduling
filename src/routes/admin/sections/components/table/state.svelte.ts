@@ -3,8 +3,6 @@ import type { SectionPageSchema } from './schema';
 
 class TableState {
   #activeRow = $state<SectionPageSchema | null>(null);
-  showUpdate = $state(false);
-  showDelete = $state(false);
 
   getActiveRow() {
     return this.#activeRow;

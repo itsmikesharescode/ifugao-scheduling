@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" module>
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
   import { useTableState } from '../table/state.svelte';
@@ -11,7 +11,9 @@
   import EditInformation from './components/edit-information.svelte';
   import EditPassword from './components/edit-password.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+</script>
 
+<script lang="ts">
   interface Props {
     editEmailForm: SuperValidated<Infer<EditEmailSchema>>;
     editInformationForm: SuperValidated<Infer<EditInformationSchema>>;

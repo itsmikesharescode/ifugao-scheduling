@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+//NOTE: must populate by accounts details faculty_name, academic_rank, status, campus, department
+
 const loadProfSchema = z.object({
   code: z.string().min(1, 'Subject code is required'),
   section_id: z.number().min(1, 'Section is required'),
@@ -15,8 +17,7 @@ const loadProfSchema = z.object({
     })
 });
 
-export const editScheduleSchema = z.object({
-  id: z.number(),
+const baseSchema = {
   user_id: z.string(),
   semester: z.string().min(1, 'Please select a semester'),
   school_year: z.string().min(1, 'Please select a school year'),
@@ -27,6 +28,18 @@ export const editScheduleSchema = z.object({
     .refine((items) => new Set(items.map((i) => i.code)).size === items.length, {
       message: 'Duplicate subject codes found'
     })
+};
+
+export const createScheduleSchema = z.object(baseSchema);
+
+export const editScheduleSchema = createScheduleSchema.extend({
+  id: z.number()
 });
 
+export const deleteScheduleSchema = z.object({
+  id: z.number()
+});
+
+export type CreateScheduleSchema = typeof createScheduleSchema;
 export type EditScheduleSchema = typeof editScheduleSchema;
+export type DeleteScheduleSchema = typeof deleteScheduleSchema;

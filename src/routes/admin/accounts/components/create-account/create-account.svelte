@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" module>
   import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import Plus from 'lucide-svelte/icons/plus';
@@ -15,7 +15,9 @@
   import DepartmentPicker, {
     sampleDeps
   } from '$lib/components/select-picker/department-picker.svelte';
+</script>
 
+<script lang="ts">
   interface Props {
     createAccountForm: SuperValidated<Infer<CreateAccountSchema>>;
   }

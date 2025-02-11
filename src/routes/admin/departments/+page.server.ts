@@ -1,10 +1,12 @@
 import { superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { createDepartmentSchema } from './components/create-department/schema';
+import {
+  createDepartmentSchema,
+  editDepartmentSchema,
+  deleteDepartmentSchema
+} from './components/create-edit-delete-department/schema';
 import { fail } from '@sveltejs/kit';
-import { editDepartmentSchema } from './components/edit-department/schema';
-import { deleteDepartmentSchema } from './components/delete-department/schema';
 
 export const load: PageServerLoad = async () => {
   return {
