@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" module>
   import Loader from 'lucide-svelte/icons/loader';
   import * as Form from '$lib/components/ui/form/index.js';
   import { editOperationalSchema, type EditOperationalSchema } from './schema';
@@ -8,7 +8,9 @@
   import { useTableState } from '../table/state.svelte';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
+</script>
 
+<script lang="ts">
   interface Props {
     editOperationalForm: SuperValidated<Infer<EditOperationalSchema>>;
   }

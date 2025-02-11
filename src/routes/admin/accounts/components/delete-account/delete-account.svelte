@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" module>
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import Loader from 'lucide-svelte/icons/loader';
   import { toast } from 'svelte-sonner';
@@ -7,7 +7,9 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { useTableState } from '../table/state.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
+</script>
 
+<script lang="ts">
   interface Props {
     deleteAccountForm: SuperValidated<Infer<DeleteAccountSchema>>;
   }
