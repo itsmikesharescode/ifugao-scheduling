@@ -3,63 +3,57 @@
   import Loader from 'lucide-svelte/icons/loader';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
+  import {
+    createDepartmentSchema,
+    editDepartmentSchema,
+    deleteDepartmentSchema,
+    type CreateDepartmentSchema,
+    type EditDepartmentSchema,
+    type DeleteDepartmentSchema
+  } from './schema';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
-  import { useTableState } from '../table/state.svelte';
-  import { goto } from '$app/navigation';
-  import {
-    createSectionSchema,
-    editSectionSchema,
-    deleteSectionSchema,
-    type CreateSectionSchema,
-    type DeleteSectionSchema,
-    type EditSectionSchema
-  } from './schema';
   import { urlParamReducer } from '$lib/utils';
   import { page } from '$app/state';
-
-  interface Props {
-    createSectionForm: SuperValidated<Infer<CreateSectionSchema>>;
-    editSectionForm: SuperValidated<Infer<EditSectionSchema>>;
-    deleteSectionForm: SuperValidated<Infer<DeleteSectionSchema>>;
-    open: boolean;
-    mode: 'create' | 'edit' | 'delete';
-  }
+  import { goto } from '$app/navigation';
+  import { useTableState } from '../table/state.svelte';
 
   const schemas = {
-    create: createSectionSchema,
-    edit: editSectionSchema,
-    delete: deleteSectionSchema
-  };
-
-  const formIds = {
-    create: 'create-section-form',
-    edit: 'edit-section-form',
-    delete: 'delete-section-form'
+    create: createDepartmentSchema,
+    edit: editDepartmentSchema,
+    delete: deleteDepartmentSchema
   };
 
   const endPoints = {
-    create: '?/createSectionEvent',
-    edit: '?/editSectionEvent',
-    delete: '?/deleteSectionEvent'
+    create: '?/createDepartmentEvent',
+    edit: '?/editDepartmentEvent',
+    delete: '?/deleteDepartmentEvent'
   };
 </script>
 
 <script lang="ts">
-  const { open, mode, createSectionForm, editSectionForm, deleteSectionForm }: Props = $props();
+  interface Props {
+    createDepartmentForm: SuperValidated<Infer<CreateDepartmentSchema>>;
+    editDepartmentForm: SuperValidated<Infer<EditDepartmentSchema>>;
+    deleteDepartmentForm: SuperValidated<Infer<DeleteDepartmentSchema>>;
+    mode: 'create' | 'edit' | 'delete';
+    open: boolean;
+  }
+
+  const { createDepartmentForm, editDepartmentForm, deleteDepartmentForm, mode, open }: Props =
+    $props();
 
   const tableState = useTableState();
-
   const forms = {
-    create: createSectionForm,
-    edit: editSectionForm,
-    delete: deleteSectionForm
+    create: createDepartmentForm,
+    edit: editDepartmentForm,
+    delete: deleteDepartmentForm
   };
 
   const form = superForm(forms[mode] as any, {
     validators: zodClient(schemas[mode]),
-    id: formIds[mode],
+    id: crypto.randomUUID(),
     onUpdate: ({ result }) => {
       const { status, data } = result;
 
@@ -83,7 +77,11 @@
     if (mode !== 'create') {
       const activeRow = tableState.getActiveRow();
       if (activeRow) {
-        $formData.name = activeRow.name;
+        $formData.id = activeRow?.id ?? 0;
+        $formData.department_code = activeRow?.department_code ?? '';
+        $formData.name = activeRow?.name ?? '';
+        $formData.color = activeRow?.color ?? '';
+
         return () => {};
       }
 
@@ -117,20 +115,24 @@
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
+  <!--  <Dialog.Trigger class={buttonVariants({ variant: 'default', size: 'sm' })}>
+    Create Department
+    <Plus class="ml-auto" />
+  </Dialog.Trigger> -->
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>
         {@render modeTemplate({
-          createMsg: 'Create Section',
-          editMsg: 'Edit Section',
-          deleteMsg: 'Delete Section'
+          createMsg: 'Create Department',
+          editMsg: 'Edit Department',
+          deleteMsg: 'Delete Department'
         })}
       </Dialog.Title>
       <Dialog.Description>
         {@render modeTemplate({
-          createMsg: 'Kindly answer the field to create a section.',
-          editMsg: 'Kindly answer the field to edit a section.',
-          deleteMsg: 'Press delete to delete a section.'
+          createMsg: 'Kindly answer the field to create department.',
+          editMsg: 'Kindly answer the field to edit department.',
+          deleteMsg: 'Press delete to delete this department.'
         })}
       </Dialog.Description>
     </Dialog.Header>
@@ -139,19 +141,46 @@
       {#if tableState.getActiveRow() && mode !== 'create'}
         <input name="id" type="hidden" value={tableState.getActiveRow()?.id} />
       {/if}
-
       {#if mode !== 'delete'}
+        <Form.Field {form} name="department_code">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Department Code</Form.Label>
+              <Input
+                {...props}
+                bind:value={$formData.department_code}
+                placeholder="Enter department code"
+              />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
         <Form.Field {form} name="name">
           <Form.Control>
             {#snippet children({ props })}
-              <Form.Label>Section Name</Form.Label>
-              <Input {...props} bind:value={$formData.name} placeholder="Enter section name" />
+              <Form.Label>Department Name</Form.Label>
+              <Input {...props} bind:value={$formData.name} placeholder="Enter department name" />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
+        <Form.Field {form} name="color">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Department Color</Form.Label>
+              <Input
+                type="color"
+                {...props}
+                bind:value={$formData.color}
+                placeholder="Enter department name"
+              />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
       {/if}
-
       <div class="flex justify-end">
         <Form.Button disabled={$submitting} class="relative">
           {#if $submitting}

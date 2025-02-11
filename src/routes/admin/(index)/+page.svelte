@@ -34,7 +34,11 @@
     });
   };
 
-  const detectMode = $derived(page.url.searchParams.get('mode')) as 'create' | 'edit' | 'delete';
+  const detectMode = $derived(page.url.searchParams.get('mode')) as
+    | 'create'
+    | 'edit'
+    | 'delete'
+    | null;
 </script>
 
 <main>
@@ -51,6 +55,6 @@
     createSubjectForm={data.createSubjectForm}
     editSubjectForm={data.editSubjectForm}
     deleteSubjectForm={data.deleteSubjectForm}
-    mode={detectMode}
+    mode={detectMode ?? 'edit'}
   />
 {/if}

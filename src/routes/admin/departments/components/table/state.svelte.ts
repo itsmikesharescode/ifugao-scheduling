@@ -3,8 +3,6 @@ import type { DepartmentPageSchema } from './schema';
 
 class TableState {
   #activeRow = $state<DepartmentPageSchema | null>(null);
-  showUpdate = $state(false);
-  showDelete = $state(false);
 
   getActiveRow() {
     return this.#activeRow;
