@@ -112,6 +112,7 @@
   {open}
   onOpenChange={() => {
     form.reset();
+    tableState.setActiveRow(null);
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >

@@ -1,11 +1,13 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import CreateDepartment from './components/create-schedule/create-schedule.svelte';
-  import DeleteSchedule from './components/delete-schedule/delete-schedule.svelte';
-  import EditSchedule from './components/edit-schedule/edit-schedule.svelte';
+  import CreateEditDeleteSchedule from './components/create-edit-delete-schedule/create-edit-delete-schedule.svelte';
   import ViewSchedule from './components/view-schedule/view-schedule.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
+  import { page } from '$app/state';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import Plus from 'lucide-svelte/icons/plus';
+  import { urlParamStacker } from '$lib/utils';
 
   const { data } = $props();
 
@@ -56,13 +58,28 @@
   $effect(() => {
     console.log(generateMockData(20));
   });
+
+  const detectMode = $derived(page.url.searchParams.get('mode')) as
+    | 'create'
+    | 'edit'
+    | 'delete'
+    | null;
 </script>
 
 <main>
-  <CreateDepartment createScheduleForm={data.createScheduleForm} />
+  <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+    Create
+    <Plus />
+  </Button>
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
+<CreateEditDeleteSchedule
+  createScheduleForm={data.createScheduleForm}
+  editScheduleForm={data.editScheduleForm}
+  deleteScheduleForm={data.deleteScheduleForm}
+  mode={detectMode ?? 'edit'}
+  open={detectMode !== null}
+/>
+
 <ViewSchedule />
-<EditSchedule editScheduleForm={data.editScheduleForm} />
-<DeleteSchedule deleteScheduleForm={data.deleteScheduleForm} />

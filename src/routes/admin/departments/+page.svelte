@@ -62,6 +62,6 @@
     editDepartmentForm={data.editDepartmentForm}
     deleteDepartmentForm={data.deleteDepartmentForm}
     mode={detectMode ?? 'edit'}
-    open={!!detectMode}
+    open={detectMode !== null}
   />
 {/if}

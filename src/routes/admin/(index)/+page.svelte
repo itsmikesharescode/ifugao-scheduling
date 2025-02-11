@@ -51,7 +51,7 @@
 
 {#if detectMode}
   <CreateEditDeleteSubject
-    open={!!detectMode}
+    open={detectMode !== null}
     createSubjectForm={data.createSubjectForm}
     editSubjectForm={data.editSubjectForm}
     deleteSubjectForm={data.deleteSubjectForm}

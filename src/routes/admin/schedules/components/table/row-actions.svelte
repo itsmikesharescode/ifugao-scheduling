@@ -4,7 +4,6 @@
 
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
-  import PrinterCheck from 'lucide-svelte/icons/printer-check';
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import Maximize2 from 'lucide-svelte/icons/maximize-2';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
@@ -13,6 +12,9 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from './state.svelte';
   import type { SchedulePageSchema } from './schema';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
+  import { urlParamStacker } from '$lib/utils';
 
   let { row }: { row: Row<SchedulePageSchema> } = $props();
 
@@ -42,7 +44,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.showUpdate = true;
+        goto(urlParamStacker('mode', 'edit', page));
       }}
     >
       Edit
@@ -52,7 +54,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.showDelete = true;
+        goto(urlParamStacker('mode', 'delete', page));
       }}
     >
       <span class="text-destructive">Delete</span>

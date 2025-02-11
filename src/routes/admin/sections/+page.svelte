@@ -43,12 +43,13 @@
   </Button>
   <DataTable data={generateMockData(60)} {columns} />
 </main>
+
 {#if detectMode}
   <CreateEditDeleteSection
-    open={!!detectMode}
+    open={detectMode !== null}
     createSectionForm={data.createSectionForm}
     editSectionForm={data.editSectionForm}
     deleteSectionForm={data.deleteSectionForm}
-    mode={detectMode}
+    mode={detectMode ?? 'edit'}
   />
 {/if}

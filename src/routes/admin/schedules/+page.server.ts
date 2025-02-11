@@ -2,9 +2,12 @@ import { superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
-import { editScheduleSchema } from './components/edit-schedule/schema';
-import { deleteScheduleSchema } from './components/delete-schedule/schema';
-import { createScheduleSchema } from './components/create-schedule/schema';
+
+import {
+  createScheduleSchema,
+  editScheduleSchema,
+  deleteScheduleSchema
+} from './components/create-edit-delete-schedule/schema';
 
 export const load: PageServerLoad = async () => {
   return {
@@ -17,6 +20,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
   createScheduleEvent: async ({ request }) => {
     const form = await superValidate(request, zod(createScheduleSchema));
+    console.log(form.data);
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
@@ -32,7 +36,7 @@ export const actions: Actions = {
 
   deleteScheduleEvent: async ({ request }) => {
     const form = await superValidate(request, zod(deleteScheduleSchema));
-
+    console.log(form.data);
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
