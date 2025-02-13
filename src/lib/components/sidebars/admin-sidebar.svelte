@@ -51,8 +51,8 @@
 <Sidebar.Root bind:ref {...restProps}>
   <Sidebar.Header>
     <div class="grid grid-cols-[auto,1fr] items-center gap-2">
-      <div class="size-10 rounded-lg bg-secondary"></div>
-      <!-- <enhanced:img src="./assets/logo.png" alt="" class="size-10 object-cover" /> -->
+      <!-- <div class="size-10 rounded-lg bg-secondary"></div> -->
+      <img src="./favicon.png" alt="logo" class="size-10 object-cover" />
       <div class="flex flex-col">
         <span class="text-base font-medium">Administrator</span>
         <span class="text-sm text-muted-foreground">Management</span>
@@ -100,8 +100,8 @@
   <Sidebar.Footer>
     <NavUser
       user={{
-        name: 'Mike John Eviota',
-        email: 'admin_mike@gmail.com',
+        name: 'Angel Chumayyo',
+        email: 'admin_angel@gmail.com',
         avatar: '/avatars/shadcn.jpg'
       }}
     />

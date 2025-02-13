@@ -4,11 +4,15 @@
   import * as Sidebar from '$lib/components/ui/sidebar/index.js';
   import { useSidebar } from '$lib/components/ui/sidebar/index.js';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
+  import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+  import { buttonVariants } from '$lib/components/ui/button/index.js';
   import Settings from 'lucide-svelte/icons/settings';
   import LogOut from 'lucide-svelte/icons/log-out';
 
   let { user }: { user: { name: string; email: string; avatar: string } } = $props();
   const sidebar = useSidebar();
+
+  let showLogout = $state(false);
 </script>
 
 <Sidebar.Menu>
@@ -22,7 +26,10 @@
             {...props}
           >
             <Avatar.Root class="h-8 w-8 rounded-lg">
-              <Avatar.Image src={user.avatar} alt={user.name} />
+              <Avatar.Image
+                src="https://www.arkvetofliberty.com/wp-content/uploads/2018/03/sad-tabby-cat-500x350.jpeg"
+                alt={user.name}
+              />
               <Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
             </Avatar.Root>
             <div class="grid flex-1 text-left text-sm leading-tight">
@@ -42,7 +49,10 @@
         <DropdownMenu.Label class="p-0 font-normal">
           <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar.Root class="h-8 w-8 rounded-lg">
-              <Avatar.Image src={user.avatar} alt={user.name} />
+              <Avatar.Image
+                src="https://www.arkvetofliberty.com/wp-content/uploads/2018/03/sad-tabby-cat-500x350.jpeg"
+                alt={user.name}
+              />
               <Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
             </Avatar.Root>
             <div class="grid flex-1 text-left text-sm leading-tight">
@@ -63,7 +73,7 @@
           </a>
         </DropdownMenu.Group>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item>
+        <DropdownMenu.Item onclick={() => (showLogout = true)}>
           <LogOut />
           Log out
         </DropdownMenu.Item>
@@ -71,3 +81,16 @@
     </DropdownMenu.Root>
   </Sidebar.MenuItem>
 </Sidebar.Menu>
+
+<AlertDialog.Root bind:open={showLogout}>
+  <AlertDialog.Content>
+    <AlertDialog.Header>
+      <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+      <AlertDialog.Description>You are about to log out of your account.</AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Action>Continue</AlertDialog.Action>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+</AlertDialog.Root>
