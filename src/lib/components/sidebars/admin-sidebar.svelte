@@ -44,15 +44,19 @@
   import type { ComponentProps } from 'svelte';
   import NavUser from './nav-user.svelte';
   import { page } from '$app/state';
+  import { useSidebar } from '$lib/components/ui/sidebar';
 
   let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
+
+  const sidebar = useSidebar();
 </script>
 
 <Sidebar.Root bind:ref {...restProps}>
   <Sidebar.Header>
     <div class="grid grid-cols-[auto,1fr] items-center gap-2">
       <!-- <div class="size-10 rounded-lg bg-secondary"></div> -->
-      <img src="./favicon.png" alt="logo" class="size-10 object-cover" />
+
+      <enhanced:img src="../../assets/logo.png" alt="" class="size-10 object-cover" />
       <div class="flex flex-col">
         <span class="text-base font-medium">Administrator</span>
         <span class="text-sm text-muted-foreground">Management</span>
@@ -82,7 +86,10 @@
               <Sidebar.Menu class="ml-2 border-l-2 px-2">
                 {#each group.items as item (item.title)}
                   <Sidebar.MenuItem>
-                    <Sidebar.MenuButton isActive={page.url.pathname === item.url}>
+                    <Sidebar.MenuButton
+                      isActive={page.url.pathname === item.url}
+                      onclick={() => (sidebar.openMobile = false)}
+                    >
                       {#snippet child({ props })}
                         <a title="navigate to {item.url}" href={item.url} {...props}>{item.title}</a
                         >
