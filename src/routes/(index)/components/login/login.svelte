@@ -1,4 +1,4 @@
-<script lang="ts">
+<script module lang="ts">
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { toast } from 'svelte-sonner';
@@ -7,7 +7,9 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import Button from '$lib/components/ui/button/button.svelte';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+</script>
 
+<script lang="ts">
   interface Props {
     loginForm: SuperValidated<Infer<LoginSchema>>;
   }
