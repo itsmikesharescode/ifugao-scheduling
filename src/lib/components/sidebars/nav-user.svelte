@@ -5,9 +5,9 @@
   import { useSidebar } from '$lib/components/ui/sidebar/index.js';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-  import { buttonVariants } from '$lib/components/ui/button/index.js';
   import Settings from 'lucide-svelte/icons/settings';
   import LogOut from 'lucide-svelte/icons/log-out';
+  import { goto } from '$app/navigation';
 
   let { user }: { user: { name: string; email: string; avatar: string } } = $props();
   const sidebar = useSidebar();
@@ -65,12 +65,15 @@
         <DropdownMenu.Group></DropdownMenu.Group>
         <DropdownMenu.Separator />
         <DropdownMenu.Group>
-          <a href="/admin/account-settings">
-            <DropdownMenu.Item>
-              <Settings />
-              Account Settings
-            </DropdownMenu.Item>
-          </a>
+          <DropdownMenu.Item
+            onclick={() => {
+              sidebar.openMobile = false;
+              goto('/admin/account-settings');
+            }}
+          >
+            <Settings />
+            Account Settings
+          </DropdownMenu.Item>
         </DropdownMenu.Group>
         <DropdownMenu.Separator />
         <DropdownMenu.Item onclick={() => (showLogout = true)}>
