@@ -238,7 +238,17 @@
                 <Form.Label>Department</Form.Label>
                 <DepartmentPicker
                   departments={sampleDeps}
-                  bind:selected_id={$formData.department_id}
+                  bind:selected={
+                    () => {
+                      return {
+                        single: $formData.department_id,
+                        multiple: undefined
+                      };
+                    },
+                    (v) => {
+                      $formData.department_id = v.single;
+                    }
+                  }
                 />
                 <input name={props.name} type="hidden" bind:value={$formData.department_id} />
               {/snippet}

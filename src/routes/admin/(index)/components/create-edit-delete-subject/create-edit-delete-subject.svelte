@@ -27,6 +27,9 @@
     type EditSubjectSchema
   } from './schema';
   import { urlParamReducer } from '$lib/utils';
+  import DepartmentPicker, {
+    sampleDeps
+  } from '$lib/components/select-picker/department-picker.svelte';
 
   const schemas = {
     create: createSubjectSchema,
@@ -163,6 +166,32 @@
             {#snippet children({ props })}
               <Form.Label>Course Name</Form.Label>
               <Input {...props} bind:value={$formData.name} placeholder="Enter course name" />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
+        <Form.Field {form} name="departments">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Departments</Form.Label>
+              <DepartmentPicker
+                mode="multiple"
+                departments={sampleDeps}
+                bind:selected={
+                  () => {
+                    return {
+                      single: undefined,
+                      multiple: $formData.departments as number[]
+                    };
+                  },
+                  (v) => {
+                    $formData.departments = v.multiple;
+                    console.log($formData.departments);
+                  }
+                }
+              />
+              <input name={props.name} type="hidden" bind:value={$formData.departments} />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />
