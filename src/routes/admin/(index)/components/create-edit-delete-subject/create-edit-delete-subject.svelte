@@ -90,6 +90,7 @@
       if (activeRow) {
         $formData.course_code = activeRow.course_code;
         $formData.name = activeRow.name;
+        $formData.departments = activeRow.departments;
         return () => {};
       }
 
