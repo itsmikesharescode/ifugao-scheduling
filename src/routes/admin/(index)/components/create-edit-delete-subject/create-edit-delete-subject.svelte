@@ -63,6 +63,7 @@
 
   const form = superForm(forms[mode] as any, {
     validators: zodClient(schemas[mode]),
+    dataType: 'json',
     id: formIds[mode],
     onUpdate: ({ result }) => {
       const { status, data } = result;
@@ -187,7 +188,7 @@
                   },
                   (v) => {
                     $formData.departments = v.multiple;
-                    console.log($formData.departments);
+                    console.log($formData.departments, 'aw');
                   }
                 }
               />
