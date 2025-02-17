@@ -10,12 +10,12 @@
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
   import { useTableState } from './state.svelte';
-  import type { DepartmentPageSchema } from './schema';
+  import type { SubjectPageSchema } from './schema';
   import { goto } from '$app/navigation';
-  import { page } from '$app/state';
   import { urlParamStacker } from '$lib/utils';
+  import { page } from '$app/state';
 
-  let { row }: { row: Row<DepartmentPageSchema> } = $props();
+  let { row }: { row: Row<SubjectPageSchema> } = $props();
 
   const tableState = useTableState();
 </script>

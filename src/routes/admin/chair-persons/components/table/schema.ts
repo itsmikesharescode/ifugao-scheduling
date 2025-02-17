@@ -8,7 +8,7 @@ export const accountsPageSchema = z.object({
   middlename: z.string(),
   lastname: z.string(),
   academic_rank: z.string(),
-  department_id: z.number(),
+  departments: z.array(z.number()),
   department_name: z.string(),
   status: z.string(),
   gender: z.string(),

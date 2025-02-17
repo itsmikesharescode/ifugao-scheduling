@@ -6,6 +6,12 @@
   import EditOperational from './components/edit-operational/edit-operational.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
+  import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
+  import Label from '$lib/components/ui/label/label.svelte';
+  import { urlParamStacker } from '$lib/utils';
+  import { page } from '$app/state';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import Plus from 'lucide-svelte/icons/plus';
 
   const { data } = $props();
 
@@ -46,7 +52,12 @@
         birth_date: birthDate.toISOString().split('T')[0],
         academic_rank: academicRanks[Math.floor(Math.random() * academicRanks.length)],
         department_name: department,
-        department_id: i,
+        departments: Array.from(
+          {
+            length: Math.floor(Math.random() * 11) // Random array length 0-10
+          },
+          () => Math.floor(Math.random() * 9)
+        ),
         status: ['COS', 'TOP', 'RUP'][Math.floor(Math.random() * 3)],
         operational: ['activated', 'pending'][Math.floor(Math.random() * 2)]
       };
@@ -54,10 +65,22 @@
   };
 </script>
 
-<main>
-  <CreateAccount createAccountForm={data.createAccountForm} />
+<main class="flex flex-col gap-4">
+  <section class="flex items-center justify-between">
+    <div class="grid grid-cols-[auto_1fr] items-center gap-2">
+      <Label>Filter by Department:</Label>
+      <DepartmentPager />
+    </div>
+
+    <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+      Create Chair Person
+      <Plus />
+    </Button>
+  </section>
   <DataTable data={generateMockData(60)} {columns} />
 </main>
+
+<CreateAccount createAccountForm={data.createAccountForm} />
 
 <EditAccount
   editEmailForm={data.editEmailForm}

@@ -1,21 +1,19 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import Button from '$lib/components/ui/button/button.svelte';
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import { urlParamStacker } from '$lib/utils';
+  import CreateEditDeleteDepartment from './components/create-edit-delete-department/create-edit-delete-department.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
+  import { urlParamStacker } from '$lib/utils';
+  import { Button } from '$lib/components/ui/button';
   import Plus from 'lucide-svelte/icons/plus';
-  import CreateEditDeleteSubject from './components/create-edit-delete-subject/create-edit-delete-subject.svelte';
-  import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
-  import Label from '$lib/components/ui/label/label.svelte';
 
   const { data } = $props();
 
   initTableState();
 
   const generateMockData = (count: number) => {
-    const subjects = [
+    const departments = [
       { code: 'GEO', name: 'Geometry' },
       { code: 'MAT', name: 'Mathematics' },
       { code: 'PHY', name: 'Physics' },
@@ -23,21 +21,22 @@
       { code: 'BIO', name: 'Biology' }
     ];
 
+    const getRandomColor = () =>
+      '#' +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0');
+
     return Array.from({ length: count }, (_, i) => {
-      const subject = subjects[Math.floor(Math.random() * subjects.length)];
+      const department = departments[Math.floor(Math.random() * departments.length)];
       return {
         id: i,
         created_at: new Date(
           Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
         ).toISOString(),
-        course_code: `${subject.code}${Math.floor(100 + Math.random() * 900)}`,
-        name: `${subject.name} ${['Fundamentals', 'Principles', 'Advanced', 'Applied'][Math.floor(Math.random() * 4)]}`,
-        departments: Array.from(
-          {
-            length: Math.floor(Math.random() * 11) // Random array length 0-10
-          },
-          () => Math.floor(Math.random() * 9)
-        ) // Values 0-8
+        department_code: `${department.code}${Math.floor(100 + Math.random() * 900)}`,
+        name: `${department.name} ${['Computer', 'Engineering', 'Linguistics', 'Calesthenics'][Math.floor(Math.random() * 4)]}`,
+        color: getRandomColor()
       };
     });
   };
@@ -50,27 +49,19 @@
 </script>
 
 <main class="flex flex-col gap-4">
-  <section class="flex items-center justify-between">
-    <div class="grid grid-cols-[auto_1fr] items-center gap-2">
-      <Label>Filter by Department:</Label>
-      <DepartmentPager />
-    </div>
-
-    <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
-      Create Subject
-      <Plus />
-    </Button>
-  </section>
-
+  <Button size="sm" href={urlParamStacker('mode', 'create', page)} class="ml-auto">
+    Create Department
+    <Plus />
+  </Button>
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
 {#if detectMode}
-  <CreateEditDeleteSubject
-    open={detectMode !== null}
-    createSubjectForm={data.createSubjectForm}
-    editSubjectForm={data.editSubjectForm}
-    deleteSubjectForm={data.deleteSubjectForm}
+  <CreateEditDeleteDepartment
+    createDepartmentForm={data.createDepartmentForm}
+    editDepartmentForm={data.editDepartmentForm}
+    deleteDepartmentForm={data.deleteDepartmentForm}
     mode={detectMode ?? 'edit'}
+    open={detectMode !== null}
   />
 {/if}

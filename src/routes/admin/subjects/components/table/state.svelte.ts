@@ -1,14 +1,14 @@
 import { getContext, setContext } from 'svelte';
-import type { DepartmentPageSchema } from './schema';
+import type { SubjectPageSchema } from './schema';
 
 class TableState {
-  #activeRow = $state<DepartmentPageSchema | null>(null);
+  #activeRow = $state<SubjectPageSchema | null>(null);
 
   getActiveRow() {
     return this.#activeRow;
   }
 
-  setActiveRow(row: DepartmentPageSchema | null) {
+  setActiveRow(row: SubjectPageSchema | null) {
     this.#activeRow = row;
   }
 }

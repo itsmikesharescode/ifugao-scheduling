@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-export const subectPageSchema = z.object({
+export const departmentPageSchema = z.object({
   id: z.number(),
   created_at: z.string(),
-  course_code: z.string(),
+  department_code: z.string(),
   name: z.string(),
-  departments: z.number().array()
+  color: z.string()
 });
 
-export type SubjectPageSchema = z.output<typeof subectPageSchema>;
+export type DepartmentPageSchema = z.output<typeof departmentPageSchema>;

@@ -15,6 +15,9 @@
   import DepartmentPicker, {
     sampleDeps
   } from '$lib/components/select-picker/department-picker.svelte';
+  import { goto } from '$app/navigation';
+  import { urlParamReducer } from '$lib/utils';
+  import { page } from '$app/state';
 </script>
 
 <script lang="ts">
@@ -43,17 +46,17 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  const open = $derived(page.url.searchParams.get('mode') === 'create');
 </script>
 
 <Dialog.Root
+  {open}
   onOpenChange={() => {
     form.reset();
+    goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
-  <Dialog.Trigger class={buttonVariants({ variant: 'default', size: 'sm' })}>
-    Create Account
-    <Plus class="ml-auto" />
-  </Dialog.Trigger>
   <Dialog.Content class="flex max-h-screen max-w-7xl flex-col p-0">
     <Dialog.Header class="px-6 pt-6">
       <Dialog.Title>Create Account</Dialog.Title>
@@ -158,16 +161,24 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="department_id">
+            <Form.Field {form} name="departments">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Department</Form.Label>
+                  <Form.Label>Departments</Form.Label>
                   <DepartmentPicker
-                    bind:selected_id={$formData.department_id}
+                    mode="multiple"
                     departments={sampleDeps}
+                    bind:selected={
+                      () => {
+                        return {
+                          single: undefined,
+                          multiple: $formData.departments as number[]
+                        };
+                      },
+                      (v) => ($formData.departments = v.multiple)
+                    }
                   />
-
-                  <input name={props.name} type="hidden" bind:value={$formData.department_id} />
+                  <input name={props.name} type="hidden" bind:value={$formData.departments} />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />

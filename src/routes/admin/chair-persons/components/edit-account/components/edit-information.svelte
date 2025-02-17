@@ -53,7 +53,7 @@
       $formData.middlename = activeRow?.middlename ?? '';
       $formData.lastname = activeRow?.lastname ?? '';
       $formData.academic_rank = activeRow?.academic_rank ?? '';
-      $formData.department_id = activeRow?.department_id ?? 0;
+      $formData.departments = activeRow?.departments ?? [];
       $formData.gender = activeRow?.gender ?? '';
       $formData.birth_date = activeRow?.birth_date ?? '';
       $formData.status = activeRow?.status ?? '';
@@ -148,17 +148,24 @@
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Field {form} name="department_id">
+      <Form.Field {form} name="departments">
         <Form.Control>
           {#snippet children({ props })}
-            <Form.Label>Department</Form.Label>
-            <DepartmentPicker bind:selected_id={$formData.department_id} departments={sampleDeps} />
-            <input
-              name={props.name}
-              type="hidden"
-              bind:value={$formData.department_id}
-              placeholder="Enter new department"
+            <Form.Label>Departments</Form.Label>
+            <DepartmentPicker
+              mode="multiple"
+              departments={sampleDeps}
+              bind:selected={
+                () => {
+                  return {
+                    single: undefined,
+                    multiple: $formData.departments as number[]
+                  };
+                },
+                (v) => ($formData.departments = v.multiple)
+              }
             />
+            <input name={props.name} type="hidden" bind:value={$formData.departments} />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />

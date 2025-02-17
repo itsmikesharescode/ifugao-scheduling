@@ -13,7 +13,7 @@ export const editInformationSchema = z.object({
   birth_date: z.string().min(1, 'Must enter birth date.'),
   gender: z.string().min(1, 'Must select gender.'),
   academic_rank: z.string().min(1, 'Must enter academic rank.'),
-  department_id: z.number(),
+  departments: z.array(z.number()).min(1, 'Must select at least one department.'),
   status: z.string().min(1, 'Must enter status.')
 });
 
