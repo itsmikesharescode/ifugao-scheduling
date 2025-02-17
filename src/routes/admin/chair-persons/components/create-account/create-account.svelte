@@ -18,6 +18,7 @@
   import { goto } from '$app/navigation';
   import { urlParamReducer } from '$lib/utils';
   import { page } from '$app/state';
+  import { parseDate } from '@internationalized/date';
 </script>
 
 <script lang="ts">
@@ -123,8 +124,17 @@
                   <Form.Label>Birth Date</Form.Label>
                   <CalendarPicker
                     type="single"
-                    bind:dateString={$formData.birth_date}
                     title="Select Birth Date"
+                    bind:value={
+                      () => {
+                        if ($formData.birth_date) {
+                          return parseDate($formData.birth_date);
+                        }
+                      },
+                      (v) => {
+                        $formData.birth_date = v ? v.toString() : '';
+                      }
+                    }
                   />
                 {/snippet}
               </Form.Control>

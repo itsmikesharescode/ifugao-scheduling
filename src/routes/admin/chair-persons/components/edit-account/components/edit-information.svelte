@@ -13,6 +13,7 @@
   import DepartmentPicker, {
     sampleDeps
   } from '$lib/components/select-picker/department-picker.svelte';
+  import { parseDate } from '@internationalized/date';
 
   interface Props {
     editInformationForm: SuperValidated<Infer<EditInformationSchema>>;
@@ -108,8 +109,20 @@
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Birth Date</Form.Label>
-            <CalendarPicker type="single" bind:dateString={$formData.birth_date} />
-            <input name={props.name} type="hidden" bind:value={$formData.birth_date} />
+            <CalendarPicker
+              type="single"
+              title="Select Birth Date"
+              bind:value={
+                () => {
+                  if ($formData.birth_date) {
+                    return parseDate($formData.birth_date);
+                  }
+                },
+                (v) => {
+                  $formData.birth_date = v ? v.toString() : '';
+                }
+              }
+            />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />

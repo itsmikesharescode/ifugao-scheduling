@@ -8,19 +8,22 @@
   import CalendarFold from 'lucide-svelte/icons/calendar-fold';
 
   type Props = WithoutChildrenOrChild<CalendarPrimitive.RootProps> & {
-    dateString: string;
+    value: DateValue | DateValue[] | undefined;
     title?: string;
   };
 
   let {
-    dateString = $bindable(),
+    value = $bindable(),
     weekdayFormat = 'short',
     class: className,
     ...restProps
   }: Props = $props();
 
-  let value = $state<DateValue | DateValue[] | undefined>();
   let placeholder = $state<DateValue | undefined>();
+
+  const df = new DateFormatter('en-US', {
+    dateStyle: 'long'
+  });
 
   const monthOptions = [
     'January',
@@ -70,9 +73,13 @@
   <Popover.Trigger
     class="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
   >
-    <span class={dateString ? '' : 'text-muted-foreground'}
-      >{dateString || (restProps.title ?? 'Select Date')}</span
-    >
+    <span class={value ? '' : 'text-muted-foreground'}>
+      {value
+        ? Array.isArray(value)
+          ? df.format(value[0]?.toDate(getLocalTimeZone()))
+          : df.format(value.toDate(getLocalTimeZone()))
+        : (restProps.title ?? 'Select Date')}
+    </span>
     <CalendarFold class="ml-auto size-4" />
   </Popover.Trigger>
   <Popover.Content class="p-0">
@@ -140,14 +147,7 @@
                 {#each month.weeks as weekDates}
                   <Calendar.GridRow class="mt-2 w-full">
                     {#each weekDates as date}
-                      <Calendar.Cell
-                        {date}
-                        month={month.value}
-                        onclick={() => {
-                          dateString = String(value);
-                          open = false;
-                        }}
-                      >
+                      <Calendar.Cell {date} month={month.value}>
                         <Calendar.Day />
                       </Calendar.Cell>
                     {/each}
