@@ -24,6 +24,7 @@
 
   const form = superForm(editInformationForm, {
     validators: zodClient(editInformationSchema),
+    dataType: 'json',
     id: crypto.randomUUID(),
     onUpdate: ({ result }) => {
       const { status, data } = result;

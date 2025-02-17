@@ -29,6 +29,7 @@
 
   const form = superForm(createAccountForm, {
     validators: zodClient(createAccountSchema),
+    dataType: 'json',
     id: crypto.randomUUID(),
     onUpdate: ({ result }) => {
       const { status, data } = result;
