@@ -7,7 +7,6 @@
   import { initTableState } from './components/table/state.svelte';
   import Plus from 'lucide-svelte/icons/plus';
   import CreateEditDeleteSubject from './components/create-edit-delete-subject/create-edit-delete-subject.svelte';
-  import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
   import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
   import Label from '$lib/components/ui/label/label.svelte';
 
@@ -58,7 +57,7 @@
     </div>
 
     <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
-      Create
+      Create Subject
       <Plus />
     </Button>
   </section>

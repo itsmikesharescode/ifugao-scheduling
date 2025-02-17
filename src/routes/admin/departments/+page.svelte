@@ -48,9 +48,9 @@
     | null;
 </script>
 
-<main>
-  <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
-    Create
+<main class="flex flex-col gap-4">
+  <Button size="sm" href={urlParamStacker('mode', 'create', page)} class="ml-auto">
+    Create Department
     <Plus />
   </Button>
   <DataTable data={generateMockData(60)} {columns} />

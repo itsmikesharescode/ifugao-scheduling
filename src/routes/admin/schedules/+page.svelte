@@ -8,6 +8,9 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import Plus from 'lucide-svelte/icons/plus';
   import { urlParamStacker } from '$lib/utils';
+  import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
+  import Label from '$lib/components/ui/label/label.svelte';
+  import PrintAllSchedule from './components/print-all-schedule/print-all-schedule.svelte';
 
   const { data } = $props();
 
@@ -66,11 +69,22 @@
     | null;
 </script>
 
-<main>
-  <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
-    Create
-    <Plus />
-  </Button>
+<main class="flex flex-col gap-4">
+  <section class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="grid grid-cols-[auto_1fr] items-center gap-2">
+        <Label>Filter by Department:</Label>
+        <DepartmentPager />
+      </div>
+
+      <PrintAllSchedule />
+    </div>
+
+    <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+      Create Schedule
+      <Plus />
+    </Button>
+  </section>
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 

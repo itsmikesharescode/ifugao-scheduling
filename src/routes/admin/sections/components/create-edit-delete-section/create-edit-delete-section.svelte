@@ -18,6 +18,9 @@
   } from './schema';
   import { urlParamReducer } from '$lib/utils';
   import { page } from '$app/state';
+  import DepartmentPicker, {
+    sampleDeps
+  } from '$lib/components/select-picker/department-picker.svelte';
 
   interface Props {
     createSectionForm: SuperValidated<Infer<CreateSectionSchema>>;
@@ -147,6 +150,29 @@
             {#snippet children({ props })}
               <Form.Label>Section Name</Form.Label>
               <Input {...props} bind:value={$formData.name} placeholder="Enter section name" />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
+        <Form.Field {form} name="departments">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Departments</Form.Label>
+              <DepartmentPicker
+                mode="multiple"
+                departments={sampleDeps}
+                bind:selected={
+                  () => {
+                    return {
+                      single: undefined,
+                      multiple: $formData.departments as number[]
+                    };
+                  },
+                  (v) => ($formData.departments = v.multiple)
+                }
+              />
+              <input name={props.name} type="hidden" bind:value={$formData.departments} />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />

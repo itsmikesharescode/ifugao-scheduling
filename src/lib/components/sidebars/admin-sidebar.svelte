@@ -29,8 +29,8 @@
           url: '/admin/schedules'
         },
         {
-          title: 'Accounts',
-          url: '/admin/accounts'
+          title: 'Chair Persons',
+          url: '/admin/chair-persons'
         }
       ]
     }

@@ -7,6 +7,8 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import Plus from 'lucide-svelte/icons/plus';
   import { urlParamStacker } from '$lib/utils';
+  import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
+  import Label from '$lib/components/ui/label/label.svelte';
 
   const { data } = $props();
 
@@ -36,11 +38,19 @@
   const detectMode = $derived(page.url.searchParams.get('mode')) as 'create' | 'edit' | 'delete';
 </script>
 
-<main>
-  <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
-    Create
-    <Plus />
-  </Button>
+<main class="flex flex-col gap-4">
+  <section class="flex items-center justify-between">
+    <div class="grid grid-cols-[auto_1fr] items-center gap-2">
+      <Label>Filter by Department:</Label>
+      <DepartmentPager />
+    </div>
+
+    <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+      Create Section
+      <Plus />
+    </Button>
+  </section>
+
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 

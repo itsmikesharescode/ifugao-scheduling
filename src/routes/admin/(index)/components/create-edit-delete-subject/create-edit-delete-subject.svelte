@@ -187,10 +187,7 @@
                       multiple: $formData.departments as number[]
                     };
                   },
-                  (v) => {
-                    $formData.departments = v.multiple;
-                    console.log($formData.departments, 'aw');
-                  }
+                  (v) => ($formData.departments = v.multiple)
                 }
               />
               <input name={props.name} type="hidden" bind:value={$formData.departments} />

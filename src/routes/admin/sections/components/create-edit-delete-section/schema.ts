@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 const commonFields = {
-  name: z.string().min(1, 'Must enter course name.')
+  name: z.string().min(1, 'Must enter course name.'),
+  departments: z.array(z.number()).min(1, 'Must select at least one department.')
 };
 
 export const createSectionSchema = z.object(commonFields);
