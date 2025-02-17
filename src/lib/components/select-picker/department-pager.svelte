@@ -7,22 +7,22 @@
     },
     {
       id: crypto.randomUUID(),
-      name: 'Department 1',
+      name: 'CET',
       code: 'd1'
     },
     {
       id: crypto.randomUUID(),
-      name: 'Department 2',
+      name: 'CBM',
       code: 'd2'
     },
     {
       id: crypto.randomUUID(),
-      name: 'Department 3',
+      name: 'COD',
       code: 'd3'
     },
     {
       id: crypto.randomUUID(),
-      name: 'Department 4',
+      name: 'BSM',
       code: 'd4'
     }
   ];

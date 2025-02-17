@@ -31,6 +31,10 @@
         {
           title: 'Chair Persons',
           url: '/admin/chair-persons'
+        },
+        {
+          title: 'Faculty',
+          url: '/admin/faculty'
         }
       ]
     }
