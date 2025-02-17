@@ -7,6 +7,9 @@
   import { initTableState } from './components/table/state.svelte';
   import Plus from 'lucide-svelte/icons/plus';
   import CreateEditDeleteSubject from './components/create-edit-delete-subject/create-edit-delete-subject.svelte';
+  import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
+  import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
+  import Label from '$lib/components/ui/label/label.svelte';
 
   const { data } = $props();
 
@@ -47,11 +50,19 @@
     | null;
 </script>
 
-<main>
-  <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
-    Create
-    <Plus />
-  </Button>
+<main class="flex flex-col gap-4">
+  <section class="flex items-center justify-between">
+    <div class="grid grid-cols-[auto_1fr] items-center gap-2">
+      <Label>Filter by Department:</Label>
+      <DepartmentPager />
+    </div>
+
+    <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+      Create
+      <Plus />
+    </Button>
+  </section>
+
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
