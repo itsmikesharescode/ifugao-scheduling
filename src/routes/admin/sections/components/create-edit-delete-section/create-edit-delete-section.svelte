@@ -6,7 +6,6 @@
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
-  import { useTableState } from '../table/state.svelte';
   import { goto } from '$app/navigation';
   import {
     createSectionSchema,
@@ -17,7 +16,6 @@
     type EditSectionSchema
   } from './schema';
   import { urlParamReducer } from '$lib/utils';
-  import { page } from '$app/state';
   import DepartmentPicker, {
     sampleDeps
   } from '$lib/components/select-picker/department-picker.svelte';
@@ -29,40 +27,45 @@
     open: boolean;
     mode: 'create' | 'edit' | 'delete';
   }
-
-  const schemas = {
-    create: createSectionSchema,
-    edit: editSectionSchema,
-    delete: deleteSectionSchema
-  };
-
-  const formIds = {
-    create: 'create-section-form',
-    edit: 'edit-section-form',
-    delete: 'delete-section-form'
-  };
-
-  const endPoints = {
-    create: '?/createSectionEvent',
-    edit: '?/editSectionEvent',
-    delete: '?/deleteSectionEvent'
-  };
 </script>
 
 <script lang="ts">
+  import { page } from '$app/state';
+  import { useTableState } from '../table/state.svelte';
+
   const { open, mode, createSectionForm, editSectionForm, deleteSectionForm }: Props = $props();
 
   const tableState = useTableState();
 
-  const forms = {
-    create: createSectionForm,
-    edit: editSectionForm,
-    delete: deleteSectionForm
+  const formSchemes = {
+    forms: {
+      create: createSectionForm,
+      edit: editSectionForm,
+      delete: deleteSectionForm
+    },
+
+    schemas: {
+      create: createSectionSchema,
+      edit: editSectionSchema,
+      delete: deleteSectionSchema
+    },
+
+    formIds: {
+      create: 'create-section-form',
+      edit: 'edit-section-form',
+      delete: 'delete-section-form'
+    },
+    endPoints: {
+      create: '?/createSectionEvent',
+      edit: '?/editSectionEvent',
+      delete: '?/deleteSectionEvent'
+    }
   };
 
-  const form = superForm(forms[mode] as any, {
-    validators: zodClient(schemas[mode]),
-    id: formIds[mode],
+  const form = superForm(formSchemes.forms[mode] as any, {
+    validators: zodClient(formSchemes.schemas[mode]),
+    id: formSchemes.formIds[mode],
+    dataType: 'json', //LOLS
     onUpdate: ({ result }) => {
       const { status, data } = result;
 
@@ -87,6 +90,8 @@
       const activeRow = tableState.getActiveRow();
       if (activeRow) {
         $formData.name = activeRow.name;
+        $formData.departments = activeRow.departments;
+        $formData.id = activeRow.id as number;
         return () => {};
       }
 
@@ -139,9 +144,9 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form method="POST" action={endPoints[mode]} use:enhance>
-      {#if tableState.getActiveRow() && mode !== 'create'}
-        <input name="id" type="hidden" value={tableState.getActiveRow()?.id} />
+    <form method="POST" action={formSchemes.endPoints[mode]} use:enhance>
+      {#if mode !== 'create'}
+        <input name="id" type="hidden" bind:value={$formData.id} />
       {/if}
 
       {#if mode !== 'delete'}

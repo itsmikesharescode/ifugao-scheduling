@@ -30,7 +30,13 @@
         created_at: new Date(
           Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
         ).toISOString(),
-        name: `${subject.name} ${['Fundamentals', 'Principles', 'Advanced', 'Applied'][Math.floor(Math.random() * 4)]}`
+        name: `${subject.name} ${['Fundamentals', 'Principles', 'Advanced', 'Applied'][Math.floor(Math.random() * 4)]}`,
+        departments: Array.from(
+          {
+            length: Math.floor(Math.random() * 11) // Random array length 0-10
+          },
+          () => Math.floor(Math.random() * 9)
+        )
       };
     });
   };

@@ -15,24 +15,12 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
   import { urlParamReducer } from '$lib/utils';
-  import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import { useTableState } from '../table/state.svelte';
-
-  const schemas = {
-    create: createDepartmentSchema,
-    edit: editDepartmentSchema,
-    delete: deleteDepartmentSchema
-  };
-
-  const endPoints = {
-    create: '?/createDepartmentEvent',
-    edit: '?/editDepartmentEvent',
-    delete: '?/deleteDepartmentEvent'
-  };
 </script>
 
 <script lang="ts">
+  import { page } from '$app/state';
+  import { useTableState } from '../table/state.svelte';
   interface Props {
     createDepartmentForm: SuperValidated<Infer<CreateDepartmentSchema>>;
     editDepartmentForm: SuperValidated<Infer<EditDepartmentSchema>>;
@@ -45,15 +33,35 @@
     $props();
 
   const tableState = useTableState();
-  const forms = {
-    create: createDepartmentForm,
-    edit: editDepartmentForm,
-    delete: deleteDepartmentForm
+
+  const formSchemes = {
+    forms: {
+      create: createDepartmentForm,
+      edit: editDepartmentForm,
+      delete: deleteDepartmentForm
+    },
+
+    schemas: {
+      create: createDepartmentSchema,
+      edit: editDepartmentSchema,
+      delete: deleteDepartmentSchema
+    },
+
+    formIds: {
+      create: 'create-department-form',
+      edit: 'edit-department-form',
+      delete: 'delete-department-form'
+    },
+    endPoints: {
+      create: '?/createDepartmentEvent',
+      edit: '?/editDepartmentEvent',
+      delete: '?/deleteDepartmentEvent'
+    }
   };
 
-  const form = superForm(forms[mode] as any, {
-    validators: zodClient(schemas[mode]),
-    id: crypto.randomUUID(),
+  const form = superForm(formSchemes.forms[mode] as any, {
+    validators: zodClient(formSchemes.schemas[mode]),
+    id: formSchemes.formIds[mode],
     onUpdate: ({ result }) => {
       const { status, data } = result;
 
@@ -116,10 +124,6 @@
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
-  <!--  <Dialog.Trigger class={buttonVariants({ variant: 'default', size: 'sm' })}>
-    Create Department
-    <Plus class="ml-auto" />
-  </Dialog.Trigger> -->
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>
@@ -138,9 +142,9 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form method="POST" action={endPoints[mode]} use:enhance>
-      {#if tableState.getActiveRow() && mode !== 'create'}
-        <input name="id" type="hidden" value={tableState.getActiveRow()?.id} />
+    <form method="POST" action={formSchemes.endPoints[mode]} use:enhance>
+      {#if mode !== 'create'}
+        <input name="id" type="hidden" bind:value={$formData.id} />
       {/if}
       {#if mode !== 'delete'}
         <Form.Field {form} name="department_code">
