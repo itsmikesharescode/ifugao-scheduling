@@ -30,41 +30,42 @@
   import DepartmentPicker, {
     sampleDeps
   } from '$lib/components/select-picker/department-picker.svelte';
-
-  const schemas = {
-    create: createSubjectSchema,
-    edit: editSubjectSchema,
-    delete: deleteSubjectSchema
-  };
-
-  const formIds = {
-    create: 'create-subject-form',
-    edit: 'edit-subject-form',
-    delete: 'delete-subject-form'
-  };
-
-  const endPoints = {
-    create: '?/createSubjectEvent',
-    edit: '?/editSubjectEvent',
-    delete: '?/deleteSubjectEvent'
-  };
 </script>
 
 <script lang="ts">
   const { open, createSubjectForm, editSubjectForm, deleteSubjectForm, mode }: Props = $props();
 
-  const forms = {
-    create: createSubjectForm,
-    edit: editSubjectForm,
-    delete: deleteSubjectForm
+  const formSchemes = {
+    forms: {
+      create: createSubjectForm,
+      edit: editSubjectForm,
+      delete: deleteSubjectForm
+    },
+
+    schemas: {
+      create: createSubjectSchema,
+      edit: editSubjectSchema,
+      delete: deleteSubjectSchema
+    },
+
+    formIds: {
+      create: 'create-subject-form',
+      edit: 'edit-subject-form',
+      delete: 'delete-subject-form'
+    },
+    endPoints: {
+      create: '?/createSubjectEvent',
+      edit: '?/editSubjectEvent',
+      delete: '?/deleteSubjectEvent'
+    }
   };
 
   let tableState = useTableState();
 
-  const form = superForm(forms[mode] as any, {
-    validators: zodClient(schemas[mode]),
+  const form = superForm(formSchemes.forms[mode] as any, {
+    validators: zodClient(formSchemes.schemas[mode]),
     dataType: 'json',
-    id: formIds[mode],
+    id: formSchemes.formIds[mode],
     onUpdate: ({ result }) => {
       const { status, data } = result;
 
@@ -91,10 +92,11 @@
         $formData.course_code = activeRow.course_code;
         $formData.name = activeRow.name;
         $formData.departments = activeRow.departments;
+        $formData.id = activeRow.id as number;
         return () => {};
       }
 
-      goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
+      goto(`${page.url.pathname}${urlParamReducer('mode', page)}`);
     }
   });
 </script>
@@ -143,9 +145,9 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form method="POST" action={endPoints[mode]} use:enhance>
-      {#if tableState.getActiveRow() && mode !== 'create'}
-        <input name="id" type="hidden" value={tableState.getActiveRow()?.id} />
+    <form method="POST" action={formSchemes.endPoints[mode]} use:enhance>
+      {#if mode !== 'create'}
+        <input name="id" type="hidden" bind:value={$formData.id} />
       {/if}
 
       {#if mode !== 'delete'}

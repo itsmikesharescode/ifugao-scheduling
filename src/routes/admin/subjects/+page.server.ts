@@ -33,7 +33,6 @@ export const actions: Actions = {
 
   deleteSubjectEvent: async ({ request }) => {
     const form = await superValidate(request, zod(deleteSubjectSchema));
-    console.log(form.data);
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
