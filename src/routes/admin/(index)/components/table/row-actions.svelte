@@ -33,7 +33,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        goto(urlParamStacker('mode', 'edit', page));
+        goto(urlParamStacker('mode', 'update', page));
       }}
     >
       Edit

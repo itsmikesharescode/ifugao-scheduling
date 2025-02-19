@@ -1,12 +1,14 @@
 <script lang="ts">
   import { page } from '$app/state';
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import CreateEditDeleteDepartment from './components/create-edit-delete-department/create-edit-delete-department.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
   import { urlParamStacker } from '$lib/utils';
   import { Button } from '$lib/components/ui/button';
   import Plus from 'lucide-svelte/icons/plus';
+  import CreateDepartment from './components/forms/create-department/create-department.svelte';
+  import UpdateDepartment from './components/forms/update-department/update-department.svelte';
+  import DeleteDepartment from './components/forms/delete-department/delete-department.svelte';
 
   const { data } = $props();
 
@@ -40,12 +42,6 @@
       };
     });
   };
-
-  const detectMode = $derived(page.url.searchParams.get('mode')) as
-    | 'create'
-    | 'edit'
-    | 'delete'
-    | null;
 </script>
 
 <main class="flex flex-col gap-4">
@@ -56,12 +52,6 @@
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
-{#if detectMode}
-  <CreateEditDeleteDepartment
-    createDepartmentForm={data.createDepartmentForm}
-    editDepartmentForm={data.editDepartmentForm}
-    deleteDepartmentForm={data.deleteDepartmentForm}
-    mode={detectMode ?? 'edit'}
-    open={detectMode !== null}
-  />
-{/if}
+<CreateDepartment createDepForm={data.createDepartmentForm} />
+<UpdateDepartment updateDepForm={data.editDepartmentForm} />
+<DeleteDepartment deleteDepForm={data.deleteDepartmentForm} />
