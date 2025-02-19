@@ -1,38 +1,34 @@
 import { superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import {
-  createSubjectSchema,
-  editSubjectSchema,
-  deleteSubjectSchema
-} from './components/create-edit-delete-subject/schema';
 import { fail } from '@sveltejs/kit';
+import { createSubSchema, updateSubSchema, deleteSubSchema } from './components/forms/schema';
 
 export const load: PageServerLoad = async () => {
   return {
-    createSubjectForm: await superValidate(zod(createSubjectSchema)),
-    editSubjectForm: await superValidate(zod(editSubjectSchema)),
-    deleteSubjectForm: await superValidate(zod(deleteSubjectSchema))
+    createSubForm: await superValidate(zod(createSubSchema)),
+    updateSubForm: await superValidate(zod(updateSubSchema)),
+    deleteSubForm: await superValidate(zod(deleteSubSchema))
   };
 };
 
 export const actions: Actions = {
-  createSubjectEvent: async ({ request }) => {
-    const form = await superValidate(request, zod(createSubjectSchema));
+  createSubEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(createSubSchema));
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
   },
 
-  editSubjectEvent: async ({ request }) => {
-    const form = await superValidate(request, zod(editSubjectSchema));
+  updateSubEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(updateSubSchema));
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
   },
 
-  deleteSubjectEvent: async ({ request }) => {
-    const form = await superValidate(request, zod(deleteSubjectSchema));
+  deleteSubEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(deleteSubSchema));
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);

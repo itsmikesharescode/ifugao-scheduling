@@ -6,9 +6,11 @@
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
   import Plus from 'lucide-svelte/icons/plus';
-  import CreateEditDeleteSubject from './components/create-edit-delete-subject/create-edit-delete-subject.svelte';
   import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
   import Label from '$lib/components/ui/label/label.svelte';
+  import CreateSubject from './components/forms/create-subject/create-subject.svelte';
+  import UpdateSubject from './components/forms/update-subject/update-subject.svelte';
+  import DeleteSubject from './components/forms/delete-subject/delete-subject.svelte';
 
   const { data } = $props();
 
@@ -41,12 +43,6 @@
       };
     });
   };
-
-  const detectMode = $derived(page.url.searchParams.get('mode')) as
-    | 'create'
-    | 'edit'
-    | 'delete'
-    | null;
 </script>
 
 <main class="flex flex-col gap-4">
@@ -65,12 +61,6 @@
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
-{#if detectMode}
-  <CreateEditDeleteSubject
-    open={detectMode !== null}
-    createSubjectForm={data.createSubjectForm}
-    editSubjectForm={data.editSubjectForm}
-    deleteSubjectForm={data.deleteSubjectForm}
-    mode={detectMode ?? 'edit'}
-  />
-{/if}
+<CreateSubject createSubForm={data.createSubForm} />
+<UpdateSubject updateSubForm={data.updateSubForm} />
+<DeleteSubject deleteSubForm={data.deleteSubForm} />
