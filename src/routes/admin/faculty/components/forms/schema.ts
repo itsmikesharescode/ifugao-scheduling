@@ -17,7 +17,7 @@ export const updateFacSchema = z.object(baseSchema).extend({
   id: z.number()
 });
 
-export const deleteFacSchema = z.object(baseSchema).extend({
+export const deleteFacSchema = z.object({
   id: z.number()
 });
 

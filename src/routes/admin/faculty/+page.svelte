@@ -11,7 +11,9 @@
     const lastNames = ['Santos', 'Cruz', 'Reyes', 'Bautista', 'Garcia', 'Aquino', 'Dela Cruz'];
     const ranks = ['Professor', 'Associate Professor', 'Assistant Professor', 'Lecturer'];
     const departments = ['BIO', 'CHEM', 'PHYS', 'MATH', 'ENG', 'HIST'];
-
+    const birthDate = new Date(
+      Date.now() - Math.floor((25 + Math.random() * 40) * 365 * 24 * 60 * 60 * 1000)
+    );
     return Array.from({ length: count }, (_, index) => {
       const gender = Math.random() > 0.5 ? 'male' : 'female';
       const yearBorn = 1950 + Math.floor(Math.random() * 50);
@@ -27,11 +29,7 @@
         departments: [Math.floor(Math.random() * 100) + 1],
         department_code: departments[Math.floor(Math.random() * departments.length)],
         status: Math.random() > 0.2 ? 'Active' : 'Inactive',
-        birth_date: new Date(
-          yearBorn,
-          Math.floor(Math.random() * 12),
-          Math.floor(Math.random() * 28) + 1
-        ).toISOString()
+        birth_date: birthDate.toISOString().split('T')[0]
       };
     });
   };
@@ -41,7 +39,11 @@
   import { urlParamStacker } from '$lib/utils';
   import { page } from '$app/state';
   import CreateFaculty from './components/forms/create-faculty/create-faculty.svelte';
+  import { initTableState } from './components/table/state.svelte';
+  import UpdateFaculty from './components/forms/update-faculty/update-faculty.svelte';
+  import DeleteFaculty from './components/forms/delete-faculty/delete-faculty.svelte';
 
+  initTableState();
   const { data } = $props();
 </script>
 
@@ -61,3 +63,5 @@
 </main>
 
 <CreateFaculty createFacForm={data.createFacForm} />
+<UpdateFaculty updateFacForm={data.updateFacForm} />
+<DeleteFaculty deleteFacForm={data.deleteFacForm} />
