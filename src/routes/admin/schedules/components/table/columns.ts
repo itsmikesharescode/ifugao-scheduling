@@ -131,6 +131,28 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
   },
 
   {
+    accessorKey: 'created_at',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
+        column,
+        title: 'Created At'
+      });
+    },
+    cell: ({ row }) => {
+      const createdAtSnip = createRawSnippet<[string]>((getCreatedAt) => {
+        return {
+          render: () =>
+            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
+        };
+      });
+
+      return renderSnippet(createdAtSnip, row.getValue('created_at'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     id: 'actions',
     cell: ({ row }) => renderComponent(RowActions<SchedulePageSchema>, { row })
   }

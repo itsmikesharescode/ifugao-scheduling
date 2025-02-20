@@ -59,7 +59,8 @@
           () => Math.floor(Math.random() * 9)
         ),
         status: ['COS', 'TOP', 'RUP'][Math.floor(Math.random() * 3)],
-        operational: ['activated', 'pending'][Math.floor(Math.random() * 2)]
+        operational: ['activated', 'pending'][Math.floor(Math.random() * 2)],
+        created_at: new Date().toISOString()
       };
     });
   };
