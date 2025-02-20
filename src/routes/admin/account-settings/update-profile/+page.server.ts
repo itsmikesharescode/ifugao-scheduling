@@ -1,4 +1,4 @@
-import { superValidate } from 'sveltekit-superforms';
+import { superValidate, withFiles } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { updateProfileSchema } from './components/schema';
@@ -14,7 +14,7 @@ export const actions: Actions = {
   updateProfileEvent: async ({ request }) => {
     const form = await superValidate(request, zod(updateProfileSchema));
 
-    if (!form.valid) return fail(400, { form });
+    if (!form.valid) return fail(400, withFiles({ form }));
 
     console.log(form.data);
   }

@@ -4,6 +4,6 @@
   const { data } = $props();
 </script>
 
-<div class="max-w-sm">
+<div class="max-w-full">
   <UploadProfile updateProfileForm={data.updateProfileForm} />
 </div>

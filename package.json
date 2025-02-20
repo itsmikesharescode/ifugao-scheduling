@@ -61,6 +61,7 @@
     "@tanstack/table-core": "^8.21.2",
     "@uppy/core": "^4.4.2",
     "@uppy/dashboard": "^4.3.1",
+    "@uppy/image-editor": "^3.3.1",
     "@uppy/svelte": "^4.3.0"
   }
 }
