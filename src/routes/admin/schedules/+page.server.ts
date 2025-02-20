@@ -3,40 +3,34 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
 
-import {
-  createScheduleSchema,
-  editScheduleSchema,
-  deleteScheduleSchema
-} from './components/create-edit-delete-schedule/schema';
+import { createSchedSchema, updateSchedSchema, deleteSchedSchema } from './components/forms/schema';
 
 export const load: PageServerLoad = async () => {
   return {
-    createScheduleForm: await superValidate(zod(createScheduleSchema)),
-    editScheduleForm: await superValidate(zod(editScheduleSchema)),
-    deleteScheduleForm: await superValidate(zod(deleteScheduleSchema))
+    createSchedForm: await superValidate(zod(createSchedSchema)),
+    updateSchedForm: await superValidate(zod(updateSchedSchema)),
+    deleteSchedForm: await superValidate(zod(deleteSchedSchema))
   };
 };
 
 export const actions: Actions = {
-  createScheduleEvent: async ({ request }) => {
-    const form = await superValidate(request, zod(createScheduleSchema));
-    console.log(form.data);
+  createSchedEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(createSchedSchema));
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
   },
 
-  editScheduleEvent: async ({ request }) => {
-    const form = await superValidate(request, zod(editScheduleSchema));
+  updateSchedEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(updateSchedSchema));
 
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
   },
 
-  deleteScheduleEvent: async ({ request }) => {
-    const form = await superValidate(request, zod(deleteScheduleSchema));
-    console.log(form.data);
+  deleteSchedEvent: async ({ request }) => {
+    const form = await superValidate(request, zod(deleteSchedSchema));
     if (!form.valid) return fail(400, { form });
 
     console.log(form.data);
