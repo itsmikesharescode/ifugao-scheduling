@@ -16,18 +16,17 @@
   interface Props {
     createSecForm: SuperValidated<Infer<CreateSecSchema>>;
   }
-
-  //TODO: rewrite to splitt forms
 </script>
 
 <script lang="ts">
   import { page } from '$app/state';
-  import { useTableState } from '../../table/state.svelte';
 
-  const form = superForm(formSchemes.forms[mode] as any, {
-    validators: zodClient(formSchemes.schemas[mode]),
-    id: formSchemes.formIds[mode],
-    dataType: 'json', //LOLS
+  const { createSecForm }: Props = $props();
+
+  const form = superForm(createSecForm, {
+    validators: zodClient(createSecSchema),
+    id: crypto.randomUUID(),
+    dataType: 'json',
     onUpdate: ({ result }) => {
       const { status, data } = result;
 
@@ -45,106 +44,55 @@
 
   const { form: formData, enhance, submitting } = form;
 
-  $effect(() => {
-    if (!open) return;
-
-    if (mode !== 'create') {
-      const activeRow = tableState.getActiveRow();
-      if (activeRow) {
-        $formData.name = activeRow.name;
-        $formData.departments = activeRow.departments;
-        $formData.id = activeRow.id as number;
-        return () => {};
-      }
-
-      goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
-    }
-  });
+  const open = $derived(page.url.searchParams.get('mode') === 'create');
 </script>
-
-{#snippet modeTemplate({
-  createMsg,
-  editMsg,
-  deleteMsg
-}: {
-  createMsg: string;
-  editMsg: string;
-  deleteMsg: string;
-})}
-  {#if mode === 'create'}
-    {createMsg}
-  {:else if mode === 'edit'}
-    {editMsg}
-  {:else}
-    {deleteMsg}
-  {/if}
-{/snippet}
 
 <Dialog.Root
   {open}
   onOpenChange={() => {
     form.reset();
-    tableState.setActiveRow(null);
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>
-        {@render modeTemplate({
-          createMsg: 'Create Section',
-          editMsg: 'Edit Section',
-          deleteMsg: 'Delete Section'
-        })}
-      </Dialog.Title>
-      <Dialog.Description>
-        {@render modeTemplate({
-          createMsg: 'Kindly answer the field to create a section.',
-          editMsg: 'Kindly answer the field to edit a section.',
-          deleteMsg: 'Press delete to delete a section.'
-        })}
-      </Dialog.Description>
+      <Dialog.Title>Create Section</Dialog.Title>
+      <Dialog.Description>Kindly answer the field to create a section.</Dialog.Description>
     </Dialog.Header>
 
-    <form method="POST" action={formSchemes.endPoints[mode]} use:enhance>
-      {#if mode !== 'create'}
-        <input name="id" type="hidden" bind:value={$formData.id} />
-      {/if}
+    <form method="POST" action="?/createSecEvent" use:enhance>
+      <Form.Field {form} name="name">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Section Name</Form.Label>
+            <Input {...props} bind:value={$formData.name} placeholder="Enter section name" />
+          {/snippet}
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
 
-      {#if mode !== 'delete'}
-        <Form.Field {form} name="name">
-          <Form.Control>
-            {#snippet children({ props })}
-              <Form.Label>Section Name</Form.Label>
-              <Input {...props} bind:value={$formData.name} placeholder="Enter section name" />
-            {/snippet}
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
-
-        <Form.Field {form} name="departments">
-          <Form.Control>
-            {#snippet children({ props })}
-              <Form.Label>Departments</Form.Label>
-              <DepartmentPicker
-                mode="multiple"
-                departments={sampleDeps}
-                bind:selected={
-                  () => {
-                    return {
-                      single: undefined,
-                      multiple: $formData.departments as number[]
-                    };
-                  },
-                  (v) => ($formData.departments = v.multiple)
-                }
-              />
-              <input name={props.name} type="hidden" bind:value={$formData.departments} />
-            {/snippet}
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
-      {/if}
+      <Form.Field {form} name="departments">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Departments</Form.Label>
+            <DepartmentPicker
+              mode="multiple"
+              departments={sampleDeps}
+              bind:selected={
+                () => {
+                  return {
+                    single: undefined,
+                    multiple: $formData.departments as number[]
+                  };
+                },
+                (v) => ($formData.departments = v.multiple)
+              }
+            />
+            <input name={props.name} type="hidden" bind:value={$formData.departments} />
+          {/snippet}
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
 
       <div class="flex justify-end">
         <Form.Button disabled={$submitting} class="relative">
@@ -153,11 +101,7 @@
               <Loader class="animate-spin" />
             </div>
           {/if}
-          {@render modeTemplate({
-            createMsg: 'Create',
-            editMsg: 'Edit',
-            deleteMsg: 'Delete'
-          })}
+          Create
         </Form.Button>
       </div>
     </form>
