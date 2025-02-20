@@ -6,8 +6,7 @@ const baseSchema = {
   lastname: z.string().min(1, 'Must enter last name.'),
   gender: z.string().min(1, 'Must select gender.'),
   academic_rank: z.string(),
-  departments: z.array(z.number()),
-  department_id: z.number(),
+  departments: z.array(z.number()).min(1, 'Must select at least one department.'),
   status: z.string(),
   birth_date: z.string()
 };
@@ -18,5 +17,10 @@ export const updateFacSchema = z.object(baseSchema).extend({
   id: z.number()
 });
 
+export const deleteFacSchema = z.object(baseSchema).extend({
+  id: z.number()
+});
+
 export type CreateFacSchema = typeof createFacSchema;
 export type UpdateFacSchema = typeof updateFacSchema;
+export type DeleteFacSchema = typeof deleteFacSchema;

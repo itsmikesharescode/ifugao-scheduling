@@ -152,11 +152,11 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_code',
+    accessorKey: 'departments',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
         column,
-        title: 'Department Code'
+        title: 'Departments'
       });
     },
     cell: ({ row }) => {
@@ -166,7 +166,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
         };
       });
 
-      return renderSnippet(departmentSnip, row.getValue('department_code'));
+      return renderSnippet(departmentSnip, row.getValue('departments'));
     },
     enableSorting: true,
     enableHiding: true

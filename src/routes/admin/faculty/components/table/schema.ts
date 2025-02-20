@@ -8,8 +8,7 @@ export const facultySchema = z.object({
   lastname: z.string(),
   gender: z.string(),
   academic_rank: z.string(),
-  department_id: z.number(),
-  department_code: z.string(),
+  departments: z.number().array(),
   status: z.string(),
   birth_date: z.string()
 });

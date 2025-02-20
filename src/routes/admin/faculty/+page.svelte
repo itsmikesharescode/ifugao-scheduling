@@ -5,6 +5,7 @@
   import Plus from 'lucide-svelte/icons/plus';
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import { columns } from './components/table/columns';
+
   const generateFacultyData = (count: number) => {
     const firstNames = ['Maria', 'Juan', 'Ana', 'Carlos', 'Liza', 'Ramon', 'Elena', 'Luis'];
     const lastNames = ['Santos', 'Cruz', 'Reyes', 'Bautista', 'Garcia', 'Aquino', 'Dela Cruz'];
@@ -23,7 +24,7 @@
         lastname: lastNames[Math.floor(Math.random() * lastNames.length)],
         gender,
         academic_rank: ranks[Math.floor(Math.random() * ranks.length)],
-        department_id: Math.floor(Math.random() * 100) + 1,
+        departments: [Math.floor(Math.random() * 100) + 1],
         department_code: departments[Math.floor(Math.random() * departments.length)],
         status: Math.random() > 0.2 ? 'Active' : 'Inactive',
         birth_date: new Date(
@@ -39,6 +40,9 @@
 <script lang="ts">
   import { urlParamStacker } from '$lib/utils';
   import { page } from '$app/state';
+  import CreateFaculty from './components/forms/create-faculty/create-faculty.svelte';
+
+  const { data } = $props();
 </script>
 
 <main class="flex flex-col gap-4">
@@ -55,3 +59,5 @@
   </section>
   <DataTable data={generateFacultyData(60)} {columns} />
 </main>
+
+<CreateFaculty createFacForm={data.createFacForm} />
