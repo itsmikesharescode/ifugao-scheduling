@@ -152,27 +152,6 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
   },
 
   {
-    accessorKey: 'departments',
-    header: ({ column }) => {
-      return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
-        column,
-        title: 'Departments'
-      });
-    },
-    cell: ({ row }) => {
-      const departmentSnip = createRawSnippet<[string]>((getDepartment) => {
-        return {
-          render: () => `<div class="w-[80px]">${getDepartment()}</div>`
-        };
-      });
-
-      return renderSnippet(departmentSnip, row.getValue('departments'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
     accessorKey: 'birth_date',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
