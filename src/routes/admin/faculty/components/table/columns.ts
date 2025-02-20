@@ -47,6 +47,111 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
   },
 
   {
+    accessorKey: 'firstname',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
+        column,
+        title: 'First Name'
+      });
+    },
+    cell: ({ row }) => {
+      const firstnameSnip = createRawSnippet<[string]>((getFirstName) => {
+        return {
+          render: () => `<div class="w-[80px]">${getFirstName()}</div>`
+        };
+      });
+
+      return renderSnippet(firstnameSnip, row.getValue('firstname'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'middlename',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
+        column,
+        title: 'Middle Name'
+      });
+    },
+    cell: ({ row }) => {
+      const middlenameSnip = createRawSnippet<[string]>((getMiddleName) => {
+        return {
+          render: () => `<div class="w-full">${getMiddleName()}</div>`
+        };
+      });
+
+      return renderSnippet(middlenameSnip, row.getValue('middlename'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'lastname',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
+        column,
+        title: 'Last Name'
+      });
+    },
+    cell: ({ row }) => {
+      const lastnameSnip = createRawSnippet<[string]>((getLastname) => {
+        return {
+          render: () => `<div class="w-[80px]">${getLastname()}</div>`
+        };
+      });
+
+      return renderSnippet(lastnameSnip, row.getValue('lastname'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'gender',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
+        column,
+        title: 'Gender'
+      });
+    },
+    cell: ({ row }) => {
+      const genderSnip = createRawSnippet<[string]>((getGender) => {
+        return {
+          render: () => `<div class="w-[80px]">${getGender()}</div>`
+        };
+      });
+
+      return renderSnippet(genderSnip, row.getValue('gender'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'academic_rank',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
+        column,
+        title: 'Academic Rank'
+      });
+    },
+    cell: ({ row }) => {
+      const academicRankSnip = createRawSnippet<[string]>((getAcademicRank) => {
+        return {
+          render: () => `<div class="w-[80px]">${getAcademicRank()}</div>`
+        };
+      });
+
+      return renderSnippet(academicRankSnip, row.getValue('academic_rank'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'department_code',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
@@ -55,78 +160,56 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
       });
     },
     cell: ({ row }) => {
-      const departmentCodeSnip = createRawSnippet<[string]>((getDepCode) => {
+      const departmentSnip = createRawSnippet<[string]>((getDepartment) => {
         return {
-          render: () => `<div class="w-[80px]">${getDepCode()}</div>`
+          render: () => `<div class="w-[80px]">${getDepartment()}</div>`
         };
       });
 
-      return renderSnippet(departmentCodeSnip, row.getValue('department_code'));
+      return renderSnippet(departmentSnip, row.getValue('department_code'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'name',
+    accessorKey: 'birth_date',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
         column,
-        title: 'Course Name'
+        title: 'Birth Date'
       });
     },
     cell: ({ row }) => {
-      const nameSnip = createRawSnippet<[string]>((getName) => {
-        return {
-          render: () => `<div class="w-full">${getName()}</div>`
-        };
-      });
-
-      return renderSnippet(nameSnip, row.getValue('name'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'color',
-    header: ({ column }) => {
-      return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
-        column,
-        title: 'Department Color'
-      });
-    },
-    cell: ({ row }) => {
-      const colorSnip = createRawSnippet<[string]>((getColor) => {
+      const birthDateSnip = createRawSnippet<[string]>((getBirthDate) => {
         return {
           render: () =>
-            `<div class="size-5 rounded-full" style="background-color: ${getColor()}"></div>`
+            `<div class="w-[80px]">${new Date(getBirthDate()).toLocaleDateString()}</div>`
         };
       });
 
-      return renderSnippet(colorSnip, row.getValue('color'));
+      return renderSnippet(birthDateSnip, row.getValue('birth_date'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'created_at',
+    accessorKey: 'status',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
         column,
-        title: 'Created At'
+        title: 'Status'
       });
     },
     cell: ({ row }) => {
-      const createdAtSnip = createRawSnippet<[string]>((getCreatedAt) => {
+      const statusSnip = createRawSnippet<[string]>((getStatus) => {
         return {
-          render: () =>
-            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
+          render: () => `<div class="w-[80px]">${getStatus()}</div>`
         };
       });
 
-      return renderSnippet(createdAtSnip, row.getValue('created_at'));
+      return renderSnippet(statusSnip, row.getValue('status'));
     },
     enableSorting: true,
     enableHiding: true

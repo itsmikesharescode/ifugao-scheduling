@@ -1,4 +1,10 @@
 <script lang="ts" module>
+  import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
+  import Label from '$lib/components/ui/label/label.svelte';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import Plus from 'lucide-svelte/icons/plus';
+  import DataTable from '$lib/components/ui/data-table/data-table.svelte';
+  import { columns } from './components/table/columns';
   const generateFacultyData = (count: number) => {
     const firstNames = ['Maria', 'Juan', 'Ana', 'Carlos', 'Liza', 'Ramon', 'Elena', 'Luis'];
     const lastNames = ['Santos', 'Cruz', 'Reyes', 'Bautista', 'Garcia', 'Aquino', 'Dela Cruz'];
@@ -13,8 +19,7 @@
         id: index + 1,
         created_at: new Date(Date.now() - Math.random() * 31536000000).toISOString(), // Within last year
         firstname: firstNames[Math.floor(Math.random() * firstNames.length)],
-        middlename:
-          Math.random() > 0.7 ? firstNames[Math.floor(Math.random() * firstNames.length)] : '',
+        middlename: firstNames[Math.floor(Math.random() * firstNames.length)],
         lastname: lastNames[Math.floor(Math.random() * lastNames.length)],
         gender,
         academic_rank: ranks[Math.floor(Math.random() * ranks.length)],
@@ -29,11 +34,24 @@
       };
     });
   };
-
-  console.log(generateFacultyData(10));
 </script>
 
 <script lang="ts">
+  import { urlParamStacker } from '$lib/utils';
+  import { page } from '$app/state';
 </script>
 
-<main></main>
+<main class="flex flex-col gap-4">
+  <section class="flex items-center justify-between">
+    <div class="grid grid-cols-[auto_1fr] items-center gap-2">
+      <Label>Filter by Department:</Label>
+      <DepartmentPager />
+    </div>
+
+    <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+      Create Faculty
+      <Plus />
+    </Button>
+  </section>
+  <DataTable data={generateFacultyData(60)} {columns} />
+</main>
