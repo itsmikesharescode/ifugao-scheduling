@@ -47,7 +47,7 @@ export const columns: ColumnDef<DepartmentPageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_code',
+    accessorKey: 'code',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<DepartmentPageSchema, unknown>, {
         column,
@@ -61,7 +61,7 @@ export const columns: ColumnDef<DepartmentPageSchema>[] = [
         };
       });
 
-      return renderSnippet(departmentCodeSnip, row.getValue('department_code'));
+      return renderSnippet(departmentCodeSnip, row.getValue('code'));
     },
     enableSorting: true,
     enableHiding: true

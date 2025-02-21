@@ -36,7 +36,7 @@
         created_at: new Date(
           Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
         ).toISOString(),
-        department_code: `${department.code}${Math.floor(100 + Math.random() * 900)}`,
+        code: `${department.code}${Math.floor(100 + Math.random() * 900)}`,
         name: `${department.name} ${['Computer', 'Engineering', 'Linguistics', 'Calesthenics'][Math.floor(Math.random() * 4)]}`,
         color: getRandomColor()
       };
