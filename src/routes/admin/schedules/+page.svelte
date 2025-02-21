@@ -1,6 +1,5 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import CreateEditDeleteSchedule from './components/create-edit-delete-schedule/create-edit-delete-schedule.svelte';
   import ViewSchedule from './components/view-schedule/view-schedule.svelte';
   import { columns } from './components/table/columns';
   import { initTableState } from './components/table/state.svelte';
@@ -8,6 +7,12 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import Plus from 'lucide-svelte/icons/plus';
   import { urlParamStacker } from '$lib/utils';
+  import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
+  import Label from '$lib/components/ui/label/label.svelte';
+  import PrintAllSchedule from './components/print-all-schedule/print-all-schedule.svelte';
+  import CreateSchedule from './components/forms/create-schedule/create-schedule.svelte';
+  import UpdateSchedule from './components/forms/update-schedule/update-schedule.svelte';
+  import DeleteSchedule from './components/forms/delete-schedule/delete-schedule.svelte';
 
   const { data } = $props();
 
@@ -54,32 +59,28 @@
       };
     });
   };
-
-  $effect(() => {
-    console.log(generateMockData(20));
-  });
-
-  const detectMode = $derived(page.url.searchParams.get('mode')) as
-    | 'create'
-    | 'edit'
-    | 'delete'
-    | null;
 </script>
 
-<main>
-  <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
-    Create
-    <Plus />
-  </Button>
+<main class="flex flex-col gap-4">
+  <section class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="grid grid-cols-[auto_1fr] items-center gap-2">
+        <Label>Filter by Department:</Label>
+        <DepartmentPager />
+      </div>
+
+      <PrintAllSchedule />
+    </div>
+
+    <Button size="sm" href={urlParamStacker('mode', 'create', page)}>
+      Create Schedule
+      <Plus />
+    </Button>
+  </section>
   <DataTable data={generateMockData(60)} {columns} />
 </main>
 
-<CreateEditDeleteSchedule
-  createScheduleForm={data.createScheduleForm}
-  editScheduleForm={data.editScheduleForm}
-  deleteScheduleForm={data.deleteScheduleForm}
-  mode={detectMode ?? 'edit'}
-  open={detectMode !== null}
-/>
-
+<CreateSchedule createSchedForm={data.createSchedForm} />
+<UpdateSchedule updateSchedForm={data.updateSchedForm} />
+<DeleteSchedule deleteSchedForm={data.deleteSchedForm} />
 <ViewSchedule />

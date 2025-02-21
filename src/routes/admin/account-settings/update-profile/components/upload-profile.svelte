@@ -3,10 +3,11 @@
   import { Input } from '$lib/components/ui/input/index.js';
   import { toast } from 'svelte-sonner';
   import { updateProfileSchema, type UpdateProfileSchema } from './schema';
-  import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+  import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import ProfileUploader from '$lib/components/profile-uploader/profile-uploader.svelte';
+
+  import UppyUploader from '$lib/components/uppy-uploader/uppy-uploader.svelte';
 
   interface Props {
     updateProfileForm: SuperValidated<Infer<UpdateProfileSchema>>;
@@ -32,6 +33,8 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  const file = fileProxy(form, 'profile');
 </script>
 
 <div class="flex flex-col gap-10">
@@ -40,13 +43,13 @@
       <Form.Control>
         {#snippet children({ props })}
           <Form.Label>Profile Photo</Form.Label>
-          <!-- <Input
-            type="password"
-            {...props}
-            bind:value={$formData.profile}
-            placeholder="Enter your new password"
-          /> -->
-          <ProfileUploader name={props.name} bind:photo={$formData.profile} />
+          <UppyUploader
+            dimensions={{ height: 300, width: '100%' }}
+            onFileChanges={(v) => {
+              $formData.profile = v;
+            }}
+          />
+          <input type="file" name="profile" bind:files={$file} class="hidden" />
         {/snippet}
       </Form.Control>
 

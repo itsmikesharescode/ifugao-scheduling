@@ -7,16 +7,16 @@
       url: '#',
       items: [
         {
-          title: 'Subjects',
+          title: 'Departments',
           url: '/admin'
+        },
+        {
+          title: 'Subjects',
+          url: '/admin/subjects'
         },
         {
           title: 'Sections',
           url: '/admin/sections'
-        },
-        {
-          title: 'Departments',
-          url: '/admin/departments'
         }
       ]
     },
@@ -29,8 +29,12 @@
           url: '/admin/schedules'
         },
         {
-          title: 'Accounts',
-          url: '/admin/accounts'
+          title: 'Chair Persons',
+          url: '/admin/chair-persons'
+        },
+        {
+          title: 'Faculty',
+          url: '/admin/faculty'
         }
       ]
     }

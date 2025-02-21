@@ -9,7 +9,7 @@
   const { children } = $props();
 
   const detectPage = $derived.by(() => {
-    if (page.url.pathname === '/admin') return 'Subjects';
+    if (page.url.pathname === '/admin') return 'Departments';
 
     const [_, segment] = page.url.pathname.split('/admin/');
     const formatted = segment?.split('-').join(' ');
@@ -28,7 +28,7 @@
       <Separator orientation="vertical" class="mr-2 h-4" />
 
       <div class="flex w-full items-center justify-between">
-        <span class="text-sm font-medium">{detectPage}</span>
+        <span class="text-sm font-medium">You are at {detectPage} page</span>
 
         <Darkmode />
       </div>

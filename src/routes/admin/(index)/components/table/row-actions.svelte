@@ -10,12 +10,12 @@
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
   import { useTableState } from './state.svelte';
-  import type { SubjectPageSchema } from './schema';
+  import type { DepartmentPageSchema } from './schema';
   import { goto } from '$app/navigation';
-  import { urlParamStacker } from '$lib/utils';
   import { page } from '$app/state';
+  import { urlParamStacker } from '$lib/utils';
 
-  let { row }: { row: Row<SubjectPageSchema> } = $props();
+  let { row }: { row: Row<DepartmentPageSchema> } = $props();
 
   const tableState = useTableState();
 </script>
@@ -33,7 +33,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        goto(urlParamStacker('mode', 'edit', page));
+        goto(urlParamStacker('mode', 'update', page));
       }}
     >
       Edit
