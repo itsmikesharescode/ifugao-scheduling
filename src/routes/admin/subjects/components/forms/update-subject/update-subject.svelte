@@ -8,9 +8,7 @@
   import { goto } from '$app/navigation';
   import { urlParamReducer } from '$lib/utils';
   import { updateSubSchema, type UpdateSubSchema } from '../schema';
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
 
   interface Props {
     updateSubForm: SuperValidated<Infer<UpdateSubSchema>>;
@@ -108,7 +106,7 @@
             <Form.Label>Departments</Form.Label>
             <DepartmentPicker
               mode="multiple"
-              departments={sampleDeps}
+              departments={page.data.departments ?? []}
               bind:selected={
                 () => {
                   return {

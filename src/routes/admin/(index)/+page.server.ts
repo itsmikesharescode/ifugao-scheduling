@@ -4,21 +4,11 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { createDepSchema, updateDepSchema, deleteDepSchema } from './components/forms/schema';
 import { fail } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-  const getDepartments = async () => {
-    if (!supabase) return null;
-
-    const { data, error } = await supabase.from('deparments_tb').select('*').order('created_at');
-
-    if (error) return null;
-    return data;
-  };
-
+export const load: PageServerLoad = async () => {
   return {
     createDepartmentForm: await superValidate(zod(createDepSchema)),
     editDepartmentForm: await superValidate(zod(updateDepSchema)),
-    deleteDepartmentForm: await superValidate(zod(deleteDepSchema)),
-    departments: await getDepartments()
+    deleteDepartmentForm: await superValidate(zod(deleteDepSchema))
   };
 };
 

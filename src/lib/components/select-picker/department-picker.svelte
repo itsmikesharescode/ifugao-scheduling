@@ -1,73 +1,5 @@
 <script lang="ts" module>
-  export type Department = {
-    id: number;
-    code: string;
-    name: string;
-    color: string;
-  };
-  //must only expose id
-  export const sampleDeps = [
-    {
-      id: 0,
-      code: 'BSIT',
-      name: 'Bachelor of Science in Information Technology',
-      color: '#158932'
-    },
-    {
-      id: 1,
-      code: 'BSCS',
-      name: 'Bachelor of Science in Computer Science',
-      color: '#2b6cb0'
-    },
-    {
-      id: 2,
-      code: 'BSIS',
-      name: 'Bachelor of Science in Information Systems',
-      color: '#6b46c1'
-    },
-    {
-      id: 3,
-      code: 'BSEMC',
-      name: 'Bachelor of Science in Entertainment and Multimedia Computing',
-      color: '#d53f8c'
-    },
-    {
-      id: 4,
-      code: 'BSDA',
-      name: 'Bachelor of Science in Data Analytics',
-      color: '#3182ce'
-    },
-    {
-      id: 5,
-      code: 'BSSE',
-      name: 'Bachelor of Science in Software Engineering',
-      color: '#dd6b20'
-    },
-    {
-      id: 6,
-      code: 'BSA',
-      name: 'Bachelor of Science in Architecture',
-      color: '#48bb78'
-    },
-    {
-      id: 7,
-      code: 'BSCE',
-      name: 'Bachelor of Science in Civil Engineering',
-      color: '#667eea'
-    },
-    {
-      id: 8,
-      code: 'BSME',
-      name: 'Bachelor of Science in Mechanical Engineering',
-      color: '#c53030'
-    },
-    {
-      id: 9,
-      code: 'BSEE',
-      name: 'Bachelor of Science in Electrical Engineering',
-      color: '#4a5568'
-    }
-  ];
+  import type { Database } from '$lib/database.types';
 </script>
 
 <script lang="ts">
@@ -81,7 +13,7 @@
 
   interface Props {
     mode?: 'single' | 'multiple';
-    departments: Department[];
+    departments: Database['public']['Tables']['deparments_tb']['Row'][];
     selected: {
       single?: number;
       multiple?: number[];

@@ -14,6 +14,7 @@ declare global {
       session: Session | null;
       user?: User | null;
       supabase?: SupabaseClient<Database> | undefined;
+      departments: Database['public']['Tables']['deparments_tb']['Row'][] | null;
     }
     // interface PageState {}
     // interface Platform {}

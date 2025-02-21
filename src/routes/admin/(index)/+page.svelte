@@ -13,35 +13,6 @@
   const { data } = $props();
 
   initTableState();
-
-  const generateMockData = (count: number) => {
-    const departments = [
-      { code: 'GEO', name: 'Geometry' },
-      { code: 'MAT', name: 'Mathematics' },
-      { code: 'PHY', name: 'Physics' },
-      { code: 'CHE', name: 'Chemistry' },
-      { code: 'BIO', name: 'Biology' }
-    ];
-
-    const getRandomColor = () =>
-      '#' +
-      Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, '0');
-
-    return Array.from({ length: count }, (_, i) => {
-      const department = departments[Math.floor(Math.random() * departments.length)];
-      return {
-        id: i,
-        created_at: new Date(
-          Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
-        ).toISOString(),
-        code: `${department.code}${Math.floor(100 + Math.random() * 900)}`,
-        name: `${department.name} ${['Computer', 'Engineering', 'Linguistics', 'Calesthenics'][Math.floor(Math.random() * 4)]}`,
-        color: getRandomColor()
-      };
-    });
-  };
 </script>
 
 <main class="flex flex-col gap-4">

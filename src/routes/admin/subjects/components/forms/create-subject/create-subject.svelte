@@ -6,9 +6,7 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
   import { goto } from '$app/navigation';
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
   import { createSubSchema, type CreateSubSchema } from '../schema';
   import { urlParamReducer } from '$lib/utils';
 
@@ -91,7 +89,7 @@
             <Form.Label>Departments</Form.Label>
             <DepartmentPicker
               mode="multiple"
-              departments={sampleDeps}
+              departments={page.data.departments ?? []}
               bind:selected={
                 () => {
                   return {
