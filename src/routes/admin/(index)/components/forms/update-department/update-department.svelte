@@ -30,6 +30,8 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          tableState.setActiveRow(null);
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -51,7 +53,7 @@
 
       if (activeRow) {
         $formData.id = activeRow.id;
-        $formData.department_code = activeRow.department_code;
+        $formData.code = activeRow.code;
         $formData.name = activeRow.name;
         $formData.color = activeRow.color;
       } else {
@@ -80,15 +82,11 @@
     <form method="POST" action="?/updateDepEvent" use:enhance>
       <input name="id" type="hidden" value={$formData.id} />
 
-      <Form.Field {form} name="department_code">
+      <Form.Field {form} name="code">
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Department Code</Form.Label>
-            <Input
-              {...props}
-              bind:value={$formData.department_code}
-              placeholder="Enter department code"
-            />
+            <Input {...props} bind:value={$formData.code} placeholder="Enter department code" />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />

@@ -11,6 +11,7 @@
   import '@fontsource/prompt/900.css';
   import { invalidate } from '$app/navigation';
   import { ModeWatcher } from 'mode-watcher';
+  import { Toaster } from '$lib/components/ui/sonner/index.js';
 
   let { data, children } = $props();
   let { session, supabase } = $derived(data);
@@ -39,6 +40,7 @@
   });
 </script>
 
+<Toaster />
 <ModeWatcher />
 {@render children()}
 

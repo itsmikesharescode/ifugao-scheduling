@@ -49,7 +49,7 @@
     Create Department
     <Plus />
   </Button>
-  <DataTable data={generateMockData(60)} {columns} />
+  <DataTable data={data.departments ?? []} {columns} />
 </main>
 
 <CreateDepartment createDepForm={data.createDepartmentForm} />
