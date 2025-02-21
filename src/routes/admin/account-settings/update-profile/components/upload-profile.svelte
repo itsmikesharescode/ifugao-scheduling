@@ -44,6 +44,7 @@
         {#snippet children({ props })}
           <Form.Label>Profile Photo</Form.Label>
           <UppyUploader
+            dimensions={{ height: 300, width: '100%' }}
             onFileChanges={(v) => {
               $formData.profile = v;
             }}
