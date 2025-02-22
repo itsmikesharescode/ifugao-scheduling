@@ -52,6 +52,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      sections_tb: {
+        Row: {
+          created_at: string;
+          departments: number[];
+          id: number;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          departments: number[];
+          id?: number;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          departments?: number[];
+          id?: number;
+          name?: string;
+        };
+        Relationships: [];
+      };
       subjects_tb: {
         Row: {
           code: string;

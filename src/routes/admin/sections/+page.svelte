@@ -56,7 +56,7 @@
     </Button>
   </section>
 
-  <DataTable data={generateMockData(60)} {columns} />
+  <DataTable data={data.sections ?? []} {columns} />
 </main>
 
 <CreateSection createSecForm={data.createSecForm} />

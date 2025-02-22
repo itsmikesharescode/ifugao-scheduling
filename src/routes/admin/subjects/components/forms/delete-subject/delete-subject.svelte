@@ -32,6 +32,7 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          tableState.setActiveRow(null);
           await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 

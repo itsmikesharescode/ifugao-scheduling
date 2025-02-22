@@ -9,9 +9,7 @@
   import { goto } from '$app/navigation';
   import { createSecSchema, type CreateSecSchema } from '../schema';
   import { urlParamReducer } from '$lib/utils';
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
 
   interface Props {
     createSecForm: SuperValidated<Infer<CreateSecSchema>>;
@@ -27,12 +25,13 @@
     validators: zodClient(createSecSchema),
     id: crypto.randomUUID(),
     dataType: 'json',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -77,7 +76,7 @@
             <Form.Label>Departments</Form.Label>
             <DepartmentPicker
               mode="multiple"
-              departments={sampleDeps}
+              departments={page.data.departments ?? []}
               bind:selected={
                 () => {
                   return {
