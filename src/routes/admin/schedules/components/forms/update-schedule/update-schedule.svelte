@@ -16,9 +16,7 @@
 </script>
 
 <script lang="ts">
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
   import { urlParamReducer } from '$lib/utils';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
@@ -175,7 +173,7 @@
             {#snippet children({ props })}
               <Form.Label>Department</Form.Label>
               <DepartmentPicker
-                departments={sampleDeps}
+                departments={page.data.departments ?? []}
                 bind:selected={
                   () => {
                     return {

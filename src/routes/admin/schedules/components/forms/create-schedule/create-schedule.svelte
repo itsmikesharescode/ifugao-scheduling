@@ -1,7 +1,5 @@
 <script lang="ts" module>
-  import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
-  import Plus from 'lucide-svelte/icons/plus';
   import Trash2 from 'lucide-svelte/icons/trash-2';
   import Loader from 'lucide-svelte/icons/loader';
   import * as Form from '$lib/components/ui/form/index.js';
@@ -18,9 +16,7 @@
 </script>
 
 <script lang="ts">
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
   import { urlParamReducer } from '$lib/utils';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
@@ -156,7 +152,7 @@
             {#snippet children({ props })}
               <Form.Label>Department</Form.Label>
               <DepartmentPicker
-                departments={sampleDeps}
+                departments={page.data.departments ?? []}
                 bind:selected={
                   () => {
                     return {

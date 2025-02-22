@@ -1,5 +1,4 @@
 <script lang="ts">
-  import * as Dialog from '$lib/components/ui/dialog/index.js';
   import Loader from 'lucide-svelte/icons/loader';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
@@ -10,11 +9,9 @@
   import { useTableState } from '../../table/state.svelte';
   import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
   import { parseDate } from '@internationalized/date';
-
+  import { page } from '$app/state';
   interface Props {
     editInformationForm: SuperValidated<Infer<EditInformationSchema>>;
   }
@@ -168,7 +165,7 @@
             <Form.Label>Departments</Form.Label>
             <DepartmentPicker
               mode="multiple"
-              departments={sampleDeps}
+              departments={page.data.departments ?? []}
               bind:selected={
                 () => {
                   return {
