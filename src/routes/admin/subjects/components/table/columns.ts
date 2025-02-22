@@ -47,7 +47,7 @@ export const columns: ColumnDef<SubjectPageSchema>[] = [
   },
 
   {
-    accessorKey: 'course_code',
+    accessorKey: 'code',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<SubjectPageSchema, unknown>, {
         column,
@@ -61,7 +61,7 @@ export const columns: ColumnDef<SubjectPageSchema>[] = [
         };
       });
 
-      return renderSnippet(courseCodeSnip, row.getValue('course_code'));
+      return renderSnippet(courseCodeSnip, row.getValue('code'));
     },
     enableSorting: true,
     enableHiding: true

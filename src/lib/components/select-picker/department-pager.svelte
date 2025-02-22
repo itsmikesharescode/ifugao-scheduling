@@ -59,8 +59,18 @@
   </Select.Trigger>
   <Select.Content>
     <Select.Group>
-      {#each departments as department}
-        <Select.Item value={department.code} label={department.name} />
+      <Select.Item value="all" label="All Departments" />
+      {#each page.data.departments ?? [] as department}
+        <Select.Item value={department.id.toString()} label={department.name}>
+          <div class="">
+            <div class="flex items-center gap-2">
+              <span style="background: {department.color}" class="size-5 rounded-full"></span>
+              <span>{department.code}</span>
+            </div>
+
+            <span class="text-xs text-muted-foreground">{department.name}</span>
+          </div>
+        </Select.Item>
       {/each}
     </Select.Group>
   </Select.Content>

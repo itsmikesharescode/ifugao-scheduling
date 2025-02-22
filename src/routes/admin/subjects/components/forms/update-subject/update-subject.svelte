@@ -34,6 +34,7 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -53,7 +54,7 @@
 
       if (activeRow) {
         $formData.id = activeRow.id;
-        $formData.course_code = activeRow.course_code;
+        $formData.code = activeRow.code;
         $formData.name = activeRow.name;
         $formData.departments = activeRow.departments;
       } else {
@@ -80,11 +81,11 @@
     </Dialog.Header>
 
     <form method="POST" action="?/updateSubEvent" use:enhance>
-      <Form.Field {form} name="course_code">
+      <Form.Field {form} name="code">
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Course Code</Form.Label>
-            <Input {...props} bind:value={$formData.course_code} placeholder="Enter course code" />
+            <Input {...props} bind:value={$formData.code} placeholder="Enter course code" />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />

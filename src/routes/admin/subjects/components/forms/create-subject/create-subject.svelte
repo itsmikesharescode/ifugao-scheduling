@@ -34,6 +34,7 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -63,11 +64,11 @@
     </Dialog.Header>
 
     <form method="POST" action="?/createSubEvent" use:enhance>
-      <Form.Field {form} name="course_code">
+      <Form.Field {form} name="code">
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Course Code</Form.Label>
-            <Input {...props} bind:value={$formData.course_code} placeholder="Enter course code" />
+            <Input {...props} bind:value={$formData.code} placeholder="Enter course code" />
           {/snippet}
         </Form.Control>
         <Form.FieldErrors />

@@ -15,34 +15,6 @@
   const { data } = $props();
 
   initTableState();
-
-  const generateMockData = (count: number) => {
-    const subjects = [
-      { code: 'GEO', name: 'Geometry' },
-      { code: 'MAT', name: 'Mathematics' },
-      { code: 'PHY', name: 'Physics' },
-      { code: 'CHE', name: 'Chemistry' },
-      { code: 'BIO', name: 'Biology' }
-    ];
-
-    return Array.from({ length: count }, (_, i) => {
-      const subject = subjects[Math.floor(Math.random() * subjects.length)];
-      return {
-        id: i,
-        created_at: new Date(
-          Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
-        ).toISOString(),
-        course_code: `${subject.code}${Math.floor(100 + Math.random() * 900)}`,
-        name: `${subject.name} ${['Fundamentals', 'Principles', 'Advanced', 'Applied'][Math.floor(Math.random() * 4)]}`,
-        departments: Array.from(
-          {
-            length: Math.floor(Math.random() * 11) // Random array length 0-10
-          },
-          () => Math.floor(Math.random() * 9)
-        ) // Values 0-8
-      };
-    });
-  };
 </script>
 
 <main class="flex flex-col gap-4">
@@ -58,7 +30,7 @@
     </Button>
   </section>
 
-  <DataTable data={generateMockData(60)} {columns} />
+  <DataTable data={data.subjects ?? []} {columns} />
 </main>
 
 <CreateSubject createSubForm={data.createSubForm} />
