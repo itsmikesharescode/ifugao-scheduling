@@ -58,6 +58,11 @@
         section_id: 0,
         subject_id: 0,
         units: 0,
+        schedule: {
+          days: [],
+          start_time: '',
+          end_time: ''
+        },
         num_of_hours: { lecture: 0, lab: 0 }
       }
     ];
@@ -87,6 +92,11 @@
         section_id: 0,
         subject_id: 0,
         units: 0,
+        schedule: {
+          days: [],
+          start_time: '',
+          end_time: ''
+        },
         num_of_hours: { lecture: 0, lab: 0 }
       }
     ];

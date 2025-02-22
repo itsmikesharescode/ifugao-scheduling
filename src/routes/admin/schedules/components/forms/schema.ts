@@ -7,6 +7,11 @@ const loadProfSchema = z.object({
   section_id: z.number().min(1, 'Section is required'),
   subject_id: z.number().min(1, 'Subject selection is required'),
   units: z.number().min(0.5, 'Units must be at least 0.5'),
+  schedule: z.object({
+    days: z.array(z.string()).min(1, 'At least one day is required'),
+    start_time: z.string().min(1, 'Start time is required'),
+    end_time: z.string().min(1, 'End time is required')
+  }),
   num_of_hours: z
     .object({
       lecture: z.number().min(0, 'Lecture hours cannot be negative'),
