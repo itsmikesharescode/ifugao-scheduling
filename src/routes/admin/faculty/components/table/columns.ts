@@ -47,7 +47,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
   },
 
   {
-    accessorKey: 'firstname',
+    accessorKey: 'first_name',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
         column,
@@ -61,14 +61,14 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
         };
       });
 
-      return renderSnippet(firstnameSnip, row.getValue('firstname'));
+      return renderSnippet(firstnameSnip, row.getValue('first_name'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'middlename',
+    accessorKey: 'middle_name',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
         column,
@@ -82,14 +82,14 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
         };
       });
 
-      return renderSnippet(middlenameSnip, row.getValue('middlename'));
+      return renderSnippet(middlenameSnip, row.getValue('middle_name'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'lastname',
+    accessorKey: 'last_name',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<FacultyPageSchema, unknown>, {
         column,
@@ -103,7 +103,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
         };
       });
 
-      return renderSnippet(lastnameSnip, row.getValue('lastname'));
+      return renderSnippet(lastnameSnip, row.getValue('last_name'));
     },
     enableSorting: true,
     enableHiding: true

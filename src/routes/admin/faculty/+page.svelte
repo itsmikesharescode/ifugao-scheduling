@@ -59,7 +59,7 @@
       <Plus />
     </Button>
   </section>
-  <DataTable data={generateFacultyData(60)} {columns} />
+  <DataTable data={data.faculties ?? []} {columns} />
 </main>
 
 <CreateFaculty createFacForm={data.createFacForm} />

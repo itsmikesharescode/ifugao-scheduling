@@ -52,6 +52,45 @@ export type Database = {
         };
         Relationships: [];
       };
+      faculties_tb: {
+        Row: {
+          academic_rank: string;
+          birth_date: string;
+          created_at: string;
+          departments: number[];
+          first_name: string;
+          gender: string;
+          id: number;
+          last_name: string;
+          middle_name: string;
+          status: string;
+        };
+        Insert: {
+          academic_rank: string;
+          birth_date: string;
+          created_at?: string;
+          departments: number[];
+          first_name: string;
+          gender: string;
+          id?: number;
+          last_name: string;
+          middle_name: string;
+          status: string;
+        };
+        Update: {
+          academic_rank?: string;
+          birth_date?: string;
+          created_at?: string;
+          departments?: number[];
+          first_name?: string;
+          gender?: string;
+          id?: number;
+          last_name?: string;
+          middle_name?: string;
+          status?: string;
+        };
+        Relationships: [];
+      };
       sections_tb: {
         Row: {
           created_at: string;
