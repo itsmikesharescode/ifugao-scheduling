@@ -5,6 +5,7 @@ import { fail } from '@sveltejs/kit';
 import { createSubSchema, updateSubSchema, deleteSubSchema } from './components/forms/schema';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
+  //get subjects based in query params of departments
   const getSubjects = async () => {
     if (!supabase) return null;
 
