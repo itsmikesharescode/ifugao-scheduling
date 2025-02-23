@@ -20,6 +20,9 @@
   import { urlParamReducer } from '$lib/utils';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
+  import TimePicker, {
+    convertSelectedTime
+  } from '$lib/components/time-picker.svelte/time-picker.svelte';
 
   interface Props {
     createSchedForm: SuperValidated<Infer<CreateSchedSchema>>;
@@ -58,11 +61,6 @@
         section_id: 0,
         subject_id: 0,
         units: 0,
-        schedule: {
-          days: [],
-          start_time: '',
-          end_time: ''
-        },
         num_of_hours: { lecture: 0, lab: 0 }
       }
     ];
@@ -92,11 +90,6 @@
         section_id: 0,
         subject_id: 0,
         units: 0,
-        schedule: {
-          days: [],
-          start_time: '',
-          end_time: ''
-        },
         num_of_hours: { lecture: 0, lab: 0 }
       }
     ];
@@ -112,7 +105,7 @@
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
-  <Dialog.Content class="max-h-screen max-w-7xl p-0">
+  <Dialog.Content class="max-h-screen max-w-7xl p-0 md:max-h-[80dvh]">
     <Dialog.Header class="px-6 pt-6">
       <Dialog.Title>Create Schedule</Dialog.Title>
       <Dialog.Description>'Kindly answer the field to create a schedule.'</Dialog.Description>
@@ -182,7 +175,79 @@
         </Form.Field>
       </div>
 
-      <div class="max-h-[60dvh] overflow-auto px-6" bind:this={ref}>
+      <div class="grid grid-cols-3 items-center gap-4 px-6">
+        <Form.Field {form} name="semester">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Semester</Form.Label>
+              <TimePicker
+                bind:selectedTime={
+                  () => {
+                    return {
+                      hour: '',
+                      minute: '00',
+                      second: '00',
+                      ampm: 'AM'
+                    };
+                  },
+                  (v) => {
+                    return ($formData.schedule.start_time = String(
+                      convertSelectedTime(v.hour, v.minute, v.second, v.ampm)
+                    ));
+                  }
+                }
+              />
+              <input name={props.name} type="hidden" bind:value={$formData.schedule.start_time} />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
+        <Form.Field {form} name="school_year">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>School Year</Form.Label>
+              <SelectPicker
+                selections={[
+                  { id: crypto.randomUUID(), name: 'First Year', value: 'First Year' },
+                  { id: crypto.randomUUID(), name: 'Second Year', value: 'Second Year' },
+                  { id: crypto.randomUUID(), name: 'Third Year', value: 'Third Year' },
+                  { id: crypto.randomUUID(), name: 'Fourth Year', value: 'Fourth Year' }
+                ]}
+                bind:selected={$formData.school_year}
+              />
+              <input name={props.name} type="hidden" bind:value={$formData.semester} />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
+        <Form.Field {form} name="department_id">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>Department</Form.Label>
+              <DepartmentPicker
+                departments={page.data.departments ?? []}
+                bind:selected={
+                  () => {
+                    return {
+                      single: $formData.department_id,
+                      multiple: undefined
+                    };
+                  },
+                  (v) => {
+                    $formData.department_id = v.single;
+                  }
+                }
+              />
+              <input name={props.name} type="hidden" bind:value={$formData.department_id} />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+      </div>
+
+      <div class="max-h-[40dvh] overflow-auto px-6" bind:this={ref}>
         <div class="flex flex-col gap-4">
           {#each $formData.dynamic_form as _, index (index)}
             <div class="rounded-lg border-2 bg-secondary/50 p-4">
