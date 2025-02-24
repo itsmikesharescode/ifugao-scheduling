@@ -18,7 +18,7 @@ const loadProfSchema = z.object({
 });
 
 const baseSchema = {
-  user_id: z.string(),
+  faculty_id: z.number(),
   semester: z.string().min(1, 'Please select a semester'),
   school_year: z.string().min(1, 'Please select a school year'),
   department_id: z.number().min(1, 'Department selection is required'),
