@@ -108,7 +108,7 @@
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
-  <Dialog.Content class="max-h-screen max-w-7xl overflow-hidden p-0 md:max-h-[80dvh]">
+  <Dialog.Content class="max-h-screen max-w-7xl overflow-hidden p-0 md:max-h-[80dvh]" preventScroll>
     <Dialog.Header class="px-6 pt-6">
       <Dialog.Title>Create Schedule</Dialog.Title>
       <Dialog.Description>'Kindly answer the field to create a schedule.'</Dialog.Description>
@@ -254,7 +254,7 @@
           </div>
         </Resizable.Pane>
         <Resizable.Handle withHandle />
-        <Resizable.Pane class="grid" minSize={15}>
+        <Resizable.Pane class="flex flex-col" minSize={15}>
           <div class="mt-6 flex justify-end gap-4 px-6">
             {#if $formData.dynamic_form.length > 2}
               <Button variant="secondary" onclick={resetForm}>
@@ -274,7 +274,7 @@
               Create
             </Form.Button>
           </div>
-          <div class="mt-2 overflow-auto px-6" bind:this={ref}>
+          <div class="max-h-[60dvh] overflow-auto p-6" bind:this={ref}>
             <div class="flex flex-col gap-4">
               {#each $formData.dynamic_form as _, index (index)}
                 <div class="rounded-lg border-2 bg-secondary/50 p-4">
