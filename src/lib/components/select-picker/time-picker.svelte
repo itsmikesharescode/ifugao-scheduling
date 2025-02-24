@@ -5,12 +5,7 @@
   import * as Select from '$lib/components/ui/select/index.js';
 
   interface Props {
-    selectedTime: {
-      hour: string;
-      minute: string;
-      second: string;
-      ampm: string;
-    };
+    selectedTime: number;
   }
 
   const timeStruct = {
@@ -61,22 +56,31 @@
 </script>
 
 <script lang="ts">
-  let {
-    selectedTime = $bindable({
-      hour: '',
-      minute: '00',
-      second: '00',
-      ampm: 'AM'
-    })
-  }: Props = $props();
+  let { selectedTime = $bindable() }: Props = $props();
+
+  let timeState = $state({
+    hour: '',
+    minute: '00',
+    second: '00',
+    ampm: 'AM'
+  });
 </script>
 
-<Popover.Root>
+<Popover.Root
+  onOpenChange={() => {
+    selectedTime = convertSelectedTime(
+      timeState.hour,
+      timeState.minute,
+      timeState.second,
+      timeState.ampm
+    );
+  }}
+>
   <Popover.Trigger
     class="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm font-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
   >
-    {#if selectedTime.hour && selectedTime.minute && selectedTime.second && selectedTime.ampm}
-      {selectedTime.hour} : {selectedTime.minute} : {selectedTime.second} {selectedTime.ampm}
+    {#if timeState.hour && timeState.minute && timeState.second && timeState.ampm}
+      {timeState.hour} : {timeState.minute} : {timeState.second} {timeState.ampm}
     {:else}
       <span class="text-muted-foreground">Select Time</span>
     {/if}
@@ -86,9 +90,9 @@
     <div class="flex items-center gap-2">
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>Hour</Label>
-        <Select.Root type="single" bind:value={selectedTime.hour}>
+        <Select.Root type="single" bind:value={timeState.hour}>
           <Select.Trigger class="w-20">
-            {selectedTime.hour || 'Hour'}
+            {timeState.hour || 'Hour'}
           </Select.Trigger>
           <Select.Content>
             {#each timeStruct.hours as hour}
@@ -100,9 +104,9 @@
 
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>Minute</Label>
-        <Select.Root type="single" bind:value={selectedTime.minute}>
+        <Select.Root type="single" bind:value={timeState.minute}>
           <Select.Trigger class="w-20">
-            {selectedTime.minute || 'Minute'}
+            {timeState.minute || 'Minute'}
           </Select.Trigger>
           <Select.Content>
             {#each timeStruct.minutes as minute}
@@ -114,9 +118,9 @@
 
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>Second</Label>
-        <Select.Root type="single" bind:value={selectedTime.second}>
+        <Select.Root type="single" bind:value={timeState.second}>
           <Select.Trigger class="w-20">
-            {selectedTime.second || 'Second'}
+            {timeState.second || 'Second'}
           </Select.Trigger>
           <Select.Content>
             {#each timeStruct.seconds as second}
@@ -128,9 +132,9 @@
 
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>AM/PM</Label>
-        <Select.Root type="single" bind:value={selectedTime.ampm}>
+        <Select.Root type="single" bind:value={timeState.ampm}>
           <Select.Trigger class="w-20">
-            {selectedTime.ampm || 'AM/PM'}
+            {timeState.ampm || 'AM/PM'}
           </Select.Trigger>
           <Select.Content>
             {#each timeStruct.ampm as ampm}

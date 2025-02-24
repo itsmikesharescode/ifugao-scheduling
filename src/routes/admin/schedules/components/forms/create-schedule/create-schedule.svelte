@@ -20,9 +20,8 @@
   import { urlParamReducer } from '$lib/utils';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import TimePicker, {
-    convertSelectedTime
-  } from '$lib/components/time-picker.svelte/time-picker.svelte';
+  import TimePicker from '$lib/components/select-picker/time-picker.svelte';
+  import WeeksPicker from '$lib/components/select-picker/weeks-picker.svelte';
 
   interface Props {
     createSchedForm: SuperValidated<Infer<CreateSchedSchema>>;
@@ -176,71 +175,34 @@
       </div>
 
       <div class="grid grid-cols-3 items-center gap-4 px-6">
-        <Form.Field {form} name="semester">
+        <Form.Field {form} name="schedule.start_time">
           <Form.Control>
             {#snippet children({ props })}
-              <Form.Label>Semester</Form.Label>
-              <TimePicker
-                bind:selectedTime={
-                  () => {
-                    return {
-                      hour: '',
-                      minute: '00',
-                      second: '00',
-                      ampm: 'AM'
-                    };
-                  },
-                  (v) => {
-                    return ($formData.schedule.start_time = String(
-                      convertSelectedTime(v.hour, v.minute, v.second, v.ampm)
-                    ));
-                  }
-                }
-              />
+              <Form.Label>Start Time</Form.Label>
+              <TimePicker bind:selectedTime={$formData.schedule.start_time} />
               <input name={props.name} type="hidden" bind:value={$formData.schedule.start_time} />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
 
-        <Form.Field {form} name="school_year">
+        <Form.Field {form} name="schedule.end_time">
           <Form.Control>
             {#snippet children({ props })}
-              <Form.Label>School Year</Form.Label>
-              <SelectPicker
-                selections={[
-                  { id: crypto.randomUUID(), name: 'First Year', value: 'First Year' },
-                  { id: crypto.randomUUID(), name: 'Second Year', value: 'Second Year' },
-                  { id: crypto.randomUUID(), name: 'Third Year', value: 'Third Year' },
-                  { id: crypto.randomUUID(), name: 'Fourth Year', value: 'Fourth Year' }
-                ]}
-                bind:selected={$formData.school_year}
-              />
-              <input name={props.name} type="hidden" bind:value={$formData.semester} />
+              <Form.Label>End Time</Form.Label>
+              <TimePicker bind:selectedTime={$formData.schedule.end_time} />
+              <input name={props.name} type="hidden" bind:value={$formData.schedule.end_time} />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
 
-        <Form.Field {form} name="department_id">
+        <Form.Field {form} name="schedule.days">
           <Form.Control>
             {#snippet children({ props })}
-              <Form.Label>Department</Form.Label>
-              <DepartmentPicker
-                departments={page.data.departments ?? []}
-                bind:selected={
-                  () => {
-                    return {
-                      single: $formData.department_id,
-                      multiple: undefined
-                    };
-                  },
-                  (v) => {
-                    $formData.department_id = v.single;
-                  }
-                }
-              />
-              <input name={props.name} type="hidden" bind:value={$formData.department_id} />
+              <Form.Label>Days</Form.Label>
+              <WeeksPicker bind:selectedDays={$formData.schedule.days} />
+              <input name={props.name} type="hidden" bind:value={$formData.schedule.days} />
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />

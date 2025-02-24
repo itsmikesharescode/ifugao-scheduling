@@ -13,7 +13,6 @@
   import CreateSchedule from './components/forms/create-schedule/create-schedule.svelte';
   import UpdateSchedule from './components/forms/update-schedule/update-schedule.svelte';
   import DeleteSchedule from './components/forms/delete-schedule/delete-schedule.svelte';
-  import TimePicker from '$lib/components/time-picker.svelte/time-picker.svelte';
 
   const { data } = $props();
 

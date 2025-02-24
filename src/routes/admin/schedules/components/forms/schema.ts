@@ -24,8 +24,8 @@ const baseSchema = {
   department_id: z.number().min(0, 'Department cannot be negative'),
   schedule: z.object({
     days: z.array(z.string()).min(1, 'At least one day is required'),
-    start_time: z.string().min(1, 'Start time is required'),
-    end_time: z.string().min(1, 'End time is required')
+    start_time: z.number().min(1, 'Start time is required'),
+    end_time: z.number().min(1, 'End time is required')
   }),
   dynamic_form: z
     .array(loadProfSchema)
