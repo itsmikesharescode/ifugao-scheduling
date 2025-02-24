@@ -21,7 +21,7 @@ const baseSchema = {
   user_id: z.string(),
   semester: z.string().min(1, 'Please select a semester'),
   school_year: z.string().min(1, 'Please select a school year'),
-  department_id: z.number().min(0, 'Department cannot be negative'),
+  department_id: z.number().min(1, 'Department selection is required'),
   schedule: z.object({
     days: z.array(z.string()).min(1, 'At least one day is required'),
     start_time: z.number().min(1, 'Start time is required'),

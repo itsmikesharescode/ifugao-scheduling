@@ -158,12 +158,12 @@
                 bind:selected={
                   () => {
                     return {
-                      single: $formData.department_id,
+                      single: $formData.department_id ?? undefined,
                       multiple: undefined
                     };
                   },
                   (v) => {
-                    $formData.department_id = v.single;
+                    $formData.department_id = v.single ?? null;
                   }
                 }
               />
