@@ -2,7 +2,7 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { SchedulePageSchema } from './schema';
 import { DTCheckbox, DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
-import RowActions from './row-actions.svelte';
+import { RowActions, DisplayDepartment, DisplayFaculty } from './components/index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 
 export const columns: ColumnDef<SchedulePageSchema>[] = [
@@ -47,43 +47,27 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_name',
+    accessorKey: 'department_id',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
         title: 'Department'
       });
     },
-    cell: ({ row }) => {
-      const depNameCodeSnip = createRawSnippet<[string]>((getDepName) => {
-        return {
-          render: () => `<div class="w-[80px]">${getDepName()}</div>`
-        };
-      });
-
-      return renderSnippet(depNameCodeSnip, row.getValue('department_name'));
-    },
+    cell: ({ row }) => renderComponent(DisplayDepartment<SchedulePageSchema>, { row }),
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'user_fullname',
+    accessorKey: 'faculty_id',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
-        title: 'FullName'
+        title: 'Fullname'
       });
     },
-    cell: ({ row }) => {
-      const userFullnameSnip = createRawSnippet<[string]>((getUserFullname) => {
-        return {
-          render: () => `<div class="w-full">${getUserFullname()}</div>`
-        };
-      });
-
-      return renderSnippet(userFullnameSnip, row.getValue('user_fullname'));
-    },
+    cell: ({ row }) => renderComponent(DisplayFaculty<SchedulePageSchema>, { row }),
     enableSorting: true,
     enableHiding: true
   },

@@ -5,11 +5,19 @@ import { fail } from '@sveltejs/kit';
 
 import { createSchedSchema, updateSchedSchema, deleteSchedSchema } from './components/forms/schema';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+  const getSchedules = async () => {
+    if (!supabase) return null;
+    const { data, error } = await supabase.from('schedules_tb').select('*').order('created_at');
+    if (error) return null;
+    return data;
+  };
+
   return {
     createSchedForm: await superValidate(zod(createSchedSchema)),
     updateSchedForm: await superValidate(zod(updateSchedSchema)),
-    deleteSchedForm: await superValidate(zod(deleteSchedSchema))
+    deleteSchedForm: await superValidate(zod(deleteSchedSchema)),
+    schedules: await getSchedules()
   };
 };
 
@@ -25,7 +33,7 @@ export const actions: Actions = {
       dynamic_form: form.data.dynamic_form,
       end_time: form.data.schedule.end_time,
       school_year: form.data.school_year,
-      semeter: form.data.semester,
+      semester: form.data.semester,
       start_time: form.data.schedule.start_time
     });
 

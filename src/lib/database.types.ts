@@ -103,7 +103,7 @@ export type Database = {
           faculty_id: number;
           id: number;
           school_year: string;
-          semeter: string;
+          semester: string;
           start_time: string;
         };
         Insert: {
@@ -115,7 +115,7 @@ export type Database = {
           faculty_id: number;
           id?: number;
           school_year: string;
-          semeter: string;
+          semester: string;
           start_time: string;
         };
         Update: {

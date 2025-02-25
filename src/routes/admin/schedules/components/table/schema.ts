@@ -1,26 +1,17 @@
 import { z } from 'zod';
-
-const loadProfSchema = z.object({
-  code: z.string(),
-  section_id: z.number(),
-  subject_id: z.number(),
-  units: z.number(),
-  num_of_hours: z.object({
-    lecture: z.number(),
-    lab: z.number()
-  })
-});
+import type { DynamicForm } from '$lib/types';
 
 export const schedulePageSchema = z.object({
   id: z.number(),
   created_at: z.string(),
-  user_id: z.string(),
-  user_fullname: z.string(),
+  days: z.array(z.string()),
   department_id: z.number(),
-  department_name: z.string(),
-  semester: z.string(),
+  dynamic_form: z.array(z.custom<DynamicForm>()),
+  end_time: z.string(),
+  faculty_id: z.number(),
   school_year: z.string(),
-  dynamic_form: z.array(loadProfSchema)
+  semester: z.string(),
+  start_time: z.string()
 });
 
 export type SchedulePageSchema = z.output<typeof schedulePageSchema>;

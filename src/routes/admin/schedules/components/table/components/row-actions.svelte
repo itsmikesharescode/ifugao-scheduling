@@ -10,8 +10,8 @@
   import type { Row } from '@tanstack/table-core';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { useTableState } from './state.svelte';
-  import type { SchedulePageSchema } from './schema';
+  import { useTableState } from '../state.svelte';
+  import type { SchedulePageSchema } from '../schema';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { urlParamStacker } from '$lib/utils';
