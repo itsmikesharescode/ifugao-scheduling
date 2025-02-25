@@ -47,6 +47,7 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          tableState.setActiveRow(null);
           await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
@@ -111,6 +112,8 @@
       if (activeRow) {
         startTime = timestampToSelectedTime(activeRow.start_time);
         endTime = timestampToSelectedTime(activeRow.end_time);
+
+        $formData.id = activeRow.id;
         $formData.faculty_id = activeRow.faculty_id;
         $formData.department_id = activeRow.department_id;
         $formData.semester = activeRow.semester;
@@ -171,6 +174,7 @@
       use:enhance
       class="relative flex flex-col gap-4"
     >
+      <input type="hidden" name="id" bind:value={$formData.id} />
       <Resizable.PaneGroup direction="vertical" class="min-h-[80dvh]">
         <Resizable.Pane maxSize={70}>
           <div class="px-6">
@@ -327,7 +331,7 @@
                     <Loader class="animate-spin" />
                   </div>
                 {/if}
-                Create
+                Update
               </Form.Button>
             </div>
           </div>
