@@ -35,12 +35,13 @@
     validators: zodClient(createSchedSchema),
     id: crypto.randomUUID(),
     dataType: 'json',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -108,7 +109,7 @@
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
-  <Dialog.Content class="max-h-screen max-w-7xl overflow-hidden p-0 md:max-h-[80dvh]" preventScroll>
+  <Dialog.Content class="max-h-screen max-w-7xl overflow-hidden p-0" preventScroll>
     <Dialog.Header class="px-6 pt-6">
       <Dialog.Title>Create Schedule</Dialog.Title>
       <Dialog.Description>'Kindly answer the field to create a schedule.'</Dialog.Description>
@@ -255,27 +256,33 @@
         </Resizable.Pane>
         <Resizable.Handle withHandle />
         <Resizable.Pane class="flex flex-col" minSize={15}>
-          <div class="mt-6 flex justify-end gap-4 px-6">
-            {#if $formData.dynamic_form.length > 2}
-              <Button variant="secondary" onclick={resetForm}>
-                Reset {$formData.dynamic_form.length} Forms
-              </Button>
-            {/if}
-            <Button onclick={increaseDynamicForm}>Increase Form</Button>
+          <div class="mt-6 flex items-center justify-between gap-4 px-6">
+            <div class="">
+              <Dialog.Title>Assigned Subjects</Dialog.Title>
+            </div>
 
-            <Form.Button disabled={$submitting} class="relative">
-              {#if $submitting}
-                <div
-                  class="absolute inset-0 flex items-center justify-center rounded-lg bg-primary"
-                >
-                  <Loader class="animate-spin" />
-                </div>
+            <div class="">
+              {#if $formData.dynamic_form.length > 2}
+                <Button variant="secondary" onclick={resetForm}>
+                  Reset {$formData.dynamic_form.length} Forms
+                </Button>
               {/if}
-              Create
-            </Form.Button>
+              <Button onclick={increaseDynamicForm}>Increase Form</Button>
+
+              <Form.Button disabled={$submitting} class="relative">
+                {#if $submitting}
+                  <div
+                    class="absolute inset-0 flex items-center justify-center rounded-lg bg-primary"
+                  >
+                    <Loader class="animate-spin" />
+                  </div>
+                {/if}
+                Create
+              </Form.Button>
+            </div>
           </div>
-          <div class="max-h-[60dvh] overflow-auto p-6" bind:this={ref}>
-            <div class="flex flex-col gap-4">
+          <div class="overflow-auto p-6" bind:this={ref}>
+            <div class="mb-10 flex flex-col gap-4">
               {#each $formData.dynamic_form as _, index (index)}
                 <div class="rounded-lg border-2 bg-secondary/50 p-4">
                   <div class="flex items-center justify-between p-2">

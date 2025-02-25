@@ -14,19 +14,30 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  createSchedEvent: async ({ request }) => {
+  createSchedEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(createSchedSchema));
     if (!form.valid) return fail(400, { form });
 
-    console.log(form.data);
+    const { error } = await supabase.from('schedules_tb').insert({
+      faculty_id: form.data.faculty_id,
+      days: form.data.schedule.days,
+      department_id: form.data.department_id,
+      dynamic_form: form.data.dynamic_form,
+      end_time: form.data.schedule.end_time,
+      school_year: form.data.school_year,
+      semeter: form.data.semester,
+      start_time: form.data.schedule.start_time
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Schedule created successfully' };
   },
 
   updateSchedEvent: async ({ request }) => {
     const form = await superValidate(request, zod(updateSchedSchema));
 
     if (!form.valid) return fail(400, { form });
-
-    console.log(form.data);
   },
 
   deleteSchedEvent: async ({ request }) => {

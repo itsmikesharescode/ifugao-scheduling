@@ -5,7 +5,7 @@
   import * as Select from '$lib/components/ui/select/index.js';
 
   interface Props {
-    selectedTime: number;
+    selectedTime: string;
   }
 
   const timeStruct = {
@@ -32,11 +32,11 @@
     const date = new Date();
     date.setHours(parseInt(hour), parseInt(minute), parseInt(second), 0);
 
-    return date.getTime(); // Return UNIX timestamp in milliseconds
+    return date.toISOString(); // ISO 8601 format with timezone
   };
 
-  export const timestampToSelectedTime = (timestamp: number) => {
-    const date = new Date(timestamp);
+  export const timestampToSelectedTime = (isoString: string) => {
+    const date = new Date(isoString);
     let hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
