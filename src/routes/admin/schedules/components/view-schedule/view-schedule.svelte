@@ -1,11 +1,12 @@
 <script lang="ts">
   import * as Dialog from '$lib/components/ui/dialog/index.js';
-  import { useTableState } from '../table/state.svelte';
+  import { useSchedTableState } from '../table/state.svelte';
   import { page } from '$app/state';
   import * as Table from '$lib/components/ui/table/index.js';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import PrintTeachingForm from './components/print-teaching-form.svelte';
-  const tableState = useTableState();
+
+  const tableState = useSchedTableState();
 
   const activeRow = $derived(tableState.getActiveRow());
 
@@ -45,7 +46,7 @@
       <Dialog.Title>View Schedule</Dialog.Title>
       <Dialog.Description>
         You are viewing teaching details for <span class="bg-secondary font-semibold">
-          {tableState.getActiveRow()?.user_fullname}
+          {tableState.getActiveRow()?.faculty_id}
         </span>
       </Dialog.Description>
 
@@ -55,7 +56,7 @@
             <div class="">
               {@render heading({
                 title: 'Fullname:',
-                description: activeRow?.user_fullname ?? ''
+                description: String(activeRow?.faculty_id) ?? ''
               })}
               {@render heading({ title: 'Academic Rank:', description: 'Instructor 1' })}
               {@render heading({ title: 'Status:', description: 'COS' })}

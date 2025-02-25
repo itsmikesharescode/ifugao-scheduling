@@ -4,7 +4,6 @@
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import PrinterCheck from 'lucide-svelte/icons/printer-check';
   import Printer from 'lucide-svelte/icons/printer';
-  import { useTableState } from '../../table/state.svelte';
   import { tick, type Snippet } from 'svelte';
   import { cn } from '$lib/utils';
   import type { ClassNameValue } from 'tailwind-merge';
@@ -14,8 +13,6 @@
   }
 
   const { heading }: Props = $props();
-
-  const tableState = useTableState();
 
   let open = $state(false);
 

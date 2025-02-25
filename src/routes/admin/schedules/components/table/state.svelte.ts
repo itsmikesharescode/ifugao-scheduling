@@ -16,10 +16,10 @@ class TableState {
 
 const tableStateKey = Symbol('SubjectPage');
 
-export const initTableState = () => {
+export const initSchedTableState = () => {
   return setContext(tableStateKey, new TableState());
 };
 
-export const useTableState = () => {
-  return getContext<ReturnType<typeof initTableState>>(tableStateKey);
+export const useSchedTableState = () => {
+  return getContext<ReturnType<typeof initSchedTableState>>(tableStateKey);
 };

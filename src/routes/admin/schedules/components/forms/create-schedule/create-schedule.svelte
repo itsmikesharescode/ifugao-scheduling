@@ -21,7 +21,9 @@
   import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
   import { urlParamReducer } from '$lib/utils';
   import { goto } from '$app/navigation';
-  import TimePicker from '$lib/components/select-picker/time-picker.svelte';
+  import TimePicker, {
+    convertSelectedTime
+  } from '$lib/components/select-picker/time-picker.svelte';
   import WeeksPicker from '$lib/components/select-picker/weeks-picker.svelte';
   import FacultyPicker from '$lib/components/select-picker/faculty-picker.svelte';
 
@@ -30,6 +32,20 @@
   }
 
   const { createSchedForm }: Props = $props();
+
+  let startTime = $state({
+    hour: '',
+    minute: '00',
+    second: '00',
+    ampm: 'AM'
+  });
+
+  let endTime = $state({
+    hour: '',
+    minute: '00',
+    second: '00',
+    ampm: 'AM'
+  });
 
   const form = superForm(createSchedForm, {
     validators: zodClient(createSchedSchema),
@@ -95,6 +111,26 @@
           num_of_hours: { lecture: 0, lab: 0 }
         }
       ];
+
+      // this needs to be fixed inside the time picker itself but this dirty hack works for now
+      if (startTime.hour.length) {
+        $formData.schedule.start_time = convertSelectedTime(
+          startTime.hour,
+          startTime.minute,
+          startTime.second,
+          startTime.ampm
+        );
+      }
+
+      if (endTime.hour.length) {
+        $formData.schedule.end_time = convertSelectedTime(
+          endTime.hour,
+          endTime.minute,
+          endTime.second,
+          endTime.ampm
+        );
+      }
+
       return () => {};
     }
   });
@@ -220,7 +256,7 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Start Time</Form.Label>
-                  <TimePicker bind:selectedTime={$formData.schedule.start_time} />
+                  <TimePicker bind:time={startTime} />
                   <input
                     name={props.name}
                     type="hidden"
@@ -235,7 +271,7 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>End Time</Form.Label>
-                  <TimePicker bind:selectedTime={$formData.schedule.end_time} />
+                  <TimePicker bind:time={endTime} />
                   <input name={props.name} type="hidden" bind:value={$formData.schedule.end_time} />
                 {/snippet}
               </Form.Control>

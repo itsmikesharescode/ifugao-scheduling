@@ -1,9 +1,4 @@
-<script lang="ts">
-  import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import ViewSchedule from './components/view-schedule/view-schedule.svelte';
-  import { columns } from './components/table/columns';
-  import { initTableState } from './components/table/state.svelte';
-  import { page } from '$app/state';
+<script lang="ts" module>
   import Button from '$lib/components/ui/button/button.svelte';
   import Plus from 'lucide-svelte/icons/plus';
   import { urlParamStacker } from '$lib/utils';
@@ -13,14 +8,18 @@
   import CreateSchedule from './components/forms/create-schedule/create-schedule.svelte';
   import UpdateSchedule from './components/forms/update-schedule/update-schedule.svelte';
   import DeleteSchedule from './components/forms/delete-schedule/delete-schedule.svelte';
+  import DataTable from '$lib/components/ui/data-table/data-table.svelte';
+  import ViewSchedule from './components/view-schedule/view-schedule.svelte';
+  import { columns } from './components/table/columns';
+</script>
+
+<script lang="ts">
+  import { initSchedTableState } from './components/table/state.svelte';
+  import { page } from '$app/state';
 
   const { data } = $props();
 
-  initTableState();
-
-  $effect(() => {
-    console.log(data.schedules);
-  });
+  initSchedTableState();
 </script>
 
 <main class="flex flex-col gap-4">
