@@ -1,5 +1,22 @@
 <script lang="ts" module>
   import { page } from '$app/state';
+  import Check from 'lucide-svelte/icons/check';
+  import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
+  import { tick } from 'svelte';
+  import * as Command from '$lib/components/ui/command/index.js';
+  import * as Popover from '$lib/components/ui/popover/index.js';
+  import { Button } from '$lib/components/ui/button/index.js';
+  import { cn } from '$lib/utils.js';
+  import type { ClassNameValue } from 'tailwind-merge';
+
+  interface Props {
+    mode?: 'single' | 'multiple';
+    selected: {
+      single?: number;
+      multiple?: number[];
+    };
+    class?: ClassNameValue;
+  }
 
   const getFaculties = async () => {
     if (!page.data.supabase) return null;
@@ -28,23 +45,7 @@
 </script>
 
 <script lang="ts">
-  import Check from 'lucide-svelte/icons/check';
-  import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-  import { tick } from 'svelte';
-  import * as Command from '$lib/components/ui/command/index.js';
-  import * as Popover from '$lib/components/ui/popover/index.js';
-  import { Button } from '$lib/components/ui/button/index.js';
-  import { cn } from '$lib/utils.js';
-
-  interface Props {
-    mode?: 'single' | 'multiple';
-    selected: {
-      single?: number;
-      multiple?: number[];
-    };
-  }
-
-  let { selected = $bindable(), mode = 'single' }: Props = $props();
+  let { selected = $bindable(), mode = 'single', class: className }: Props = $props();
 
   let open = $state(false);
   let triggerRef = $state<HTMLButtonElement>(null!);
@@ -113,7 +114,7 @@
       </Button>
     {/snippet}
   </Popover.Trigger>
-  <Popover.Content class="p-0">
+  <Popover.Content class={cn('w-[400px] p-0', className)}>
     <Command.Root>
       <Command.Input placeholder="Search faculty..." />
       <Command.List>

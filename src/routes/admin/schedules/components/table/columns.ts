@@ -2,7 +2,7 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { SchedulePageSchema } from './schema';
 import { DTCheckbox, DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
-import { RowActions, DisplayDepartment, DisplayFaculty } from './components/index.js';
+import { RowActions, DisplayFaculty } from './components/index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 
 export const columns: ColumnDef<SchedulePageSchema>[] = [
@@ -25,6 +25,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
     enableSorting: false,
     enableHiding: false
   },
+
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -47,14 +48,53 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_id',
+    accessorKey: 'start_time',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
-        title: 'Department'
+        title: 'Start Time'
       });
     },
-    cell: ({ row }) => renderComponent(DisplayDepartment<SchedulePageSchema>, { row }),
+    cell: ({ row }) => {
+      const startTimeSnippet = createRawSnippet<[string]>((getStartTime) => {
+        return {
+          render: () =>
+            `<div class="w-full">${new Date(getStartTime()).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })}</div>`
+        };
+      });
+
+      return renderSnippet(startTimeSnippet, row.getValue('start_time'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'end_time',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
+        column,
+        title: 'End Time'
+      });
+    },
+    cell: ({ row }) => {
+      const endTimeSnippet = createRawSnippet<[string]>((getEndTime) => {
+        return {
+          render: () =>
+            `<div class="w-full">${new Date(getEndTime()).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })}</div>`
+        };
+      });
+
+      return renderSnippet(endTimeSnippet, row.getValue('end_time'));
+    },
     enableSorting: true,
     enableHiding: true
   },
@@ -83,7 +123,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
     cell: ({ row }) => {
       const semesterSnip = createRawSnippet<[string]>((getSemester) => {
         return {
-          render: () => `<div class="w-full">${getSemester()}</div>`
+          render: () => `<div class="w-full truncate">${getSemester()}</div>`
         };
       });
 
@@ -126,7 +166,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
       const createdAtSnip = createRawSnippet<[string]>((getCreatedAt) => {
         return {
           render: () =>
-            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
+            `<div class="w-full truncate">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 

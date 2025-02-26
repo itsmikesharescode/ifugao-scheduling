@@ -184,6 +184,7 @@
                   <Form.Label>Faculty</Form.Label>
 
                   <FacultyPicker
+                    class="w-[320px] md:w-[550px] lg:w-[850px]"
                     bind:selected={
                       () => {
                         return {

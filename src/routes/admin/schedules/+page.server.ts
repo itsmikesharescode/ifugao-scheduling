@@ -66,10 +66,14 @@ export const actions: Actions = {
     return { form, msg: 'Schedule updated successfully' };
   },
 
-  deleteSchedEvent: async ({ request }) => {
+  deleteSchedEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(deleteSchedSchema));
     if (!form.valid) return fail(400, { form });
 
-    console.log(form.data);
+    const { error } = await supabase.from('schedules_tb').delete().eq('id', form.data.id);
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Schedule deleted successfully' };
   }
 };
