@@ -71,7 +71,7 @@
   }: Props = $props();
 </script>
 
-<Popover.Root onOpenChange={() => {}}>
+<Popover.Root>
   <Popover.Trigger
     class="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm font-normal ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
   >
@@ -86,7 +86,17 @@
     <div class="flex items-center gap-2">
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>Hour</Label>
-        <Select.Root type="single" bind:value={time.hour}>
+        <Select.Root
+          type="single"
+          bind:value={time.hour}
+          onValueChange={(value) => {
+            time.hour = value;
+            time = {
+              ...time,
+              hour: value
+            };
+          }}
+        >
           <Select.Trigger class="w-20">
             {time.hour || 'Hour'}
           </Select.Trigger>
@@ -100,7 +110,17 @@
 
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>Minute</Label>
-        <Select.Root type="single" bind:value={time.minute}>
+        <Select.Root
+          type="single"
+          bind:value={time.minute}
+          onValueChange={(value) => {
+            time.minute = value;
+            time = {
+              ...time,
+              minute: value
+            };
+          }}
+        >
           <Select.Trigger class="w-20">
             {time.minute || 'Minute'}
           </Select.Trigger>
@@ -114,7 +134,17 @@
 
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>Second</Label>
-        <Select.Root type="single" bind:value={time.second}>
+        <Select.Root
+          type="single"
+          bind:value={time.second}
+          onValueChange={(value) => {
+            time.second = value;
+            time = {
+              ...time,
+              second: value
+            };
+          }}
+        >
           <Select.Trigger class="w-20">
             {time.second || 'Second'}
           </Select.Trigger>
@@ -128,7 +158,17 @@
 
       <div class="grid w-full max-w-sm items-center gap-1.5">
         <Label>AM/PM</Label>
-        <Select.Root type="single" bind:value={time.ampm}>
+        <Select.Root
+          type="single"
+          bind:value={time.ampm}
+          onValueChange={(value) => {
+            time.ampm = value;
+            time = {
+              ...time,
+              ampm: value
+            };
+          }}
+        >
           <Select.Trigger class="w-20">
             {time.ampm || 'AM/PM'}
           </Select.Trigger>
