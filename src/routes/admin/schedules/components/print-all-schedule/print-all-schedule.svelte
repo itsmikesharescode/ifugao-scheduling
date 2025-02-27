@@ -42,7 +42,7 @@
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item>
-              All Semesters
+              Print All Semesters
               <Printer class="ml-auto size-4 opacity-50" />
             </DropdownMenu.Item>
           </DropdownMenu.SubContent>
