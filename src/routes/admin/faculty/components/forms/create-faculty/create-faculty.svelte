@@ -12,10 +12,7 @@
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
-
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
   interface Props {
     createFacForm: SuperValidated<Infer<CreateFacSchema>>;
   }
@@ -37,6 +34,7 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -67,13 +65,13 @@
       <form method="POST" action="?/createFacEvent" use:enhance class="max-h-[80dvh] px-6">
         <div class="grid md:grid-cols-2 md:gap-4 lg:grid-cols-2">
           <div class="">
-            <Form.Field {form} name="firstname">
+            <Form.Field {form} name="first_name">
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>First Name</Form.Label>
                   <Input
                     {...props}
-                    bind:value={$formData.firstname}
+                    bind:value={$formData.first_name}
                     placeholder="Enter first name"
                   />
                 {/snippet}
@@ -81,13 +79,13 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="middlename">
+            <Form.Field {form} name="middle_name">
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Middle Name</Form.Label>
                   <Input
                     {...props}
-                    bind:value={$formData.middlename}
+                    bind:value={$formData.middle_name}
                     placeholder="Enter middle name"
                   />
                 {/snippet}
@@ -95,11 +93,15 @@
               <Form.FieldErrors />
             </Form.Field>
 
-            <Form.Field {form} name="lastname">
+            <Form.Field {form} name="last_name">
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Last Name</Form.Label>
-                  <Input {...props} bind:value={$formData.lastname} placeholder="Enter last name" />
+                  <Input
+                    {...props}
+                    bind:value={$formData.last_name}
+                    placeholder="Enter last name"
+                  />
                 {/snippet}
               </Form.Control>
               <Form.FieldErrors />
@@ -179,7 +181,7 @@
                   <Form.Label>Departments</Form.Label>
                   <DepartmentPicker
                     mode="multiple"
-                    departments={sampleDeps}
+                    departments={page.data.departments ?? []}
                     bind:selected={
                       () => {
                         return {

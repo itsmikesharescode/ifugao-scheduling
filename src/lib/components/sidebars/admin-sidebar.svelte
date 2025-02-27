@@ -111,8 +111,8 @@
   <Sidebar.Footer>
     <NavUser
       user={{
-        name: 'Angel Chumayyo',
-        email: 'admin_angel@gmail.com',
+        name: 'Mikey',
+        email: 'mikey@gmail.com',
         avatar: '/avatars/shadcn.jpg'
       }}
     />

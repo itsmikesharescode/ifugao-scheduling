@@ -1,7 +1,5 @@
 <script lang="ts" module>
-  import { buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
-  import Plus from 'lucide-svelte/icons/plus';
   import Loader from 'lucide-svelte/icons/loader';
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
@@ -12,9 +10,7 @@
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
-  import DepartmentPicker, {
-    sampleDeps
-  } from '$lib/components/select-picker/department-picker.svelte';
+  import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
   import { goto } from '$app/navigation';
   import { urlParamReducer } from '$lib/utils';
   import { page } from '$app/state';
@@ -178,7 +174,7 @@
                   <Form.Label>Departments</Form.Label>
                   <DepartmentPicker
                     mode="multiple"
-                    departments={sampleDeps}
+                    departments={page.data.departments ?? []}
                     bind:selected={
                       () => {
                         return {
@@ -186,7 +182,9 @@
                           multiple: $formData.departments as number[]
                         };
                       },
-                      (v) => ($formData.departments = v.multiple)
+                      (v) => {
+                        return ($formData.departments = v.multiple);
+                      }
                     }
                   />
                   <input name={props.name} type="hidden" bind:value={$formData.departments} />

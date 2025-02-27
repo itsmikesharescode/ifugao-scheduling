@@ -10,15 +10,15 @@
   import type { Row } from '@tanstack/table-core';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { useTableState } from './state.svelte';
-  import type { SchedulePageSchema } from './schema';
+  import { useSchedTableState } from '../state.svelte';
+  import type { SchedulePageSchema } from '../schema';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { urlParamStacker } from '$lib/utils';
 
   let { row }: { row: Row<SchedulePageSchema> } = $props();
 
-  const tableState = useTableState();
+  const tableState = useSchedTableState();
 </script>
 
 <DropdownMenu.Root>
@@ -34,7 +34,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.showView = true;
+        goto(urlParamStacker('mode', 'view', page));
       }}
     >
       View Form

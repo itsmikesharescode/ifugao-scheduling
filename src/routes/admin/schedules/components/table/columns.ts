@@ -2,7 +2,7 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { SchedulePageSchema } from './schema';
 import { DTCheckbox, DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
-import RowActions from './row-actions.svelte';
+import { RowActions, DisplayFaculty } from './components/index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 
 export const columns: ColumnDef<SchedulePageSchema>[] = [
@@ -25,6 +25,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
     enableSorting: false,
     enableHiding: false
   },
+
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -47,43 +48,66 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_name',
+    accessorKey: 'start_time',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
-        title: 'Department'
+        title: 'Start Time'
       });
     },
     cell: ({ row }) => {
-      const depNameCodeSnip = createRawSnippet<[string]>((getDepName) => {
+      const startTimeSnippet = createRawSnippet<[string]>((getStartTime) => {
         return {
-          render: () => `<div class="w-[80px]">${getDepName()}</div>`
+          render: () =>
+            `<div class="w-full truncate">${new Date(getStartTime()).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })}</div>`
         };
       });
 
-      return renderSnippet(depNameCodeSnip, row.getValue('department_name'));
+      return renderSnippet(startTimeSnippet, row.getValue('start_time'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'user_fullname',
+    accessorKey: 'end_time',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
         column,
-        title: 'FullName'
+        title: 'End Time'
       });
     },
     cell: ({ row }) => {
-      const userFullnameSnip = createRawSnippet<[string]>((getUserFullname) => {
+      const endTimeSnippet = createRawSnippet<[string]>((getEndTime) => {
         return {
-          render: () => `<div class="w-full">${getUserFullname()}</div>`
+          render: () =>
+            `<div class="w-full truncate">${new Date(getEndTime()).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })}</div>`
         };
       });
 
-      return renderSnippet(userFullnameSnip, row.getValue('user_fullname'));
+      return renderSnippet(endTimeSnippet, row.getValue('end_time'));
     },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'faculty_id',
+    header: ({ column }) => {
+      return renderComponent(DTColumnHeader<SchedulePageSchema, unknown>, {
+        column,
+        title: 'Fullname'
+      });
+    },
+    cell: ({ row }) => renderComponent(DisplayFaculty<SchedulePageSchema>, { row }),
     enableSorting: true,
     enableHiding: true
   },
@@ -99,7 +123,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
     cell: ({ row }) => {
       const semesterSnip = createRawSnippet<[string]>((getSemester) => {
         return {
-          render: () => `<div class="w-full">${getSemester()}</div>`
+          render: () => `<div class="w-full truncate">${getSemester()}</div>`
         };
       });
 
@@ -120,7 +144,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
     cell: ({ row }) => {
       const schoolYearSnip = createRawSnippet<[string]>((getSchoolYear) => {
         return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+          render: () => `<div class="w-full truncate">${getSchoolYear()}</div>`
         };
       });
 
@@ -142,7 +166,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
       const createdAtSnip = createRawSnippet<[string]>((getCreatedAt) => {
         return {
           render: () =>
-            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
+            `<div class="w-full truncate">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 

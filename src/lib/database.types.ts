@@ -1,3 +1,5 @@
+import type { DynamicForm } from './types';
+
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -51,6 +53,92 @@ export type Database = {
           name?: string;
         };
         Relationships: [];
+      };
+      faculties_tb: {
+        Row: {
+          academic_rank: string;
+          birth_date: string;
+          created_at: string;
+          departments: number[];
+          first_name: string;
+          gender: string;
+          id: number;
+          last_name: string;
+          middle_name: string;
+          status: string;
+        };
+        Insert: {
+          academic_rank: string;
+          birth_date: string;
+          created_at?: string;
+          departments: number[];
+          first_name: string;
+          gender: string;
+          id?: number;
+          last_name: string;
+          middle_name: string;
+          status: string;
+        };
+        Update: {
+          academic_rank?: string;
+          birth_date?: string;
+          created_at?: string;
+          departments?: number[];
+          first_name?: string;
+          gender?: string;
+          id?: number;
+          last_name?: string;
+          middle_name?: string;
+          status?: string;
+        };
+        Relationships: [];
+      };
+      schedules_tb: {
+        Row: {
+          created_at: string;
+          days: string[];
+          department_id: number;
+          dynamic_form: DynamicForm[];
+          end_time: string;
+          faculty_id: number;
+          id: number;
+          school_year: string;
+          semester: string;
+          start_time: string;
+        };
+        Insert: {
+          created_at?: string;
+          days: string[];
+          department_id: number;
+          dynamic_form: DynamicForm[];
+          end_time: string;
+          faculty_id: number;
+          id?: number;
+          school_year: string;
+          semester: string;
+          start_time: string;
+        };
+        Update: {
+          created_at?: string;
+          days?: string[];
+          department_id?: number;
+          dynamic_form?: DynamicForm[];
+          end_time?: string;
+          faculty_id?: number;
+          id?: number;
+          school_year?: string;
+          semeter?: string;
+          start_time?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'schedules_tb_faculty_id_fkey';
+            columns: ['faculty_id'];
+            isOneToOne: false;
+            referencedRelation: 'faculties_tb';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       sections_tb: {
         Row: {

@@ -3,7 +3,6 @@ import type { SchedulePageSchema } from './schema';
 
 class TableState {
   #activeRow = $state<SchedulePageSchema | null>(null);
-  showView = $state(false);
 
   getActiveRow() {
     return this.#activeRow;
@@ -16,10 +15,10 @@ class TableState {
 
 const tableStateKey = Symbol('SubjectPage');
 
-export const initTableState = () => {
+export const initSchedTableState = () => {
   return setContext(tableStateKey, new TableState());
 };
 
-export const useTableState = () => {
-  return getContext<ReturnType<typeof initTableState>>(tableStateKey);
+export const useSchedTableState = () => {
+  return getContext<ReturnType<typeof initSchedTableState>>(tableStateKey);
 };

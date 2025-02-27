@@ -4,8 +4,8 @@ import { z } from 'zod';
 
 const loadProfSchema = z.object({
   code: z.string().min(1, 'Subject code is required'),
-  section_id: z.number().min(1, 'Section is required'),
-  subject_id: z.number().min(1, 'Subject selection is required'),
+  section_id: z.string().min(1, 'Section is required'),
+  subject_id: z.string().min(1, 'Subject selection is required'),
   units: z.number().min(0.5, 'Units must be at least 0.5'),
   num_of_hours: z
     .object({
@@ -18,10 +18,15 @@ const loadProfSchema = z.object({
 });
 
 const baseSchema = {
-  user_id: z.string(),
+  faculty_id: z.number().min(1, 'Faculty selection is required'),
   semester: z.string().min(1, 'Please select a semester'),
   school_year: z.string().min(1, 'Please select a school year'),
-  department_id: z.number().min(0, 'Department cannot be negative'),
+  department_id: z.number().min(1, 'Department selection is required'),
+  schedule: z.object({
+    days: z.array(z.string()).min(1, 'At least one day is required'),
+    start_time: z.string().min(1, 'Start time is required'),
+    end_time: z.string().min(1, 'End time is required')
+  }),
   dynamic_form: z
     .array(loadProfSchema)
     .min(1, 'At least one subject entry is required')

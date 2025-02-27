@@ -1,20 +1,68 @@
-<script lang="ts">
+<script lang="ts" module>
   import * as Dialog from '$lib/components/ui/dialog/index.js';
-  import { useTableState } from '../table/state.svelte';
-  import { page } from '$app/state';
   import * as Table from '$lib/components/ui/table/index.js';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
   import PrintTeachingForm from './components/print-teaching-form.svelte';
-  const tableState = useTableState();
+  import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+  import { urlParamReducer } from '$lib/utils';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
+
+  export const getSectionbyId = async (id: number) => {
+    if (!page.data.supabase) return null;
+    const { data, error } = await page.data.supabase
+      .from('sections_tb')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) return null;
+    return data;
+  };
+
+  export const getCoursebyId = async (id: number) => {
+    if (!page.data.supabase) return null;
+    const { data, error } = await page.data.supabase
+      .from('subjects_tb')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) return null;
+    return data;
+  };
+
+  export const getFacultybyId = async (id: number) => {
+    if (!page.data.supabase) return null;
+    const { data, error } = await page.data.supabase
+      .from('faculties_tb')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) return null;
+    return data;
+  };
+
+  export const getDepartmentbyId = async (id: number) => {
+    if (!page.data.supabase) return null;
+    const { data, error } = await page.data.supabase
+      .from('deparments_tb')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) return null;
+    return data;
+  };
+</script>
+
+<script lang="ts">
+  import { useSchedTableState } from '../table/state.svelte';
+
+  const tableState = useSchedTableState();
 
   const activeRow = $derived(tableState.getActiveRow());
-
-  //TODO: query data based in the id;s relation of table
-
-  const getUserInformation = () => {
-    if (!page.data.supabase) return null;
-    //query user information
-  };
 
   const calculateUnits = () => {
     if (!activeRow) return 0;
@@ -25,6 +73,24 @@
     if (!activeRow) return 0;
     return activeRow.dynamic_form.map((item) => item.num_of_hours[type]).reduce((p, c) => p + c);
   };
+
+  const open = $derived(page.url.searchParams.get('mode') === 'view');
+
+  let faculty = $state<Awaited<ReturnType<typeof getFacultybyId>>>(null);
+
+  $effect(() => {
+    if (open) {
+      const activeRow = tableState.getActiveRow();
+      if (activeRow) {
+        getFacultybyId(activeRow.faculty_id ?? 0).then((v) => {
+          faculty = v;
+        });
+      } else {
+        goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
+      }
+    }
+    return () => {};
+  });
 </script>
 
 {#snippet heading({ title, description }: { title: string; description: string })}
@@ -35,9 +101,10 @@
 {/snippet}
 
 <Dialog.Root
-  open={tableState.showView}
+  {open}
   onOpenChange={() => {
-    tableState.showView = false;
+    tableState.setActiveRow(null);
+    goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
   <Dialog.Content class="max-h-screen max-w-7xl">
@@ -45,7 +112,9 @@
       <Dialog.Title>View Schedule</Dialog.Title>
       <Dialog.Description>
         You are viewing teaching details for <span class="bg-secondary font-semibold">
-          {tableState.getActiveRow()?.user_fullname}
+          {faculty?.last_name}
+          {faculty?.first_name}
+          {faculty?.middle_name}
         </span>
       </Dialog.Description>
 
@@ -55,18 +124,38 @@
             <div class="">
               {@render heading({
                 title: 'Fullname:',
-                description: activeRow?.user_fullname ?? ''
+                description: `${faculty?.last_name} ${faculty?.first_name} ${faculty?.middle_name}`
               })}
-              {@render heading({ title: 'Academic Rank:', description: 'Instructor 1' })}
-              {@render heading({ title: 'Status:', description: 'COS' })}
+              {@render heading({
+                title: 'Academic Rank:',
+                description: `${faculty?.academic_rank}`
+              })}
+              {@render heading({ title: 'Status:', description: `${faculty?.status}` })}
             </div>
 
             <div class="">
               {@render heading({ title: 'Campus:', description: 'Lagawe Campus' })}
-              {@render heading({
-                title: 'College:',
-                description: 'College of Engineering and Technology'
-              })}
+
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-medium">Departments:</span>
+
+                <div class="flex items-center gap-2">
+                  {#each faculty?.departments ?? [] as department_id}
+                    {#await getDepartmentbyId(department_id)}
+                      <Skeleton class="h-4 w-full" />
+                    {:then department}
+                      <span class="flex items-center gap-2 text-sm">
+                        <div
+                          class="size-4 rounded-full"
+                          style="background: {department?.color ?? 'transparent'}"
+                        ></div>
+                        {department?.code}
+                      </span>
+                    {/await}
+                  {/each}
+                </div>
+              </div>
+
               {@render heading({
                 title: 'Semester:',
                 description: `${activeRow?.semester ?? ''} @ ${activeRow?.school_year ?? ''} SY `
@@ -96,9 +185,27 @@
             {#each activeRow?.dynamic_form ?? [] as form}
               <Table.Row>
                 <Table.Cell class="font-medium">{form.code}</Table.Cell>
-                <Table.Cell class="font-medium">{form.section_id}</Table.Cell>
-                <Table.Cell class="font-medium">{form.subject_id}</Table.Cell>
-                <Table.Cell class="font-medium">{form.subject_id}</Table.Cell>
+                <Table.Cell class="font-medium">
+                  {#await getSectionbyId(Number(form.section_id) ?? 0)}
+                    <Skeleton class="h-4 w-full" />
+                  {:then section}
+                    <span>{section?.name}</span>
+                  {/await}
+                </Table.Cell>
+                <Table.Cell class="font-medium">
+                  {#await getCoursebyId(Number(form.subject_id) ?? 0)}
+                    <Skeleton class="h-4 w-full" />
+                  {:then subject}
+                    <span>{subject?.code}</span>
+                  {/await}
+                </Table.Cell>
+                <Table.Cell class="font-medium">
+                  {#await getCoursebyId(Number(form.subject_id) ?? 0)}
+                    <Skeleton class="h-4 w-full" />
+                  {:then subject}
+                    <span>{subject?.name}</span>
+                  {/await}
+                </Table.Cell>
                 <Table.Cell class="font-medium">{form.units}</Table.Cell>
                 <Table.Cell class="font-medium">{form.num_of_hours.lecture}</Table.Cell>
                 <Table.Cell class="font-medium">{form.num_of_hours.lab}</Table.Cell>
