@@ -59,7 +59,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
       const startTimeSnippet = createRawSnippet<[string]>((getStartTime) => {
         return {
           render: () =>
-            `<div class="w-full">${new Date(getStartTime()).toLocaleTimeString('en-US', {
+            `<div class="w-full truncate">${new Date(getStartTime()).toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit',
               second: '2-digit'
@@ -85,7 +85,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
       const endTimeSnippet = createRawSnippet<[string]>((getEndTime) => {
         return {
           render: () =>
-            `<div class="w-full">${new Date(getEndTime()).toLocaleTimeString('en-US', {
+            `<div class="w-full truncate">${new Date(getEndTime()).toLocaleTimeString('en-US', {
               hour: '2-digit',
               minute: '2-digit',
               second: '2-digit'
@@ -144,7 +144,7 @@ export const columns: ColumnDef<SchedulePageSchema>[] = [
     cell: ({ row }) => {
       const schoolYearSnip = createRawSnippet<[string]>((getSchoolYear) => {
         return {
-          render: () => `<div class="w-full">${getSchoolYear()}</div>`
+          render: () => `<div class="w-full truncate">${getSchoolYear()}</div>`
         };
       });
 

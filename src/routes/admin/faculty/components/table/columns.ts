@@ -36,7 +36,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
     cell: ({ row }) => {
       const idSnippet = createRawSnippet<[string]>((getId) => {
         return {
-          render: () => `<div class="w-[80px]">${getId()}</div>`
+          render: () => `<div class="truncate w-full">${getId()}</div>`
         };
       });
 
@@ -57,7 +57,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
     cell: ({ row }) => {
       const firstnameSnip = createRawSnippet<[string]>((getFirstName) => {
         return {
-          render: () => `<div class="w-[80px]">${getFirstName()}</div>`
+          render: () => `<div class="truncate w-full">${getFirstName()}</div>`
         };
       });
 
@@ -78,7 +78,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
     cell: ({ row }) => {
       const middlenameSnip = createRawSnippet<[string]>((getMiddleName) => {
         return {
-          render: () => `<div class="w-full">${getMiddleName()}</div>`
+          render: () => `<div class="truncate w-full">${getMiddleName()}</div>`
         };
       });
 
@@ -99,7 +99,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
     cell: ({ row }) => {
       const lastnameSnip = createRawSnippet<[string]>((getLastname) => {
         return {
-          render: () => `<div class="w-[80px]">${getLastname()}</div>`
+          render: () => `<div class="truncate w-full">${getLastname()}</div>`
         };
       });
 
@@ -120,7 +120,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
     cell: ({ row }) => {
       const genderSnip = createRawSnippet<[string]>((getGender) => {
         return {
-          render: () => `<div class="w-[80px]">${getGender()}</div>`
+          render: () => `<div class="truncate w-full">${getGender()}</div>`
         };
       });
 
@@ -141,7 +141,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
     cell: ({ row }) => {
       const academicRankSnip = createRawSnippet<[string]>((getAcademicRank) => {
         return {
-          render: () => `<div class="w-[80px]">${getAcademicRank()}</div>`
+          render: () => `<div class="truncate w-full">${getAcademicRank()}</div>`
         };
       });
 
@@ -163,7 +163,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
       const birthDateSnip = createRawSnippet<[string]>((getBirthDate) => {
         return {
           render: () =>
-            `<div class="w-[80px]">${new Date(getBirthDate()).toLocaleDateString()}</div>`
+            `<div class="truncate w-full">${new Date(getBirthDate()).toLocaleDateString()}</div>`
         };
       });
 
@@ -184,7 +184,7 @@ export const columns: ColumnDef<FacultyPageSchema>[] = [
     cell: ({ row }) => {
       const statusSnip = createRawSnippet<[string]>((getStatus) => {
         return {
-          render: () => `<div class="w-[80px]">${getStatus()}</div>`
+          render: () => `<div class="truncate w-full">${getStatus()}</div>`
         };
       });
 
