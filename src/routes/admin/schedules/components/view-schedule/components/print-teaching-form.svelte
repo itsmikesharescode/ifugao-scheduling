@@ -1,21 +1,32 @@
-<script lang="ts">
+<script lang="ts" module>
   import { buttonVariants } from '$lib/components/ui/button';
   import Button from '$lib/components/ui/button/button.svelte';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import PrinterCheck from 'lucide-svelte/icons/printer-check';
+  import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import Printer from 'lucide-svelte/icons/printer';
   import { tick, type Snippet } from 'svelte';
   import { cn } from '$lib/utils';
   import type { ClassNameValue } from 'tailwind-merge';
-
+  import {
+    getFacultybyId,
+    getCoursebyId,
+    getDepartmentbyId,
+    getSectionbyId
+  } from '../view-schedule.svelte';
   interface Props {
     heading: Snippet<[{ title: string; description: string }]>;
   }
+</script>
+
+<script lang="ts">
+  import { useSchedTableState } from '../../table/state.svelte';
 
   const { heading }: Props = $props();
 
   let open = $state(false);
 
+  const tableState = useSchedTableState();
   let isPrinting = $state(false);
 
   const handlePrint = async () => {
@@ -29,6 +40,16 @@
     window.addEventListener('afterprint', handleAfterPrint);
     print();
   };
+
+  let faculty = $state<Awaited<ReturnType<typeof getFacultybyId>>>(null);
+
+  $effect(() => {
+    if (open) {
+      getFacultybyId(tableState.getActiveRow()?.faculty_id ?? 0).then((v) => {
+        faculty = v;
+      });
+    }
+  });
 </script>
 
 {#snippet span({ title, class: className }: { title: string; class?: ClassNameValue })}
@@ -65,16 +86,30 @@
 
       <div class="grid grid-cols-2">
         <div class="">
-          {@render heading({ title: 'Name of Faculty:', description: 'Eviota, Mike John B.' })}
-          {@render heading({ title: 'Academic:', description: 'INSTRUCTOR 1' })}
-          {@render heading({ title: 'Status:', description: 'COS' })}
+          {@render heading({
+            title: 'Name of Faculty:',
+            description: `${faculty?.last_name} ${faculty?.first_name} ${faculty?.middle_name}`
+          })}
+          {@render heading({ title: 'Academic:', description: faculty?.academic_rank ?? '' })}
+          {@render heading({ title: 'Status:', description: faculty?.status ?? '' })}
         </div>
         <div class="">
-          {@render heading({ title: 'Campus:', description: 'Imus Galactic Campus' })}
-          {@render heading({
-            title: 'College:',
-            description: 'College of Engineering and Technology'
-          })}
+          {@render heading({ title: 'Campus:', description: 'Lagawe Campus' })}
+
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium">Departments:</span>
+            <div class="flex items-center gap-2">
+              {#each faculty?.departments ?? [] as department_id}
+                {#await getDepartmentbyId(department_id)}
+                  <Skeleton class="h-4 w-full" />
+                {:then department}
+                  <span class="flex items-center gap-2 text-sm">
+                    {department?.code},
+                  </span>
+                {/await}
+              {/each}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -97,24 +132,59 @@
             </div>
           </div>
         </div>
-        {#each Array(10)}
+        {#each tableState.getActiveRow()?.dynamic_form ?? [] as form}
           <div class="grid grid-cols-[1fr_1fr_1fr_2fr_1fr_1fr_1fr] border-2 border-t-0">
-            {@render span({ title: 'E158' })}
-            {@render span({ title: 'BSIT 2' })}
-            {@render span({ title: 'MATH 16' })}
-            {@render span({ title: 'Applied Industrial Matchematics' })}
-            {@render span({ title: '3' })}
-            {@render span({ title: '3' })}
-            {@render span({ title: '3', class: 'border-r-0' })}
+            {@render span({ title: form.code ?? '' })}
+
+            {#await getSectionbyId(Number(form.section_id) ?? 0)}
+              <Skeleton class="h-4 w-full" />
+            {:then section}
+              {@render span({ title: section?.name ?? '' })}
+            {/await}
+
+            {#await getCoursebyId(Number(form.subject_id) ?? 0)}
+              <Skeleton class="h-4 w-full" />
+            {:then subject}
+              {@render span({ title: subject?.code ?? '' })}
+            {/await}
+
+            {#await getCoursebyId(Number(form.subject_id) ?? 0)}
+              <Skeleton class="h-4 w-full" />
+            {:then subject}
+              {@render span({ title: subject?.name ?? '' })}
+            {/await}
+
+            {@render span({ title: form.units.toString() ?? '' })}
+            {@render span({ title: form.num_of_hours.lecture.toString() ?? '' })}
+            {@render span({ title: form.num_of_hours.lab.toString() ?? '', class: 'border-r-0' })}
           </div>
         {/each}
         <div class="grid grid-cols-[1fr_1fr_1fr_2fr_1fr_1fr_1fr] border-2 border-t-0">
           <div class="col-span-4 flex items-center justify-center border-r-2 py-1">
             <span class="text-center">TOTAL</span>
           </div>
-          {@render span({ title: '23' })}
-          {@render span({ title: '21' })}
-          {@render span({ title: '6', class: 'border-r-0' })}
+          {@render span({
+            title:
+              tableState
+                .getActiveRow()
+                ?.dynamic_form.reduce((acc, curr) => acc + Number(curr.units), 0)
+                .toString() ?? ''
+          })}
+          {@render span({
+            title:
+              tableState
+                .getActiveRow()
+                ?.dynamic_form.reduce((acc, curr) => acc + Number(curr.num_of_hours.lecture), 0)
+                .toString() ?? ''
+          })}
+          {@render span({
+            title:
+              tableState
+                .getActiveRow()
+                ?.dynamic_form.reduce((acc, curr) => acc + Number(curr.num_of_hours.lab), 0)
+                .toString() ?? '',
+            class: 'border-r-0'
+          })}
         </div>
       </div>
     </div>

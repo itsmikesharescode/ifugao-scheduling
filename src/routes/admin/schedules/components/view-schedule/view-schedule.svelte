@@ -8,7 +8,7 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
 
-  const getSectionbyId = async (id: number) => {
+  export const getSectionbyId = async (id: number) => {
     if (!page.data.supabase) return null;
     const { data, error } = await page.data.supabase
       .from('sections_tb')
@@ -20,7 +20,7 @@
     return data;
   };
 
-  const getCoursebyId = async (id: number) => {
+  export const getCoursebyId = async (id: number) => {
     if (!page.data.supabase) return null;
     const { data, error } = await page.data.supabase
       .from('subjects_tb')
@@ -32,7 +32,7 @@
     return data;
   };
 
-  const getFacultybyId = async (id: number) => {
+  export const getFacultybyId = async (id: number) => {
     if (!page.data.supabase) return null;
     const { data, error } = await page.data.supabase
       .from('faculties_tb')
@@ -44,7 +44,7 @@
     return data;
   };
 
-  const getDepartmentbyId = async (id: number) => {
+  export const getDepartmentbyId = async (id: number) => {
     if (!page.data.supabase) return null;
     const { data, error } = await page.data.supabase
       .from('deparments_tb')
