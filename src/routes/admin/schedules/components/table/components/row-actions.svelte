@@ -34,7 +34,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.showView = true;
+        goto(urlParamStacker('mode', 'view', page));
       }}
     >
       View Form
