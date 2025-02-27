@@ -4,8 +4,8 @@ import { z } from 'zod';
 
 const loadProfSchema = z.object({
   code: z.string().min(1, 'Subject code is required'),
-  section_id: z.number().min(1, 'Section is required'),
-  subject_id: z.number().min(1, 'Subject selection is required'),
+  section_id: z.string().min(1, 'Section is required'),
+  subject_id: z.string().min(1, 'Subject selection is required'),
   units: z.number().min(0.5, 'Units must be at least 0.5'),
   num_of_hours: z
     .object({

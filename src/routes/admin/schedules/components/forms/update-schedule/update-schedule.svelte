@@ -23,6 +23,7 @@
   } from '$lib/components/select-picker/time-picker.svelte';
   import WeeksPicker from '$lib/components/select-picker/weeks-picker.svelte';
   import FacultyPicker from '$lib/components/select-picker/faculty-picker.svelte';
+  import { getSections, getSubjects, getTime } from '../create-schedule/create-schedule.svelte';
 </script>
 
 <script lang="ts">
@@ -36,6 +37,11 @@
   const { updateSchedForm }: Props = $props();
 
   const tableState = useSchedTableState();
+
+  let startTime = $state(getTime());
+  let endTime = $state(getTime());
+  let subjects = $state<Awaited<ReturnType<typeof getSubjects>>>(null);
+  let sections = $state<Awaited<ReturnType<typeof getSections>>>(null);
 
   const form = superForm(updateSchedForm, {
     validators: zodClient(updateSchedSchema),
@@ -67,8 +73,8 @@
       ...$formData.dynamic_form,
       {
         code: '',
-        section_id: 0,
-        subject_id: 0,
+        section_id: '',
+        subject_id: '',
         units: 0,
         num_of_hours: { lecture: 0, lab: 0 }
       }
@@ -91,27 +97,24 @@
     $formData.dynamic_form = [$formData.dynamic_form[0]];
   };
 
-  let startTime = $state({
-    hour: '',
-    minute: '00',
-    second: '00',
-    ampm: 'AM'
-  });
-
-  let endTime = $state({
-    hour: '',
-    minute: '00',
-    second: '00',
-    ampm: 'AM'
-  });
-
   $effect(() => {
     if (open) {
       const activeRow = tableState.getActiveRow();
 
       if (activeRow) {
+        getSubjects().then((v) => {
+          subjects = v;
+        });
+
+        getSections().then((v) => {
+          sections = v;
+        });
+
         startTime = timestampToSelectedTime(activeRow.start_time);
         endTime = timestampToSelectedTime(activeRow.end_time);
+
+        $formData.schedule.start_time = activeRow.start_time;
+        $formData.schedule.end_time = activeRow.end_time;
 
         $formData.id = activeRow.id;
         $formData.faculty_id = activeRow.faculty_id;
@@ -126,29 +129,6 @@
 
       return () => {};
     }
-  });
-
-  $effect(() => {
-    // this needs to be fixed inside the time picker itself but this dirty hack works for now
-    if (startTime.hour.length) {
-      $formData.schedule.start_time = convertSelectedTime(
-        startTime.hour,
-        startTime.minute,
-        startTime.second,
-        startTime.ampm
-      );
-    }
-
-    if (endTime.hour.length) {
-      $formData.schedule.end_time = convertSelectedTime(
-        endTime.hour,
-        endTime.minute,
-        endTime.second,
-        endTime.ampm
-      );
-    }
-
-    return () => {};
   });
 
   const open = $derived(page.url.searchParams.get('mode') === 'update');
@@ -210,16 +190,20 @@
                   <Form.Label>Semester</Form.Label>
                   <SelectPicker
                     selections={[
-                      { id: crypto.randomUUID(), name: 'First Semester', value: 'First Semester' },
+                      { id: 'First Semester', name: 'First Semester', value: 'First Semester' },
                       {
-                        id: crypto.randomUUID(),
+                        id: 'Second Semester',
                         name: 'Second Semester',
                         value: 'Second Semester'
                       },
-                      { id: crypto.randomUUID(), name: 'Third Semester', value: 'Third Semester' }
+                      { id: 'Third Semester', name: 'Third Semester', value: 'Third Semester' }
                     ]}
-                    bind:selected={$formData.semester}
-                  />
+                    bind:selected_id={$formData.semester}
+                  >
+                    {#snippet childLoop({ props, selected_id })}
+                      <span>{props.name}</span>
+                    {/snippet}
+                  </SelectPicker>
                   <input name={props.name} type="hidden" bind:value={$formData.semester} />
                 {/snippet}
               </Form.Control>
@@ -232,13 +216,17 @@
                   <Form.Label>School Year</Form.Label>
                   <SelectPicker
                     selections={[
-                      { id: crypto.randomUUID(), name: 'First Year', value: 'First Year' },
-                      { id: crypto.randomUUID(), name: 'Second Year', value: 'Second Year' },
-                      { id: crypto.randomUUID(), name: 'Third Year', value: 'Third Year' },
-                      { id: crypto.randomUUID(), name: 'Fourth Year', value: 'Fourth Year' }
+                      { id: 'First Year', name: 'First Year', value: 'First Year' },
+                      { id: 'Second Year', name: 'Second Year', value: 'Second Year' },
+                      { id: 'Third Year', name: 'Third Year', value: 'Third Year' },
+                      { id: 'Fourth Year', name: 'Fourth Year', value: 'Fourth Year' }
                     ]}
-                    bind:selected={$formData.school_year}
-                  />
+                    bind:selected_id={$formData.school_year}
+                  >
+                    {#snippet childLoop({ props, selected_id })}
+                      <span>{props.name}</span>
+                    {/snippet}
+                  </SelectPicker>
                   <input name={props.name} type="hidden" bind:value={$formData.semester} />
                 {/snippet}
               </Form.Control>
@@ -275,7 +263,21 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>Start Time</Form.Label>
-                  <TimePicker bind:time={startTime} />
+                  <TimePicker
+                    bind:time={
+                      () => {
+                        return startTime;
+                      },
+                      (v) => {
+                        $formData.schedule.start_time = convertSelectedTime(
+                          v.hour,
+                          v.minute,
+                          v.second,
+                          v.ampm
+                        );
+                      }
+                    }
+                  />
                   <input
                     name={props.name}
                     type="hidden"
@@ -290,7 +292,21 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <Form.Label>End Time</Form.Label>
-                  <TimePicker bind:time={endTime} />
+                  <TimePicker
+                    bind:time={
+                      () => {
+                        return endTime;
+                      },
+                      (v) => {
+                        $formData.schedule.end_time = convertSelectedTime(
+                          v.hour,
+                          v.minute,
+                          v.second,
+                          v.ampm
+                        );
+                      }
+                    }
+                  />
                   <input name={props.name} type="hidden" bind:value={$formData.schedule.end_time} />
                 {/snippet}
               </Form.Control>
@@ -359,10 +375,18 @@
                         <Form.Control>
                           {#snippet children({ props })}
                             <Form.Label>Subject</Form.Label>
-                            <SubjectPicker
-                              subjects={sampleSubs}
+                            <SelectPicker
+                              selections={subjects?.map((v) => ({
+                                id: v.id.toString(),
+                                name: v.name,
+                                value: v.name
+                              })) ?? []}
                               bind:selected_id={$formData.dynamic_form[index].subject_id}
-                            />
+                            >
+                              {#snippet childLoop({ props, selected_id })}
+                                <span>{props.name}</span>
+                              {/snippet}
+                            </SelectPicker>
                             <input
                               name={props.name}
                               type="hidden"
@@ -377,10 +401,18 @@
                         <Form.Control>
                           {#snippet children({ props })}
                             <Form.Label>Section</Form.Label>
-                            <SectionPicker
-                              sections={sampleSecs}
+                            <SelectPicker
+                              selections={sections?.map((v) => ({
+                                id: v.id.toString(),
+                                name: v.name,
+                                value: v.name
+                              })) ?? []}
                               bind:selected_id={$formData.dynamic_form[index].section_id}
-                            />
+                            >
+                              {#snippet childLoop({ props, selected_id })}
+                                <span>{props.name}</span>
+                              {/snippet}
+                            </SelectPicker>
                             <input
                               name={props.name}
                               type="hidden"

@@ -9,27 +9,12 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
-  import SubjectPicker, { sampleSubs } from '$lib/components/select-picker/subject-picker.svelte';
-  import SectionPicker, { sampleSecs } from '$lib/components/select-picker/section-picker.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
   import { tick } from 'svelte';
   import * as Resizable from '$lib/components/ui/resizable/index.js';
   import { page } from '$app/state';
 
-  type Time = {
-    hour: string;
-    minute: string;
-    second: string;
-    ampm: string;
-  };
-
-  type Select = {
-    id: string;
-    name: string;
-    value: string;
-  };
-
-  const getTime = () => {
+  export const getTime = () => {
     return {
       hour: '',
       minute: '00',
@@ -38,15 +23,7 @@
     };
   };
 
-  const getSelect = () => {
-    return {
-      id: '',
-      name: '',
-      value: ''
-    };
-  };
-
-  const getSections = async () => {
+  export const getSections = async () => {
     if (!page.data.supabase) return null;
 
     const { data, error } = await page.data.supabase
@@ -60,7 +37,7 @@
     return data;
   };
 
-  const getSubjects = async () => {
+  export const getSubjects = async () => {
     if (!page.data.supabase) return null;
 
     const { data, error } = await page.data.supabase
@@ -89,12 +66,8 @@
 
   const { createSchedForm }: Props = $props();
 
-  let startTime = $state<Time>(getTime());
-  let endTime = $state<Time>(getTime());
-
-  let schoolYearBind = $state<Select>(getSelect());
-  let subjectBind = $state<Select>(getSelect());
-  let semesterBind = $state<Select>(getSelect());
+  let startTime = $state(getTime());
+  let endTime = $state(getTime());
 
   const form = superForm(createSchedForm, {
     validators: zodClient(createSchedSchema),
@@ -128,8 +101,8 @@
       ...$formData.dynamic_form,
       {
         code: '',
-        section_id: 0,
-        subject_id: 0,
+        section_id: '',
+        subject_id: '',
         units: 0,
         num_of_hours: { lecture: 0, lab: 0 }
       }
@@ -162,36 +135,15 @@
         sections = data;
       });
 
-      schoolYearBind = getSelect();
-      semesterBind = getSelect();
-
       $formData.dynamic_form = [
         {
           code: '',
-          section_id: 0,
-          subject_id: 0,
+          section_id: '',
+          subject_id: '',
           units: 0,
           num_of_hours: { lecture: 0, lab: 0 }
         }
       ];
-      // this needs to be fixed inside the time picker itself but this dirty hack works for now
-      /*  if (startTime?.hour.length) {
-        $formData.schedule.start_time = convertSelectedTime(
-          startTime.hour,
-          startTime.minute,
-          startTime.second,
-          startTime.ampm
-        );
-      }
-
-      if (endTime?.hour.length) {
-        $formData.schedule.end_time = convertSelectedTime(
-          endTime.hour,
-          endTime.minute,
-          endTime.second,
-          endTime.ampm
-        );
-      } */
 
       return () => {};
     }
@@ -445,27 +397,16 @@
                         <Form.Control>
                           {#snippet children({ props })}
                             <Form.Label>Subject</Form.Label>
-                            <!-- <SubjectPicker
-                              subjects={sampleSubs}
-                              bind:selected_id={$formData.dynamic_form[index].subject_id}
-                            /> -->
                             <SelectPicker
                               placeholder="Select subject"
-                              selections={sampleSubs.map((sub) => ({
+                              selections={subjects?.map((sub) => ({
                                 id: sub.id.toString(),
                                 name: sub.name,
                                 value: sub.id.toString()
-                              }))}
-                              bind:selected={
-                                () => {
-                                  return subjectBind;
-                                },
-                                (v) => {
-                                  $formData.dynamic_form[index].subject_id = Number(v.id);
-                                }
-                              }
+                              })) ?? []}
+                              bind:selected_id={$formData.dynamic_form[index].subject_id}
                             >
-                              {#snippet childLoop({ props, selected })}
+                              {#snippet childLoop({ props, selected_id })}
                                 <span>{props.name} {props.id}</span>
                               {/snippet}
                             </SelectPicker>
@@ -483,10 +424,19 @@
                         <Form.Control>
                           {#snippet children({ props })}
                             <Form.Label>Section</Form.Label>
-                            <SectionPicker
-                              sections={sampleSecs}
+                            <SelectPicker
+                              placeholder="Select section"
+                              selections={sections?.map((sub) => ({
+                                id: sub.id.toString(),
+                                name: sub.name,
+                                value: sub.id.toString()
+                              })) ?? []}
                               bind:selected_id={$formData.dynamic_form[index].section_id}
-                            />
+                            >
+                              {#snippet childLoop({ props, selected_id })}
+                                <span>{props.name} {props.id}</span>
+                              {/snippet}
+                            </SelectPicker>
                             <input
                               name={props.name}
                               type="hidden"
