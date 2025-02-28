@@ -54,6 +54,8 @@
         case 200:
           toast.success(data.msg);
           tableState.setActiveRow(null);
+          startTime = getTime();
+          endTime = getTime();
           await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
@@ -138,6 +140,8 @@
   {open}
   onOpenChange={() => {
     form.reset();
+    startTime = getTime();
+    endTime = getTime();
     tableState.setActiveRow(null);
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}

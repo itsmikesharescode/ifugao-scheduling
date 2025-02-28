@@ -79,6 +79,9 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          form.reset();
+          startTime = getTime();
+          endTime = getTime();
           await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
