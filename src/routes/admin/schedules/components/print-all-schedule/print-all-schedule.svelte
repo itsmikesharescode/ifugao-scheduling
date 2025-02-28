@@ -29,6 +29,11 @@
           </DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent>
             <DropdownMenu.Item>
+              Print All Semesters
+              <Printer class="ml-auto size-4 opacity-50" />
+            </DropdownMenu.Item>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item>
               Print First Semester
               <Printer class="ml-auto size-4 opacity-50" />
             </DropdownMenu.Item>
@@ -38,11 +43,6 @@
             </DropdownMenu.Item>
             <DropdownMenu.Item>
               Print Third Semester
-              <Printer class="ml-auto size-4 opacity-50" />
-            </DropdownMenu.Item>
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item>
-              Print All Semesters
               <Printer class="ml-auto size-4 opacity-50" />
             </DropdownMenu.Item>
           </DropdownMenu.SubContent>
