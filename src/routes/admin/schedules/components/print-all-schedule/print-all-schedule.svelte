@@ -12,6 +12,10 @@
   let allSchedules = $derived(page.data.schedules) as SchedulePageSchema[];
   const departments = $derived(page.data.departments);
 
+  let printAllScheduleModal = $state({
+    filteredSchedules: []
+  });
+
   let open = $state(false);
 
   const handlePrint = (
@@ -20,7 +24,49 @@
   ) => {
     open = true;
 
-    console.log(allSchedules);
+    // Filter schedules by department
+    const departmentSchedules = allSchedules.filter(
+      (schedule) => schedule.department_id === department.id
+    );
+
+    console.log('Department:', department.code);
+
+    // Filter by semester if not "all"
+    let filteredSchedules = departmentSchedules;
+    if (mode !== 'all') {
+      const semesterMap = {
+        first: 'First Semester',
+        second: 'Second Semester',
+        third: 'Third Semester'
+      };
+
+      filteredSchedules = departmentSchedules.filter(
+        (schedule) => schedule.semester === semesterMap[mode]
+      );
+      console.log('Semester:', semesterMap[mode]);
+    } else {
+      console.log('All Semesters');
+    }
+
+    // Log filtered schedules
+    console.log('Filtered Schedules:', filteredSchedules);
+
+    // Summary of courses from dynamic_form
+    const coursesSummary = filteredSchedules.flatMap((schedule) =>
+      schedule.dynamic_form.map((course) => ({
+        code: course.code,
+        units: course.units,
+        lectureHours: course.num_of_hours.lecture,
+        labHours: course.num_of_hours.lab,
+        faculty_id: course.faculty_id,
+        schoolYear: schedule.school_year,
+        semester: schedule.semester,
+        days: schedule.days,
+        timeRange: `${new Date(schedule.start_time).toLocaleTimeString()} - ${new Date(schedule.end_time).toLocaleTimeString()}`
+      }))
+    );
+
+    console.log('Courses to print:', coursesSummary);
   };
 </script>
 
@@ -64,14 +110,26 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
+<!--Printing Happens here-->
 <Dialog.Root bind:open>
   <Dialog.Content class="max-w-screen h-screen">
     <Dialog.Header>
-      <Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
+      <Dialog.Title>Schedule Printing Preview</Dialog.Title>
       <Dialog.Description>
-        This action cannot be undone. This will permanently delete your account and remove your data
-        from our servers.
+        Preview and print class schedules for the selected department and semester.
       </Dialog.Description>
     </Dialog.Header>
+
+    <div class="print-container overflow-auto p-4">
+      <!-- Here you would render the actual schedule based on the filtered data -->
+      <!-- The format would match the form shown in your attached image -->
+    </div>
+
+    <Dialog.Footer>
+      <button class={buttonVariants()} onclick={() => window.print()}>
+        <Printer class="mr-2 size-4" />
+        Print Now
+      </button>
+    </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>
