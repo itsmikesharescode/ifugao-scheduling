@@ -4,7 +4,7 @@
   import { urlParamStacker } from '$lib/utils';
   import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
   import Label from '$lib/components/ui/label/label.svelte';
-  import PrintAllSchedule from './components/print-all-schedule/print-all-schedule.svelte';
+  import GeneralPrinting from './components/toolbars/general-printing.svelte';
   import CreateSchedule from './components/forms/create-schedule/create-schedule.svelte';
   import UpdateSchedule from './components/forms/update-schedule/update-schedule.svelte';
   import DeleteSchedule from './components/forms/delete-schedule/delete-schedule.svelte';
@@ -30,7 +30,7 @@
         <DepartmentPager />
       </div>
 
-      <PrintAllSchedule />
+      <GeneralPrinting />
     </div>
 
     <Button size="sm" href={urlParamStacker('mode', 'create', page)}>

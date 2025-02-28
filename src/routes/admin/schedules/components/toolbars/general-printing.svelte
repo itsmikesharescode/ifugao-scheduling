@@ -4,16 +4,34 @@
   import { page } from '$app/state';
   import Printer from 'lucide-svelte/icons/printer';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-  import * as Dialog from '$lib/components/ui/dialog/index.js';
+  import PrintingTemplate from './printing-template.svelte';
   import type { SchedulePageSchema } from '../table/schema';
+
+  export type CourseSummary = {
+    code: string;
+    units: number;
+    lectureHours: number;
+    labHours: number;
+    faculty_id: number;
+    schoolYear: string;
+    semester: string;
+    days: string[];
+    timeRange: string;
+  };
+
+  export type PrintingState = {
+    filteredSchedules: SchedulePageSchema[] | null;
+    courseSum: CourseSummary[] | null;
+  };
 </script>
 
 <script lang="ts">
   let allSchedules = $derived(page.data.schedules) as SchedulePageSchema[];
   const departments = $derived(page.data.departments);
 
-  let printAllScheduleModal = $state({
-    filteredSchedules: []
+  let printingSchedState = $state<PrintingState>({
+    filteredSchedules: null,
+    courseSum: null
   });
 
   let open = $state(false);
@@ -40,7 +58,7 @@
         third: 'Third Semester'
       };
 
-      filteredSchedules = departmentSchedules.filter(
+      printingSchedState.filteredSchedules = departmentSchedules.filter(
         (schedule) => schedule.semester === semesterMap[mode]
       );
       console.log('Semester:', semesterMap[mode]);
@@ -52,21 +70,19 @@
     console.log('Filtered Schedules:', filteredSchedules);
 
     // Summary of courses from dynamic_form
-    const coursesSummary = filteredSchedules.flatMap((schedule) =>
+    printingSchedState.courseSum = filteredSchedules.flatMap((schedule) =>
       schedule.dynamic_form.map((course) => ({
         code: course.code,
         units: course.units,
         lectureHours: course.num_of_hours.lecture,
         labHours: course.num_of_hours.lab,
-        faculty_id: course.faculty_id,
+        faculty_id: schedule.faculty_id,
         schoolYear: schedule.school_year,
         semester: schedule.semester,
         days: schedule.days,
         timeRange: `${new Date(schedule.start_time).toLocaleTimeString()} - ${new Date(schedule.end_time).toLocaleTimeString()}`
       }))
     );
-
-    console.log('Courses to print:', coursesSummary);
   };
 </script>
 
@@ -110,26 +126,4 @@
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 
-<!--Printing Happens here-->
-<Dialog.Root bind:open>
-  <Dialog.Content class="max-w-screen h-screen">
-    <Dialog.Header>
-      <Dialog.Title>Schedule Printing Preview</Dialog.Title>
-      <Dialog.Description>
-        Preview and print class schedules for the selected department and semester.
-      </Dialog.Description>
-    </Dialog.Header>
-
-    <div class="print-container overflow-auto p-4">
-      <!-- Here you would render the actual schedule based on the filtered data -->
-      <!-- The format would match the form shown in your attached image -->
-    </div>
-
-    <Dialog.Footer>
-      <button class={buttonVariants()} onclick={() => window.print()}>
-        <Printer class="mr-2 size-4" />
-        Print Now
-      </button>
-    </Dialog.Footer>
-  </Dialog.Content>
-</Dialog.Root>
+<PrintingTemplate bind:open {printingSchedState} />
