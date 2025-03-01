@@ -241,9 +241,7 @@
                 {#await getSubjectNameById(Number(course.subject_id))}
                   <Skeleton class="h-[20px] w-full" />
                 {:then subject}
-                  <span>
-                    {@render formatter({ title: subject?.code ?? '' })}
-                  </span>
+                  {@render formatter({ title: subject?.code ?? '' })}
                 {/await}
               </Table.Cell>
               <Table.Cell class="border-2">
@@ -282,6 +280,26 @@
               </Table.Cell>
             </Table.Row>
           {/each}
+
+          <Table.Row>
+            <Table.Cell class="border-b-2 border-l-2">
+              {@render formatter({ title: 'TOTAL' })}
+            </Table.Cell>
+            <Table.Cell class="border-b-2"></Table.Cell>
+            <Table.Cell class="border-b-2"></Table.Cell>
+            <Table.Cell class="border-2">
+              {@render formatter({
+                title: `${derivedSchedules?.courseSummary.reduce((acc, curr) => acc + Number(curr.units), 0)}`
+              })}
+            </Table.Cell>
+            <Table.Cell class="border-2">
+              {@render formatter({
+                title: `${derivedSchedules?.courseSummary.reduce((acc, curr) => acc + Number(curr.lectureHours), 0)} / ${derivedSchedules?.courseSummary.reduce((acc, curr) => acc + Number(curr.labHours), 0)}`
+              })}
+            </Table.Cell>
+            <Table.Cell class="border-2"></Table.Cell>
+            <Table.Cell class="border-2"></Table.Cell>
+          </Table.Row>
         </Table.Body>
       </Table.Root>
     </section>
