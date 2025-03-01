@@ -9,7 +9,6 @@
   import UpdateSchedule from './components/forms/update-schedule/update-schedule.svelte';
   import DeleteSchedule from './components/forms/delete-schedule/delete-schedule.svelte';
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
-  import ViewSchedule from './components/view-schedule/view-schedule.svelte';
   import { columns } from './components/table/columns';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
@@ -52,4 +51,3 @@
 <CreateSchedule createSchedForm={data.createSchedForm} />
 <UpdateSchedule updateSchedForm={data.updateSchedForm} />
 <DeleteSchedule deleteSchedForm={data.deleteSchedForm} />
-<ViewSchedule />
