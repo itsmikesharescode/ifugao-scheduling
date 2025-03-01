@@ -4,8 +4,8 @@
   import { page } from '$app/state';
   import Printer from 'lucide-svelte/icons/printer';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-  import PrintingTemplate from './printing-template.svelte';
   import type { SchedulePageSchema } from '../table/schema';
+  import { goto } from '$app/navigation';
 
   export type CourseSummary = {
     code: string;
@@ -26,63 +26,10 @@
 </script>
 
 <script lang="ts">
-  let allSchedules = $derived(page.data.schedules) as SchedulePageSchema[];
   const departments = $derived(page.data.departments);
 
-  let printingSchedState = $state<PrintingState>({
-    filteredSchedules: null,
-    courseSum: null
-  });
-
-  let open = $state(false);
-
-  const handlePrint = (
-    department: NonNullable<typeof departments>[number],
-    mode: 'all' | 'first' | 'second' | 'third'
-  ) => {
-    open = true;
-
-    // Filter schedules by department
-    const departmentSchedules = allSchedules.filter(
-      (schedule) => schedule.department_id === department.id
-    );
-
-    console.log('Department:', department.code);
-
-    // Filter by semester if not "all"
-    let filteredSchedules = departmentSchedules;
-    if (mode !== 'all') {
-      const semesterMap = {
-        first: 'First Semester',
-        second: 'Second Semester',
-        third: 'Third Semester'
-      };
-
-      printingSchedState.filteredSchedules = departmentSchedules.filter(
-        (schedule) => schedule.semester === semesterMap[mode]
-      );
-      console.log('Semester:', semesterMap[mode]);
-    } else {
-      console.log('All Semesters');
-    }
-
-    // Log filtered schedules
-    console.log('Filtered Schedules:', filteredSchedules);
-
-    // Summary of courses from dynamic_form
-    printingSchedState.courseSum = filteredSchedules.flatMap((schedule) =>
-      schedule.dynamic_form.map((course) => ({
-        code: course.code,
-        units: course.units,
-        lectureHours: course.num_of_hours.lecture,
-        labHours: course.num_of_hours.lab,
-        faculty_id: schedule.faculty_id,
-        schoolYear: schedule.school_year,
-        semester: schedule.semester,
-        days: schedule.days,
-        timeRange: `${new Date(schedule.start_time).toLocaleTimeString()} - ${new Date(schedule.end_time).toLocaleTimeString()}`
-      }))
-    );
+  const handleRedirection = (id: number, mode: 'all' | 'first' | 'second' | 'third') => {
+    goto(`/admin/schedules/print-schedules?id=${id}&mode=${mode}`);
   };
 </script>
 
@@ -102,20 +49,20 @@
             </div>
           </DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent>
-            <DropdownMenu.Item onclick={() => handlePrint(department, 'all')}>
+            <DropdownMenu.Item onclick={() => handleRedirection(department.id, 'all')}>
               Print All Semesters
               <Printer class="ml-auto size-4 opacity-50" />
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item onclick={() => handlePrint(department, 'first')}>
+            <DropdownMenu.Item onclick={() => handleRedirection(department.id, 'first')}>
               Print First Semester
               <Printer class="ml-auto size-4 opacity-50" />
             </DropdownMenu.Item>
-            <DropdownMenu.Item onclick={() => handlePrint(department, 'second')}>
+            <DropdownMenu.Item onclick={() => handleRedirection(department.id, 'second')}>
               Print Second Semester
               <Printer class="ml-auto size-4 opacity-50" />
             </DropdownMenu.Item>
-            <DropdownMenu.Item onclick={() => handlePrint(department, 'third')}>
+            <DropdownMenu.Item onclick={() => handleRedirection(department.id, 'third')}>
               Print Third Semester
               <Printer class="ml-auto size-4 opacity-50" />
             </DropdownMenu.Item>
@@ -125,5 +72,3 @@
     </DropdownMenu.Group>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
-
-<PrintingTemplate bind:open {printingSchedState} />

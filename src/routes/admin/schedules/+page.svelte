@@ -11,16 +11,14 @@
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import ViewSchedule from './components/view-schedule/view-schedule.svelte';
   import { columns } from './components/table/columns';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 </script>
 
 <script lang="ts">
-  import { initSchedTableState, useSchedTableState } from './components/table/state.svelte';
-  import { page } from '$app/state';
-  import { goto } from '$app/navigation';
+  import { useSchedTableState } from './components/table/state.svelte';
 
   const { data } = $props();
-
-  initSchedTableState();
 
   const tableState = useSchedTableState();
 </script>
