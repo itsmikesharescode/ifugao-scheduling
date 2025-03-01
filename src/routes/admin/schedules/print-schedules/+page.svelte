@@ -74,24 +74,20 @@
       courseSummary
     };
   });
+
+  $effect(() => {
+    console.log($state.snapshot(derivedSchedules));
+  });
 </script>
 
 {#snippet heading({ title, description }: { title: string; description: string })}
-  <div class="flex items-center gap-2">
+  <div class="grid grid-cols-[auto_1fr] items-end gap-2">
     <span class="text-sm font-medium">{title}</span>
-    <span class="text-sm">{description}</span>
+    <div class="w-full">
+      <span class="text-sm">{description}</span>
+      <div class="border-b-[1px] border-muted-foreground"></div>
+    </div>
   </div>
-{/snippet}
-
-{#snippet span({ title, class: className }: { title: string; class?: ClassNameValue })}
-  <span
-    class={cn(
-      'flex items-center justify-center border-r-2 px-2 py-1 text-center text-xs',
-      className
-    )}
-  >
-    {title}
-  </span>
 {/snippet}
 
 {#snippet formatter({ title, class: className }: { title: string; class?: ClassNameValue })}
@@ -116,108 +112,116 @@
   {/if}
 
   <Separator />
+  {#each derivedSchedules?.filteredSchedules ?? [] as schedule, index}
+    <section class="flex flex-col gap-5">
+      <!--Template Header-->
+      <div class="flex flex-col gap-4">
+        <div class="grid grid-cols-[2fr_1fr]">
+          <div class="flex">
+            <div class="flex flex-col items-center justify-center">
+              <img src="/favicon.png" alt="" class="mb-3 size-20 rounded-lg object-cover" />
+              <span class="text-center text-sm">Republic of the Philippines</span>
+              <span class="text-center text-sm">IFUGAO STATE UNIVERSITY</span>
+            </div>
+          </div>
 
-  <section class="flex flex-col gap-5">
-    <!--Template Header-->
-    <div class="flex flex-col gap-4">
-      <div class="grid grid-cols-[2fr_1fr]">
-        <div class="flex">
           <div class="flex flex-col items-center justify-center">
-            <img src="/favicon.png" alt="" class="mb-3 size-20 rounded-lg object-cover" />
-            <span class="text-center text-sm">Republic of the Philippines</span>
-            <span class="text-center text-sm">IFUGAO STATE UNIVERSITY</span>
+            <span class="text-2xl font-medium text-muted-foreground">CLASS SCHEDULE</span>
+            <span class="text-2xl font-medium text-muted-foreground">FORM</span>
           </div>
         </div>
 
-        <div class="flex flex-col items-center justify-center">
-          <span class="text-2xl font-medium text-muted-foreground">CLASS SCHEDULE</span>
-          <span class="text-2xl font-medium text-muted-foreground">FORM</span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2">
-        <div class="flex flex-col gap-2">
-          {@render heading({
-            title: 'Campus:',
-            description: 'Lagawe Campus'
-          })}
-          {@render heading({ title: 'Department:', description: 'College of Science' })}
-        </div>
-
-        <div class="flex flex-col gap-2">
-          {@render heading({
-            title: 'Program:',
-            description: 'Bachelor of Science in Information Technology'
-          })}
-          <div class="grid grid-cols-2">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2">
             {@render heading({
-              title: 'Year Level:',
-              description: '1st Year'
+              title: 'Campus:',
+              description: 'Lagawe Campus'
             })}
-
             {@render heading({
-              title: 'Section:',
-              description: 'Assd'
+              title: 'Department:',
+              description: page.data.departments?.[schedule.department_id]?.name ?? ''
             })}
+          </div>
+
+          <div class="flex flex-col gap-2">
+            {@render heading({
+              title: 'Program:',
+              description: `N/A`
+            })}
+            <div class="grid grid-cols-2 gap-4">
+              {@render heading({
+                title: 'Year Level:',
+                description: schedule.school_year
+              })}
+
+              {@render heading({
+                title: 'Section:',
+                description: ''
+              })}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="mt-5 flex flex-col items-center justify-center">
-      <span class="text-xl font-medium text-muted-foreground">Second Semester SY 2021-2022</span>
-    </div>
-    <!--Template Body-->
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.Head class="border-2">
-            {@render formatter({ title: 'CODE' })}
-          </Table.Head>
-          <Table.Head class="border-2">
-            {@render formatter({ title: 'COURSE CODE' })}
-          </Table.Head>
-          <Table.Head class="border-2">
-            {@render formatter({ title: 'COURSE DESCRIPTION' })}
-          </Table.Head>
-          <Table.Head class="border-2">
-            {@render formatter({ title: 'NO. OF UNITS' })}
-          </Table.Head>
-          <Table.Head class="border-2">NO. OF HOURS (LEC/LAB)</Table.Head>
-          <Table.Head class="border-2">
-            {@render formatter({ title: 'INSTRUCTOR' })}
-          </Table.Head>
-          <Table.Head class="border-2">
-            {@render formatter({ title: 'SCHEDULE' })}
-          </Table.Head>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {#each Array(200)}
+      <div class="mt-5 flex flex-col items-center justify-center">
+        <span class="text-xl font-medium text-muted-foreground">Second Semester SY 2021-2022</span>
+      </div>
+      <!--Template Body-->
+      <Table.Root>
+        <Table.Header>
           <Table.Row>
-            <Table.Cell class="border-2">
-              {@render formatter({ title: 'E145' })}
-            </Table.Cell>
-            <Table.Cell class="border-2">
-              {@render formatter({ title: 'CpE 321' })}
-            </Table.Cell>
-            <Table.Cell class="border-2">
-              {@render formatter({ title: 'Basic Occupational Health and Safety' })}
-            </Table.Cell>
-            <Table.Cell class="border-2 text-center">
-              {@render formatter({ title: '3' })}
-            </Table.Cell>
-            <Table.Cell class="border-2 text-center">
-              {@render formatter({ title: '3/3' })}
-            </Table.Cell>
-            <Table.Cell class="border-2">
-              {@render formatter({ title: 'Ms. Jane Doe' })}
-            </Table.Cell>
-            <Table.Cell class="border-2">
-              {@render formatter({ title: 'TTH 10:00-11:00' })}
-            </Table.Cell>
+            <Table.Head class="border-2">
+              {@render formatter({ title: 'CODE' })}
+            </Table.Head>
+            <Table.Head class="border-2">
+              {@render formatter({ title: 'COURSE CODE' })}
+            </Table.Head>
+            <Table.Head class="border-2">
+              {@render formatter({ title: 'COURSE DESCRIPTION' })}
+            </Table.Head>
+            <Table.Head class="border-2">
+              {@render formatter({ title: 'NO. OF UNITS' })}
+            </Table.Head>
+            <Table.Head class="border-2">NO. OF HOURS (LEC/LAB)</Table.Head>
+            <Table.Head class="border-2">
+              {@render formatter({ title: 'INSTRUCTOR' })}
+            </Table.Head>
+            <Table.Head class="border-2">
+              {@render formatter({ title: 'SCHEDULE' })}
+            </Table.Head>
           </Table.Row>
-        {/each}
-      </Table.Body>
-    </Table.Root>
-  </section>
+        </Table.Header>
+        <Table.Body>
+          {#each Array(10)}
+            <Table.Row>
+              <Table.Cell class="border-2">
+                {@render formatter({ title: 'E145' })}
+              </Table.Cell>
+              <Table.Cell class="border-2">
+                {@render formatter({ title: 'CpE 321' })}
+              </Table.Cell>
+              <Table.Cell class="border-2">
+                {@render formatter({ title: 'Basic Occupational Health and Safety' })}
+              </Table.Cell>
+              <Table.Cell class="border-2 text-center">
+                {@render formatter({ title: '3' })}
+              </Table.Cell>
+              <Table.Cell class="border-2 text-center">
+                {@render formatter({ title: '3/3' })}
+              </Table.Cell>
+              <Table.Cell class="border-2">
+                {@render formatter({ title: 'Ms. Jane Doe' })}
+              </Table.Cell>
+              <Table.Cell class="border-2">
+                {@render formatter({ title: 'TTH 10:00-11:00' })}
+              </Table.Cell>
+            </Table.Row>
+          {/each}
+        </Table.Body>
+      </Table.Root>
+    </section>
+
+    {#if index !== (derivedSchedules?.filteredSchedules?.length ?? 0) - 1}
+      <div class="break-after-page"></div>
+    {/if}
+  {/each}
 </main>
