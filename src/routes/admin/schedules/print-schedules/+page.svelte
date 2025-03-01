@@ -143,6 +143,12 @@
   {/if}
 
   <Separator />
+
+  {#if !derivedSchedules?.filteredSchedules.length}
+    <div class="flex flex-col items-center justify-center gap-5">
+      <span class="text-xl font-medium text-muted-foreground">No printable schedules found</span>
+    </div>
+  {/if}
   {#each derivedSchedules?.filteredSchedules ?? [] as schedule, index}
     <section class="flex flex-col gap-5">
       <!--Template Header-->
@@ -197,7 +203,7 @@
       </div>
       <div class="mt-5 flex flex-col items-center justify-center">
         <span class="text-xl font-medium text-muted-foreground">
-          {schedule.semester} SY {schedule.school_year}
+          {schedule.semester} SY {`${new Date().getFullYear() - 1}-${new Date().getFullYear()}`}
         </span>
       </div>
       <!--Template Body-->
