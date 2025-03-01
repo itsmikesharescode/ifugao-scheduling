@@ -10,6 +10,35 @@
   import Separator from '$lib/components/ui/separator/separator.svelte';
   import { tick } from 'svelte';
   import type { SchedulePageSchema } from '../components/table/schema';
+  import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+
+  export const getFacultyNameById = async (id: number) => {
+    if (!page.data.supabase) return null;
+
+    const { data, error } = await page.data.supabase
+      .from('faculties_tb')
+      .select('first_name, last_name, middle_name')
+      .eq('id', id)
+      .single();
+
+    if (error) return null;
+
+    return data;
+  };
+
+  export const getSubjectNameById = async (id: number) => {
+    if (!page.data.supabase) return null;
+
+    const { data, error } = await page.data.supabase
+      .from('subjects_tb')
+      .select('name, code')
+      .eq('id', id)
+      .single();
+
+    if (error) return null;
+
+    return data;
+  };
 </script>
 
 <script lang="ts">
@@ -56,8 +85,10 @@
 
     // Create course summary
     const courseSummary = filteredSchedules.flatMap((schedule) =>
-      schedule.dynamic_form.map((course: any) => ({
+      schedule.dynamic_form.map((course) => ({
         code: course.code,
+        subject_id: course.subject_id,
+        section_id: course.section_id,
         units: course.units,
         lectureHours: course.num_of_hours.lecture,
         labHours: course.num_of_hours.lab,
@@ -139,7 +170,9 @@
             })}
             {@render heading({
               title: 'Department:',
-              description: page.data.departments?.[schedule.department_id]?.name ?? ''
+              description:
+                page.data.departments?.filter((d) => d.id === schedule.department_id)?.[0]?.name ??
+                ''
             })}
           </div>
 
@@ -163,7 +196,9 @@
         </div>
       </div>
       <div class="mt-5 flex flex-col items-center justify-center">
-        <span class="text-xl font-medium text-muted-foreground">Second Semester SY 2021-2022</span>
+        <span class="text-xl font-medium text-muted-foreground">
+          {schedule.semester} SY {schedule.school_year}
+        </span>
       </div>
       <!--Template Body-->
       <Table.Root>
@@ -191,28 +226,53 @@
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {#each Array(10)}
+          {#each derivedSchedules?.courseSummary ?? [] as course}
             <Table.Row>
               <Table.Cell class="border-2">
-                {@render formatter({ title: 'E145' })}
+                {@render formatter({ title: course.code })}
               </Table.Cell>
               <Table.Cell class="border-2">
-                {@render formatter({ title: 'CpE 321' })}
+                {#await getSubjectNameById(Number(course.subject_id))}
+                  <Skeleton class="h-[20px] w-full" />
+                {:then subject}
+                  <span>
+                    {@render formatter({ title: subject?.code ?? '' })}
+                  </span>
+                {/await}
               </Table.Cell>
               <Table.Cell class="border-2">
-                {@render formatter({ title: 'Basic Occupational Health and Safety' })}
+                {#await getSubjectNameById(Number(course.subject_id))}
+                  <Skeleton class="h-[20px] w-full" />
+                {:then subject}
+                  <span>
+                    {@render formatter({ title: subject?.name ?? '' })}
+                  </span>
+                {/await}
               </Table.Cell>
               <Table.Cell class="border-2 text-center">
-                {@render formatter({ title: '3' })}
+                {@render formatter({ title: course.units.toString() })}
               </Table.Cell>
               <Table.Cell class="border-2 text-center">
-                {@render formatter({ title: '3/3' })}
+                {@render formatter({ title: `${course.lectureHours} / ${course.labHours}` })}
               </Table.Cell>
               <Table.Cell class="border-2">
-                {@render formatter({ title: 'Ms. Jane Doe' })}
+                {#await getFacultyNameById(course.faculty_id)}
+                  <Skeleton class="h-[20px] w-full" />
+                {:then faculty}
+                  <span>
+                    {faculty?.last_name},
+                    {faculty?.middle_name}
+                    {faculty?.first_name}
+                  </span>
+                {/await}
               </Table.Cell>
               <Table.Cell class="border-2">
-                {@render formatter({ title: 'TTH 10:00-11:00' })}
+                <div class="flex items-center gap-1">
+                  {#each course.days as day}
+                    <span>{day}</span>,
+                  {/each}
+                </div>
+                <span>{course.timeRange}</span>
               </Table.Cell>
             </Table.Row>
           {/each}
