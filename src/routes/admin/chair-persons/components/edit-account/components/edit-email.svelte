@@ -6,7 +6,7 @@
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
-  import { useTableState } from '../../table/state.svelte';
+  import { useChairPersonTableState } from '../../table/state.svelte';
 
   interface Props {
     editEmailForm: SuperValidated<Infer<EditEmailSchema>>;
@@ -14,7 +14,7 @@
 
   const { editEmailForm }: Props = $props();
 
-  const tableState = useTableState();
+  const tableState = useChairPersonTableState();
 
   const form = superForm(editEmailForm, {
     validators: zodClient(editEmailSchema),
@@ -25,7 +25,6 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
-          tableState.showUpdate = false;
           tableState.setActiveRow(null);
           break;
 
@@ -39,13 +38,11 @@
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
-    if (tableState.showUpdate) {
-      $formData.user_id = tableState.getActiveRow()?.user_id ?? '';
-      $formData.email = tableState.getActiveRow()?.email ?? '';
-      return () => {
-        form.reset();
-      };
-    }
+    $formData.user_id = tableState.getActiveRow()?.user_id ?? '';
+    $formData.email = tableState.getActiveRow()?.email ?? '';
+    return () => {
+      form.reset();
+    };
   });
 </script>
 

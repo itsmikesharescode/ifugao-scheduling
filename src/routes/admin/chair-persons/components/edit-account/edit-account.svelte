@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
-  import { useTableState } from '../table/state.svelte';
+  import { useChairPersonTableState } from '../table/state.svelte';
   import EditEmail from './components/edit-email.svelte';
   import type {
     EditEmailSchema,
@@ -11,24 +11,36 @@
   import EditInformation from './components/edit-information.svelte';
   import EditPassword from './components/edit-password.svelte';
   import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-</script>
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
+  import { urlParamReducer } from '$lib/utils';
 
-<script lang="ts">
   interface Props {
     editEmailForm: SuperValidated<Infer<EditEmailSchema>>;
     editInformationForm: SuperValidated<Infer<EditInformationSchema>>;
     editPasswordForm: SuperValidated<Infer<EditPasswordSchema>>;
   }
+</script>
 
+<script lang="ts">
   const { editEmailForm, editInformationForm, editPasswordForm }: Props = $props();
 
-  const tableState = useTableState();
+  const tableState = useChairPersonTableState();
+
+  const open = $derived(page.url.searchParams.get('mode') === 'update');
+
+  $effect(() => {
+    if (open) {
+      if (!tableState.getActiveRow()) goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
+    }
+  });
 </script>
 
 <Dialog.Root
-  bind:open={tableState.showUpdate}
+  {open}
   onOpenChange={() => {
-    tableState.showUpdate = false;
+    tableState.setActiveRow(null);
+    goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >
   <Dialog.Content class="flex max-h-screen max-w-7xl flex-col p-0">
