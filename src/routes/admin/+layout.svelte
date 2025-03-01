@@ -18,7 +18,7 @@
   });
 </script>
 
-{#if page.url.pathname.includes('print-schedules')}
+{#if page.url.pathname.includes('print-schedules') || page.url.pathname.includes('print-teaching-form')}
   {@render children()}
 {:else}
   <Sidebar.Provider>
