@@ -14,12 +14,15 @@
 </script>
 
 <script lang="ts">
-  import { initSchedTableState } from './components/table/state.svelte';
+  import { initSchedTableState, useSchedTableState } from './components/table/state.svelte';
   import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 
   const { data } = $props();
 
   initSchedTableState();
+
+  const tableState = useSchedTableState();
 </script>
 
 <main class="flex flex-col gap-4">
@@ -38,7 +41,14 @@
       <Plus />
     </Button>
   </section>
-  <DataTable data={data.schedules ?? []} {columns} />
+  <DataTable
+    data={data.schedules ?? []}
+    {columns}
+    ondblclick={(v) => {
+      tableState.setActiveRow(v);
+      goto(urlParamStacker('mode', 'update', page));
+    }}
+  />
 </main>
 
 <CreateSchedule createSchedForm={data.createSchedForm} />
