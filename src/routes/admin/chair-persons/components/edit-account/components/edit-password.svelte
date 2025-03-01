@@ -6,7 +6,7 @@
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
-  import { useTableState } from '../../table/state.svelte';
+  import { useChairPersonTableState } from '../../table/state.svelte';
 
   interface Props {
     editPasswordForm: SuperValidated<Infer<EditPasswordSchema>>;
@@ -14,7 +14,7 @@
 
   const { editPasswordForm }: Props = $props();
 
-  const tableState = useTableState();
+  const tableState = useChairPersonTableState();
 
   const form = superForm(editPasswordForm, {
     validators: zodClient(editPasswordSchema),
@@ -25,7 +25,6 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
-          tableState.showUpdate = false;
           tableState.setActiveRow(null);
           break;
 

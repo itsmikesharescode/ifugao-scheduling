@@ -5,18 +5,20 @@
   import { deleteAccountSchema, type DeleteAccountSchema } from './schema';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
-  import { useTableState } from '../table/state.svelte';
+  import { useChairPersonTableState } from '../table/state.svelte';
   import Button from '$lib/components/ui/button/button.svelte';
-</script>
-
-<script lang="ts">
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
+  import { urlParamReducer } from '$lib/utils';
   interface Props {
     deleteAccountForm: SuperValidated<Infer<DeleteAccountSchema>>;
   }
+</script>
 
+<script lang="ts">
   const { deleteAccountForm }: Props = $props();
 
-  const tableState = useTableState();
+  const tableState = useChairPersonTableState();
 
   const form = superForm(deleteAccountForm, {
     validators: zodClient(deleteAccountSchema),
@@ -27,6 +29,8 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          tableState.setActiveRow(null);
+          goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -38,8 +42,10 @@
 
   const { form: formData, enhance, submitting } = form;
 
+  const open = $derived(page.url.searchParams.get('mode') === 'delete');
+
   $effect(() => {
-    if (tableState.showDelete) {
+    if (open) {
       $formData.user_id = tableState.getActiveRow()?.user_id ?? '';
       $formData.avatar = tableState.getActiveRow()?.avatar ?? 'sasdasdasd-samplepath';
       return () => form.reset();
@@ -47,7 +53,13 @@
   });
 </script>
 
-<AlertDialog.Root bind:open={tableState.showDelete}>
+<AlertDialog.Root
+  {open}
+  onOpenChange={() => {
+    tableState.setActiveRow(null);
+    goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
+  }}
+>
   <AlertDialog.Content>
     <AlertDialog.Header>
       <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>

@@ -6,7 +6,7 @@
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
-  import { useTableState } from '../../table/state.svelte';
+  import { useChairPersonTableState } from '../../table/state.svelte';
   import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
   import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
   import DepartmentPicker from '$lib/components/select-picker/department-picker.svelte';
@@ -18,7 +18,7 @@
 
   const { editInformationForm }: Props = $props();
 
-  const tableState = useTableState();
+  const tableState = useChairPersonTableState();
 
   const form = superForm(editInformationForm, {
     validators: zodClient(editInformationSchema),
@@ -30,7 +30,6 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
-          tableState.showUpdate = false;
           tableState.setActiveRow(null);
           break;
 
@@ -44,23 +43,21 @@
   const { form: formData, enhance, submitting } = form;
 
   $effect(() => {
-    if (tableState.showUpdate) {
-      const activeRow = tableState.getActiveRow();
+    const activeRow = tableState.getActiveRow();
 
-      $formData.user_id = activeRow?.user_id ?? '';
-      $formData.firstname = activeRow?.firstname ?? '';
-      $formData.middlename = activeRow?.middlename ?? '';
-      $formData.lastname = activeRow?.lastname ?? '';
-      $formData.academic_rank = activeRow?.academic_rank ?? '';
-      $formData.departments = activeRow?.departments ?? [];
-      $formData.gender = activeRow?.gender ?? '';
-      $formData.birth_date = activeRow?.birth_date ?? '';
-      $formData.status = activeRow?.status ?? '';
+    $formData.user_id = activeRow?.user_id ?? '';
+    $formData.firstname = activeRow?.firstname ?? '';
+    $formData.middlename = activeRow?.middlename ?? '';
+    $formData.lastname = activeRow?.lastname ?? '';
+    $formData.academic_rank = activeRow?.academic_rank ?? '';
+    $formData.departments = activeRow?.departments ?? [];
+    $formData.gender = activeRow?.gender ?? '';
+    $formData.birth_date = activeRow?.birth_date ?? '';
+    $formData.status = activeRow?.status ?? '';
 
-      return () => {
-        form.reset();
-      };
-    }
+    return () => {
+      form.reset();
+    };
   });
 </script>
 
@@ -133,12 +130,15 @@
             <Form.Label>Gender</Form.Label>
             <SelectPicker
               selections={[
-                { id: crypto.randomUUID(), name: 'Male', value: 'Male' },
-                { id: crypto.randomUUID(), name: 'Female', value: 'Female' }
+                { id: 'Male', name: 'Male', value: 'Male' },
+                { id: 'Female', name: 'Female', value: 'Female' }
               ]}
-              bind:selected={$formData.gender}
-              placeholder="Select new gender"
-            />
+              bind:selected_id={$formData.gender}
+            >
+              {#snippet childLoop({ props, selected_id })}
+                <span>{props.name} </span>
+              {/snippet}
+            </SelectPicker>
             <input name={props.name} type="hidden" bind:value={$formData.gender} />
           {/snippet}
         </Form.Control>

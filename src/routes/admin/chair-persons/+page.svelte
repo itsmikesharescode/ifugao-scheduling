@@ -1,21 +1,25 @@
-<script lang="ts">
+<script lang="ts" module>
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import CreateAccount from './components/create-account/create-account.svelte';
   import DeleteAccount from './components/delete-account/delete-account.svelte';
   import EditAccount from './components/edit-account/edit-account.svelte';
-  import EditOperational from './components/edit-operational/edit-operational.svelte';
   import { columns } from './components/table/columns';
-  import { initTableState } from './components/table/state.svelte';
   import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
   import Label from '$lib/components/ui/label/label.svelte';
   import { urlParamStacker } from '$lib/utils';
   import { page } from '$app/state';
   import Button from '$lib/components/ui/button/button.svelte';
   import Plus from 'lucide-svelte/icons/plus';
+  import { goto } from '$app/navigation';
+</script>
 
+<script lang="ts">
+  import { initTableState, useChairPersonTableState } from './components/table/state.svelte';
   const { data } = $props();
 
   initTableState();
+
+  const tableState = useChairPersonTableState();
 
   const generateMockData = (count: number) => {
     const departments = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science'];
@@ -78,7 +82,14 @@
       <Plus />
     </Button>
   </section>
-  <DataTable data={generateMockData(60)} {columns} />
+  <DataTable
+    data={generateMockData(60)}
+    {columns}
+    ondblclick={(v) => {
+      tableState.setActiveRow(v);
+      goto(urlParamStacker('mode', 'update', page));
+    }}
+  />
 </main>
 
 <CreateAccount createAccountForm={data.createAccountForm} />
@@ -89,5 +100,4 @@
   editPasswordForm={data.editPasswordForm}
 />
 
-<EditOperational editOperationalForm={data.editOperationalForm} />
 <DeleteAccount deleteAccountForm={data.deleteAccountForm} />

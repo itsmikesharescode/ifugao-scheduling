@@ -1,20 +1,22 @@
 <script lang="ts" module>
-  type TData = unknown;
-</script>
-
-<script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import type { Row } from '@tanstack/table-core';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
-  import { useTableState } from './state.svelte';
+  import { useChairPersonTableState } from './state.svelte';
   import type { AccountsPageSchema } from './schema';
+  import { goto } from '$app/navigation';
+  import { urlParamStacker } from '$lib/utils';
+  import { page } from '$app/state';
+  type TData = unknown;
+</script>
 
+<script lang="ts" generics="TData">
   let { row }: { row: Row<AccountsPageSchema> } = $props();
 
-  const tableState = useTableState();
+  const tableState = useChairPersonTableState();
 </script>
 
 <DropdownMenu.Root>
@@ -30,27 +32,17 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.showOperational = true;
+        goto(urlParamStacker('mode', 'update', page));
       }}
     >
-      Operational
-      <FilePenLine class="ml-auto" />
-    </DropdownMenu.Item>
-
-    <DropdownMenu.Item
-      onclick={() => {
-        tableState.setActiveRow(row.original);
-        tableState.showUpdate = true;
-      }}
-    >
-      Edit
+      Update
       <FilePenLine class="ml-auto" />
     </DropdownMenu.Item>
     <DropdownMenu.Separator />
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.showDelete = true;
+        goto(urlParamStacker('mode', 'delete', page));
       }}
     >
       <span class="text-destructive">Delete</span>

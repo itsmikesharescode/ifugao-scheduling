@@ -18,23 +18,27 @@
   });
 </script>
 
-<Sidebar.Provider>
-  <AdminSidebar />
-  <Sidebar.Inset class="min-w-0">
-    <header
-      class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4"
-    >
-      <Sidebar.Trigger class="-ml-1" />
-      <Separator orientation="vertical" class="mr-2 h-4" />
+{#if page.url.pathname.includes('print-schedules') || page.url.pathname.includes('print-teaching-form')}
+  {@render children()}
+{:else}
+  <Sidebar.Provider>
+    <AdminSidebar />
+    <Sidebar.Inset class="min-w-0">
+      <header
+        class="sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4"
+      >
+        <Sidebar.Trigger class="-ml-1" />
+        <Separator orientation="vertical" class="mr-2 h-4" />
 
-      <div class="flex w-full items-center justify-between">
-        <span class="text-sm font-medium">You are at {detectPage} page</span>
+        <div class="flex w-full items-center justify-between">
+          <span class="text-sm font-medium">You are at {detectPage} page</span>
 
-        <Darkmode />
+          <Darkmode />
+        </div>
+      </header>
+      <div class="flex flex-1 flex-col gap-4 p-4">
+        {@render children()}
       </div>
-    </header>
-    <div class="flex flex-1 flex-col gap-4 p-4">
-      {@render children()}
-    </div>
-  </Sidebar.Inset>
-</Sidebar.Provider>
+    </Sidebar.Inset>
+  </Sidebar.Provider>
+{/if}

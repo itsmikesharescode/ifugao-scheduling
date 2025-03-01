@@ -27,9 +27,10 @@
   interface Props {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    ondblclick?: (row: TData) => void;
   }
 
-  let { columns, data }: Props = $props();
+  let { columns, data, ondblclick }: Props = $props();
 
   let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});
@@ -128,7 +129,12 @@
       </Table.Header>
       <Table.Body>
         {#each table.getRowModel().rows as row (row.id)}
-          <Table.Row data-state={row.getIsSelected() && 'selected'}>
+          <Table.Row
+            data-state={row.getIsSelected() && 'selected'}
+            ondblclick={() => {
+              ondblclick?.(row.original);
+            }}
+          >
             {#each row.getVisibleCells() as cell (cell.id)}
               <Table.Cell>
                 <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />

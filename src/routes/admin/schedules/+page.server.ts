@@ -5,34 +5,11 @@ import { fail } from '@sveltejs/kit';
 
 import { createSchedSchema, updateSchedSchema, deleteSchedSchema } from './components/forms/schema';
 
-export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
-  //get faculties based in query params of departments
-  const getSchedules = async () => {
-    if (!supabase) return null;
-
-    const filter = url.searchParams.get('filter');
-
-    if (filter) {
-      const { data, error } = await supabase
-        .from('schedules_tb')
-        .select('*')
-        .eq('department_id', Number(filter));
-      if (error) return null;
-      return data;
-    }
-
-    const { data, error } = await supabase.from('schedules_tb').select('*').order('created_at');
-
-    if (error) return null;
-
-    return data;
-  };
-
+export const load: PageServerLoad = async () => {
   return {
     createSchedForm: await superValidate(zod(createSchedSchema)),
     updateSchedForm: await superValidate(zod(updateSchedSchema)),
-    deleteSchedForm: await superValidate(zod(deleteSchedSchema)),
-    schedules: await getSchedules()
+    deleteSchedForm: await superValidate(zod(deleteSchedSchema))
   };
 };
 

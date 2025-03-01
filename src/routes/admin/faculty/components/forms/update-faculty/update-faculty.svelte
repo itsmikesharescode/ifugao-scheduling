@@ -174,12 +174,16 @@
                   <Form.Label>Gender</Form.Label>
                   <SelectPicker
                     selections={[
-                      { id: crypto.randomUUID(), name: 'Male', value: 'Male' },
-                      { id: crypto.randomUUID(), name: 'Female', value: 'Female' }
+                      { id: 'Male', name: 'Male', value: 'Male' },
+                      { id: 'Female', name: 'Female', value: 'Female' }
                     ]}
-                    bind:selected={$formData.gender}
+                    bind:selected_id={$formData.gender}
                     placeholder="Select gender"
-                  />
+                  >
+                    {#snippet childLoop({ props, selected_id })}
+                      <span>{props.name} </span>
+                    {/snippet}
+                  </SelectPicker>
                   <input name={props.name} type="hidden" value={$formData.gender} />
                 {/snippet}
               </Form.Control>

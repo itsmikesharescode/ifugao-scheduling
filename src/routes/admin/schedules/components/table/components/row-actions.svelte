@@ -34,7 +34,8 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        goto(urlParamStacker('mode', 'view', page));
+        console.log(row.original.id);
+        goto(`${page.url.pathname}/print-teaching-form?id=${row.original.id}`);
       }}
     >
       View Form
