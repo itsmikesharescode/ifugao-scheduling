@@ -72,6 +72,24 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."helper_check_role"("client_id" "uuid") RETURNS character varying
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+declare
+    role_name varchar;
+begin
+    select name into role_name
+    from public.roles_tb
+    where id = client_id;
+    
+    return role_name;
+end;
+$$;
+
+
+ALTER FUNCTION "public"."helper_check_role"("client_id" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."on_auth_user_created"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -95,6 +113,37 @@ $$;
 
 
 ALTER FUNCTION "public"."on_auth_user_created"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."on_auth_user_updated"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+declare
+    var_role text;
+    var_role_id uuid;
+    var_meta_data jsonb;
+begin
+  var_role := new.raw_user_meta_data ->> 'role'; 
+  var_role_id := (new.raw_user_meta_data ->> 'role_id')::uuid;
+  var_meta_data := new.raw_user_meta_data;
+
+  update public.users_tb 
+  set
+    meta_data = var_meta_data
+  where user_id = new.id;
+
+  update public.users_role_tb
+  set
+    role_id = var_role_id
+  where user_id = new.id;
+
+  return new;
+
+end;
+$$;
+
+
+ALTER FUNCTION "public"."on_auth_user_updated"() OWNER TO "postgres";
 
 SET default_tablespace = '';
 
@@ -347,7 +396,7 @@ ALTER TABLE ONLY "public"."users_role_tb"
 
 
 ALTER TABLE ONLY "public"."users_role_tb"
-    ADD CONSTRAINT "users_role_tb_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_tb"("user_id") ON DELETE CASCADE;
+    ADD CONSTRAINT "users_role_tb_user_id_fkey1" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
 
 
 
@@ -360,9 +409,6 @@ ALTER TABLE "public"."roles_tb" ENABLE ROW LEVEL SECURITY;
 
 
 ALTER TABLE "public"."users_role_tb" ENABLE ROW LEVEL SECURITY;
-
-
-ALTER TABLE "public"."users_tb" ENABLE ROW LEVEL SECURITY;
 
 
 
@@ -563,9 +609,21 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
+GRANT ALL ON FUNCTION "public"."helper_check_role"("client_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."helper_check_role"("client_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."helper_check_role"("client_id" "uuid") TO "service_role";
+
+
+
 GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "anon";
 GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "anon";
+GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "service_role";
 
 
 

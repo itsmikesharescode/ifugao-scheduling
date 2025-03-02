@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  // sample data
+  import { page } from '$app/state';
 
   export const adminRoutes = [
     {
@@ -39,6 +39,18 @@
       ]
     }
   ];
+
+  export const routeProvider = () => {
+    if (page.data.role === 'super') return adminRoutes;
+
+    // Create a deep copy of adminRoutes and remove chair persons entry
+    const filteredRoutes = structuredClone(adminRoutes);
+    filteredRoutes[1].items = filteredRoutes[1].items.filter(
+      (_, index) => index !== 1 // Remove index 1 (Chair Persons)
+    );
+
+    return filteredRoutes;
+  };
 </script>
 
 <script lang="ts">
@@ -47,7 +59,6 @@
   import ChevronRight from 'lucide-svelte/icons/chevron-right';
   import type { ComponentProps } from 'svelte';
   import NavUser from './nav-user.svelte';
-  import { page } from '$app/state';
   import { useSidebar } from '$lib/components/ui/sidebar';
 
   let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
@@ -70,7 +81,7 @@
   </Sidebar.Header>
   <Sidebar.Content class="gap-0">
     <!-- We create a Sidebar.Group for each parent. -->
-    {#each adminRoutes as group (group.title)}
+    {#each routeProvider() as group (group.title)}
       <Collapsible.Root title={group.title} open={true} class="group/collapsible">
         <Sidebar.Group>
           <Sidebar.GroupLabel

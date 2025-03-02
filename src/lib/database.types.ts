@@ -164,19 +164,19 @@ export type Database = {
       sections_tb: {
         Row: {
           created_at: string;
-          departments: number[];
+          departments: Json;
           id: number;
           name: string;
         };
         Insert: {
           created_at?: string;
-          departments: number[];
+          departments: Json;
           id?: number;
           name: string;
         };
         Update: {
           created_at?: string;
-          departments?: number[];
+          departments?: Json;
           id?: number;
           name?: string;
         };
@@ -186,21 +186,21 @@ export type Database = {
         Row: {
           code: string;
           created_at: string;
-          departments: number[];
+          departments: Json;
           id: number;
           name: string;
         };
         Insert: {
           code: string;
           created_at?: string;
-          departments: number[];
+          departments: Json;
           id?: number;
           name: string;
         };
         Update: {
           code?: string;
           created_at?: string;
-          departments?: number[];
+          departments?: Json;
           id?: number;
           name?: string;
         };
@@ -232,13 +232,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'roles_tb';
             referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'users_role_tb_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'users_tb';
-            referencedColumns: ['user_id'];
           }
         ];
       };
@@ -265,7 +258,12 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      helper_check_role: {
+        Args: {
+          client_id: string;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       [_ in never]: never;

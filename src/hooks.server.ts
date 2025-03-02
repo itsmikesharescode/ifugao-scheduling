@@ -4,6 +4,18 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { PRIVATE_SUPABASE_ADMIN_KEY } from '$env/static/private';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
+import type { Database } from '$lib/database.types';
+
+const checkRole = async (supabaseAdmin: SupabaseClient<Database>, user: User | null) => {
+  const { data, error } = await supabaseAdmin.rpc('helper_check_role', {
+    client_id: user?.user_metadata?.role_id ?? ''
+  });
+
+  if (error) return null;
+
+  return data;
+};
 
 const supabase: Handle = async ({ event, resolve }) => {
   event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
@@ -60,14 +72,13 @@ const authGuard: Handle = async ({ event, resolve }) => {
   const { session, user } = await event.locals.safeGetSession();
   event.locals.session = session;
   event.locals.user = user;
+  event.locals.role = await checkRole(event.locals.supabaseAdmin, user);
 
-  if (!event.locals.session && event.url.pathname.startsWith('/private')) {
-    redirect(303, '/auth');
-  }
+  const path = event.url.pathname;
 
-  if (event.locals.session && event.url.pathname === '/auth') {
-    redirect(303, '/private');
-  }
+  if (!user && path.startsWith('/admin')) redirect(303, '/');
+
+  if (user && path === '/') redirect(303, '/admin');
 
   return resolve(event);
 };

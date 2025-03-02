@@ -10,12 +10,14 @@ declare global {
       safeGetSession: () => Promise<{ session: Session | null; user: User | null }>;
       session: Session | null;
       user: User | null;
+      role: string | null;
     }
     interface PageData {
       session: Session | null;
       user?: User | null;
       supabase?: SupabaseClient<Database> | undefined;
       departments: Database['public']['Tables']['deparments_tb']['Row'][] | null;
+      role: string | null;
     }
     // interface PageState {}
     // interface Platform {}
