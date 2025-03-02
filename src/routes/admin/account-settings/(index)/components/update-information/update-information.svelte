@@ -6,7 +6,9 @@
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-
+  import SelectPicker from '$lib/components/select-picker/select-picker.svelte';
+  import { parseDate } from '@internationalized/date';
+  import CalendarPicker from '$lib/components/calendar-picker/calendar-picker.svelte';
   interface Props {
     updateInfoForm: SuperValidated<Infer<UpdateInfoSchema>>;
   }
@@ -34,17 +36,6 @@
 </script>
 
 <form method="POST" action="?/updateInfoEvent" use:enhance>
-  <Form.Field {form} name="address">
-    <Form.Control>
-      {#snippet children({ props })}
-        <Form.Label>Address</Form.Label>
-        <Input {...props} bind:value={$formData.address} placeholder="Enter your new address" />
-      {/snippet}
-    </Form.Control>
-
-    <Form.FieldErrors />
-  </Form.Field>
-
   <Form.Field {form} name="firstname">
     <Form.Control>
       {#snippet children({ props })}
@@ -85,6 +76,53 @@
 
     <Form.FieldErrors />
   </Form.Field>
+
+  <Form.Field {form} name="gender">
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Gender</Form.Label>
+        <SelectPicker
+          selections={[
+            { id: 'Male', name: 'Male', value: 'Male' },
+            { id: 'Female', name: 'Female', value: 'Female' }
+          ]}
+          bind:selected_id={$formData.gender}
+          placeholder="Select gender"
+        >
+          {#snippet childLoop({ props, selected_id })}
+            <span>{props.name} </span>
+          {/snippet}
+        </SelectPicker>
+        <input name={props.name} type="hidden" value={$formData.gender} />
+      {/snippet}
+    </Form.Control>
+    <Form.FieldErrors />
+  </Form.Field>
+
+  <Form.Field {form} name="birth_date">
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Birth Date</Form.Label>
+        <CalendarPicker
+          type="single"
+          title="Select Birth Date"
+          bind:value={
+            () => {
+              if ($formData.birth_date) {
+                return parseDate($formData.birth_date);
+              }
+            },
+            (v) => {
+              $formData.birth_date = v ? v.toString() : '';
+            }
+          }
+        />
+        <input name={props.name} type="hidden" value={$formData.birth_date} />
+      {/snippet}
+    </Form.Control>
+    <Form.FieldErrors />
+  </Form.Field>
+
   <div class="flex justify-end">
     <Form.Button disabled={$submitting} class="relative">
       {#if $submitting}
