@@ -21,12 +21,31 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  createAccountEvent: async ({ request }) => {
+  createAccountEvent: async ({ request, locals: { supabaseAdmin } }) => {
     const form = await superValidate(request, zod(createAccountSchema));
 
     if (!form.valid) return fail(400, { form });
 
-    console.log(form.data);
+    const { error } = await supabaseAdmin.auth.admin.createUser({
+      email: form.data.email,
+      password: form.data.password,
+      email_confirm: true,
+      user_metadata: {
+        role_id: '55d8bf75-4471-493f-ae1e-8ef1e1b65242',
+        status: form.data.status,
+        firstname: form.data.firstname,
+        middlename: form.data.middlename,
+        lastname: form.data.lastname,
+        academic_rank: form.data.academic_rank,
+        birth_date: form.data.birth_date,
+        departments: form.data.departments,
+        gender: form.data.gender
+      }
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Account created successfully' };
   },
 
   editEmailEvent: async ({ request }) => {
