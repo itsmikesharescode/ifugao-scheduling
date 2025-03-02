@@ -14,7 +14,7 @@
 
     const { data, error } = await page.data.supabase
       .from('deparments_tb')
-      .select('code, name')
+      .select('code, name, color')
       .eq('id', department_id)
       .single();
 
@@ -45,36 +45,48 @@
   };
 </script>
 
-{#if row.original.departments.length > 1}
-  <Popover.Root bind:open>
-    <Popover.Trigger
-      onmouseenter={onMouseEnter}
-      onmouseleave={onMouseLeave}
-      class={buttonVariants({ variant: 'outline', size: 'sm' })}
-    >
-      View Departments
-      <SearchCode class="size-4" />
-    </Popover.Trigger>
-    <Popover.Content onmouseenter={onMouseEnter} onmouseleave={onMouseLeave}>
-      {#each row.original.departments as department_id}
-        {#await getDepartmentById(department_id)}
-          <Skeleton class="h-[20px] w-full rounded-lg" />
-        {:then department}
-          <div class="flex flex-col">
-            <span class="text-sm font-medium">{department?.code}</span>
-            <span class="text-xs text-muted-foreground">{department?.name}</span>
-          </div>
-        {/await}
-      {/each}
-    </Popover.Content>
-  </Popover.Root>
-{:else}
-  {#await getDepartmentById(row.original.departments[0])}
-    <Skeleton class="h-[20px] w-full rounded-lg" />
-  {:then department}
-    <div class="flex flex-col">
-      <span class="text-sm font-medium">{department?.code}</span>
-      <span class="text-xs text-muted-foreground">{department?.name}</span>
-    </div>
-  {/await}
-{/if}
+<div class="w-full truncate">
+  {#if row.original.departments.length > 1}
+    <Popover.Root bind:open>
+      <Popover.Trigger
+        onmouseenter={onMouseEnter}
+        onmouseleave={onMouseLeave}
+        class={buttonVariants({ variant: 'outline', size: 'sm' })}
+      >
+        View Departments
+        <SearchCode class="size-4" />
+      </Popover.Trigger>
+      <Popover.Content
+        onmouseenter={onMouseEnter}
+        onmouseleave={onMouseLeave}
+        class="flex flex-col gap-2"
+      >
+        {#each row.original.departments as department_id}
+          {#await getDepartmentById(department_id)}
+            <Skeleton class="h-[20px] w-full rounded-lg" />
+          {:then department}
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-1">
+                <div class="size-5 rounded-full" style="background: {department?.color}"></div>
+                <span class="text-sm font-medium">{department?.code}</span>
+              </div>
+              <span class="text-xs text-muted-foreground">{department?.name}</span>
+            </div>
+          {/await}
+        {/each}
+      </Popover.Content>
+    </Popover.Root>
+  {:else}
+    {#await getDepartmentById(row.original.departments[0])}
+      <Skeleton class="h-[20px] w-full rounded-lg" />
+    {:then department}
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-1">
+          <div class="size-5 rounded-full" style="background: {department?.color}"></div>
+          <span class="text-sm font-medium">{department?.code}</span>
+        </div>
+        <span class="text-xs text-muted-foreground">{department?.name}</span>
+      </div>
+    {/await}
+  {/if}
+</div>

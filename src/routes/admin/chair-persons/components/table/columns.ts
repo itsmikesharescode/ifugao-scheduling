@@ -11,7 +11,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Avatar'
+        title: 'Avatar',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => renderComponent(Avatar<AccountsPageSchema>, { row }),
@@ -24,7 +25,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Email'
+        title: 'Email',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -45,7 +47,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'First Name'
+        title: 'First Name',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -66,7 +69,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Middle Name'
+        title: 'Middle Name',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -87,7 +91,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Last Name'
+        title: 'Last Name',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -108,7 +113,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Gender'
+        title: 'Gender',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -129,7 +135,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Birth Date'
+        title: 'Birth Date',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -150,13 +157,14 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Academic Rank'
+        title: 'Academic Rank',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
       const academicRankSnip = createRawSnippet<[string]>((getAcademicRank) => {
         return {
-          render: () => `<div class="w-[80px]">${getAcademicRank()}</div>`
+          render: () => `<div class="w-full">${getAcademicRank()}</div>`
         };
       });
 
@@ -171,7 +179,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Department'
+        title: 'Department',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => renderComponent(Departments<AccountsPageSchema>, { row }),
@@ -184,13 +193,14 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Status'
+        title: 'Status',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
       const statusSnip = createRawSnippet<[string]>((getStatus) => {
         return {
-          render: () => `<div class="w-[80px]">${getStatus()}</div>`
+          render: () => `<div class="w-full truncate">${getStatus()}</div>`
         };
       });
 
@@ -205,14 +215,15 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Created At'
+        title: 'Created At',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
       const createdAtSnip = createRawSnippet<[string]>((getCreatedAt) => {
         return {
           render: () =>
-            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
+            `<div class="w-full truncate">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 
