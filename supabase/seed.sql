@@ -72,6 +72,27 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."helper_admin_setter"() RETURNS "void"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+begin
+    update auth.users
+    set raw_user_meta_data = '{
+            "role_id": "4cd621d3-4ea3-4256-8679-1b5a68473b33",
+            "firstname": "Local Admin",
+            "lastname": "Local Admin",
+            "middlename": "Local Admin",
+            "birth_date": "2024-01-01",
+            "gender": "Male"
+        }'::jsonb
+    where email = 'localadmin@gmail.com';
+end;
+$$;
+
+
+ALTER FUNCTION "public"."helper_admin_setter"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."helper_check_role"("client_id" "uuid") RETURNS character varying
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -606,6 +627,12 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
+
+
+
+GRANT ALL ON FUNCTION "public"."helper_admin_setter"() TO "anon";
+GRANT ALL ON FUNCTION "public"."helper_admin_setter"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."helper_admin_setter"() TO "service_role";
 
 
 

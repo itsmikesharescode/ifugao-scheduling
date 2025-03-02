@@ -164,19 +164,19 @@ export type Database = {
       sections_tb: {
         Row: {
           created_at: string;
-          departments: Json;
+          departments: number[];
           id: number;
           name: string;
         };
         Insert: {
           created_at?: string;
-          departments: Json;
+          departments: number[];
           id?: number;
           name: string;
         };
         Update: {
           created_at?: string;
-          departments?: Json;
+          departments?: number[];
           id?: number;
           name?: string;
         };
@@ -186,21 +186,21 @@ export type Database = {
         Row: {
           code: string;
           created_at: string;
-          departments: Json;
+          departments: number[];
           id: number;
           name: string;
         };
         Insert: {
           code: string;
           created_at?: string;
-          departments: Json;
+          departments: number[];
           id?: number;
           name: string;
         };
         Update: {
           code?: string;
           created_at?: string;
-          departments?: Json;
+          departments?: number[];
           id?: number;
           name?: string;
         };
@@ -258,6 +258,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      helper_admin_setter: {
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
       helper_check_role: {
         Args: {
           client_id: string;
