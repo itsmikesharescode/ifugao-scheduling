@@ -5,8 +5,8 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
-  import { useChairPersonTableState } from './state.svelte';
-  import type { AccountsPageSchema } from './schema';
+  import { useChairPersonTableState } from '../state.svelte';
+  import type { AccountsPageSchema } from '../schema';
   import { goto } from '$app/navigation';
   import { urlParamStacker } from '$lib/utils';
   import { page } from '$app/state';

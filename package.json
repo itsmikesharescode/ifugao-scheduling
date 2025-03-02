@@ -54,7 +54,7 @@
     "zod": "^3.24.2"
   },
   "dependencies": {
-    "@fontsource/prompt": "^5.2.1",
+    "@fontsource/prompt": "^5.2.4",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.49.1",
     "@sveltejs/enhanced-img": "^0.4.4",

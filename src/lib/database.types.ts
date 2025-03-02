@@ -1,4 +1,4 @@
-import type { DynamicForm } from './types';
+import type { DynamicForm, MetaData } from './types';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -93,6 +93,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      roles_tb: {
+        Row: {
+          created_at: string;
+          description: string;
+          id: string;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          description: string;
+          id?: string;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          id?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
       schedules_tb: {
         Row: {
           created_at: string;
@@ -127,7 +148,7 @@ export type Database = {
           faculty_id?: number;
           id?: number;
           school_year?: string;
-          semeter?: string;
+          semester?: string;
           start_time?: string;
         };
         Relationships: [
@@ -185,12 +206,68 @@ export type Database = {
         };
         Relationships: [];
       };
+      users_role_tb: {
+        Row: {
+          created_at: string;
+          id: number;
+          role_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          role_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          role_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'users_role_tb_role_id_fkey';
+            columns: ['role_id'];
+            isOneToOne: false;
+            referencedRelation: 'roles_tb';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      users_tb: {
+        Row: {
+          created_at: string;
+          meta_data: MetaData;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          meta_data: MetaData;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          meta_data?: MetaData;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      helper_admin_setter: {
+        Args: Record<PropertyKey, never>;
+        Returns: undefined;
+      };
+      helper_check_role: {
+        Args: {
+          client_id: string;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       [_ in never]: never;

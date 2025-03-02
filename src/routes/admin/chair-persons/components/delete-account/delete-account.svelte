@@ -23,14 +23,14 @@
   const form = superForm(deleteAccountForm, {
     validators: zodClient(deleteAccountSchema),
     id: crypto.randomUUID(),
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
           tableState.setActiveRow(null);
-          goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:
@@ -47,7 +47,7 @@
   $effect(() => {
     if (open) {
       $formData.user_id = tableState.getActiveRow()?.user_id ?? '';
-      $formData.avatar = tableState.getActiveRow()?.avatar ?? 'sasdasdasd-samplepath';
+      $formData.avatar = tableState.getActiveRow()?.avatar_path ?? '';
       return () => form.reset();
     }
   });

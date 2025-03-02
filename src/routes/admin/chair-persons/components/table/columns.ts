@@ -2,55 +2,20 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { AccountsPageSchema } from './schema';
 import { DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
-import RowActions from './row-actions.svelte';
+import { RowActions, Departments, Avatar } from './components/index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 
 export const columns: ColumnDef<AccountsPageSchema>[] = [
   {
-    id: 'actions',
-    cell: ({ row }) => renderComponent(RowActions<AccountsPageSchema>, { row })
-  },
-
-  {
-    accessorKey: 'operational',
+    accessorKey: 'avatar_path',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Operational'
+        title: 'Avatar',
+        class: 'truncate w-full'
       });
     },
-    cell: ({ row }) => {
-      const operationalSnip = createRawSnippet<[string]>((getOperational) => {
-        return {
-          render: () =>
-            `<div class="w-[80px] ${getOperational() === 'activated' ? 'text-green-600' : 'text-red-600'}">${getOperational()}</div>`
-        };
-      });
-
-      return renderSnippet(operationalSnip, row.getValue('operational'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'avatar',
-    header: ({ column }) => {
-      return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
-        column,
-        title: 'Avatar'
-      });
-    },
-    cell: ({ row }) => {
-      const firstNameSnip = createRawSnippet<[string]>((getFirstName) => {
-        return {
-          render: () =>
-            `<img src=${getFirstName()} alt="profile photo" class="size-10 bg-secondary rounded-full p-2" />`
-        };
-      });
-
-      return renderSnippet(firstNameSnip, row.getValue('avatar'));
-    },
+    cell: ({ row }) => renderComponent(Avatar<AccountsPageSchema>, { row }),
     enableSorting: true,
     enableHiding: true
   },
@@ -60,7 +25,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Email'
+        title: 'Email',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -81,7 +47,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'First Name'
+        title: 'First Name',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -102,7 +69,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Middle Name'
+        title: 'Middle Name',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -123,7 +91,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Last Name'
+        title: 'Last Name',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -144,7 +113,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Gender'
+        title: 'Gender',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -165,7 +135,8 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Birth Date'
+        title: 'Birth Date',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
@@ -186,13 +157,14 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Academic Rank'
+        title: 'Academic Rank',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
       const academicRankSnip = createRawSnippet<[string]>((getAcademicRank) => {
         return {
-          render: () => `<div class="w-[80px]">${getAcademicRank()}</div>`
+          render: () => `<div class="w-full">${getAcademicRank()}</div>`
         };
       });
 
@@ -203,22 +175,15 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_name',
+    accessorKey: 'departments',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Department'
+        title: 'Department',
+        class: 'truncate w-full'
       });
     },
-    cell: ({ row }) => {
-      const departmentSnip = createRawSnippet<[string]>((getDepartment) => {
-        return {
-          render: () => `<div class="w-[80px]">${getDepartment()}</div>`
-        };
-      });
-
-      return renderSnippet(departmentSnip, row.getValue('department_name'));
-    },
+    cell: ({ row }) => renderComponent(Departments<AccountsPageSchema>, { row }),
     enableSorting: true,
     enableHiding: true
   },
@@ -228,13 +193,14 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Status'
+        title: 'Status',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
       const statusSnip = createRawSnippet<[string]>((getStatus) => {
         return {
-          render: () => `<div class="w-[80px]">${getStatus()}</div>`
+          render: () => `<div class="w-full truncate">${getStatus()}</div>`
         };
       });
 
@@ -249,14 +215,15 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
-        title: 'Created At'
+        title: 'Created At',
+        class: 'truncate w-full'
       });
     },
     cell: ({ row }) => {
       const createdAtSnip = createRawSnippet<[string]>((getCreatedAt) => {
         return {
           render: () =>
-            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
+            `<div class="w-full truncate">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 
@@ -264,5 +231,9 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
     },
     enableSorting: true,
     enableHiding: true
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => renderComponent(RowActions<AccountsPageSchema>, { row })
   }
 ];

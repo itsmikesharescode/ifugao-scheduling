@@ -1,18 +1,11 @@
-<script>
+<script lang="ts" module>
   import '../app.css';
-  import '@fontsource/prompt/100.css';
-  import '@fontsource/prompt/200.css';
-  import '@fontsource/prompt/300.css';
-  import '@fontsource/prompt/400.css';
-  import '@fontsource/prompt/500.css';
-  import '@fontsource/prompt/600.css';
-  import '@fontsource/prompt/700.css';
-  import '@fontsource/prompt/800.css';
-  import '@fontsource/prompt/900.css';
   import { invalidate } from '$app/navigation';
   import { ModeWatcher } from 'mode-watcher';
   import { Toaster } from '$lib/components/ui/sonner/index.js';
+</script>
 
+<script>
   let { data, children } = $props();
   let { session, supabase } = $derived(data);
 

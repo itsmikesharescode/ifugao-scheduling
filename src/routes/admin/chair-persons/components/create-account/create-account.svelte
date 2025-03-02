@@ -28,12 +28,14 @@
     validators: zodClient(createAccountSchema),
     dataType: 'json',
     id: crypto.randomUUID(),
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
+          form.reset();
+          await goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
           break;
 
         case 401:

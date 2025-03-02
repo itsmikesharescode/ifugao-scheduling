@@ -11,11 +11,20 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  updateEmailEvent: async ({ request }) => {
+  updateEmailEvent: async ({ request, locals: { supabaseAdmin, user } }) => {
     const form = await superValidate(request, zod(updateEmailSchema));
 
-    if (!form.valid) return fail(400, { form });
+    if (!form.valid || !user) return fail(400, { form });
 
-    console.log(form.data);
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
+      email: form.data.email,
+      user_metadata: {
+        email: form.data.email
+      }
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Email updated successfully' };
   }
 };
