@@ -10,11 +10,24 @@ import {
 } from './components/edit-account/components/schema';
 import { deleteAccountSchema } from './components/delete-account/schema';
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   const getUsers = async () => {
     if (!supabase) return null;
 
+    const filter = url.searchParams.get('filter');
+
+    if (filter) {
+      const { data, error } = await supabase
+        .from('users_tb')
+        .select('*')
+        .contains('meta_data->departments', JSON.stringify([Number(filter)]))
+        .order('created_at');
+      if (error) return null;
+      return data;
+    }
+
     const { data, error } = await supabase.from('users_tb').select('*').order('created_at');
+
     if (error) return null;
 
     return data;
