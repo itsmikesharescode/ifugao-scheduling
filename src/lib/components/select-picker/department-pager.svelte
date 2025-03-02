@@ -1,33 +1,3 @@
-<script lang="ts" module>
-  const departments = [
-    {
-      id: crypto.randomUUID(),
-      name: 'All Departments',
-      code: 'all'
-    },
-    {
-      id: crypto.randomUUID(),
-      name: 'CET',
-      code: 'd1'
-    },
-    {
-      id: crypto.randomUUID(),
-      name: 'CBM',
-      code: 'd2'
-    },
-    {
-      id: crypto.randomUUID(),
-      name: 'COD',
-      code: 'd3'
-    },
-    {
-      id: crypto.randomUUID(),
-      name: 'BSM',
-      code: 'd4'
-    }
-  ];
-</script>
-
 <script lang="ts">
   import { goto } from '$app/navigation';
 
@@ -36,11 +6,9 @@
   import * as Select from '$lib/components/ui/select/index.js';
   import { urlParamReducer, urlParamStacker } from '$lib/utils';
 
-  let code = $state('all');
+  let id = $state(page.url.searchParams.get('filter') ?? 'all');
 
-  const triggerContent = $derived(
-    departments.find((item) => item.code.toLocaleLowerCase() === code.toLocaleLowerCase())
-  );
+  const triggerContent = $derived(page.data.departments?.find((item) => item.id === Number(id)));
 </script>
 
 <Select.Root
@@ -52,10 +20,10 @@
     }
   }}
   type="single"
-  bind:value={code}
+  bind:value={id}
 >
   <Select.Trigger>
-    {triggerContent?.name || 'Select Department'}
+    {triggerContent?.name || 'All Departments'}
   </Select.Trigger>
   <Select.Content>
     <Select.Group>
