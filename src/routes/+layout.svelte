@@ -1,12 +1,11 @@
 <script lang="ts" module>
   import '../app.css';
-</script>
-
-<script>
   import { invalidate } from '$app/navigation';
   import { ModeWatcher } from 'mode-watcher';
   import { Toaster } from '$lib/components/ui/sonner/index.js';
+</script>
 
+<script>
   let { data, children } = $props();
   let { session, supabase } = $derived(data);
 
