@@ -64,6 +64,11 @@
   let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 
   const sidebar = useSidebar();
+
+  const roleTemplate = $derived.by(() => {
+    if (page.data.role === 'super') return 'Super Admin';
+    return 'Chair Person';
+  });
 </script>
 
 <Sidebar.Root bind:ref {...restProps}>
@@ -73,7 +78,7 @@
 
       <enhanced:img src="../../assets/logo.png" alt="" class="size-10 object-cover" />
       <div class="flex flex-col">
-        <span class="text-base font-medium">Administrator</span>
+        <span class="text-base font-medium">{roleTemplate}</span>
         <span class="text-sm text-muted-foreground">Management</span>
       </div>
     </div>
@@ -120,13 +125,7 @@
     {/each}
   </Sidebar.Content>
   <Sidebar.Footer>
-    <NavUser
-      user={{
-        name: 'Mikey',
-        email: 'mikey@gmail.com',
-        avatar: '/avatars/shadcn.jpg'
-      }}
-    />
+    <NavUser />
   </Sidebar.Footer>
 
   <Sidebar.Rail />
