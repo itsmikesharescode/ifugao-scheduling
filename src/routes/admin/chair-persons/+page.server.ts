@@ -10,13 +10,23 @@ import {
 } from './components/edit-account/components/schema';
 import { deleteAccountSchema } from './components/delete-account/schema';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+  const getUsers = async () => {
+    if (!supabase) return null;
+
+    const { data, error } = await supabase.from('users_tb').select('*').order('created_at');
+    if (error) return null;
+
+    return data;
+  };
+
   return {
     createAccountForm: await superValidate(zod(createAccountSchema)),
     editEmailForm: await superValidate(zod(editEmailSchema)),
     editInformationForm: await superValidate(zod(editInformationSchema)),
     editPasswordForm: await superValidate(zod(editPasswordSchema)),
-    deleteAccountForm: await superValidate(zod(deleteAccountSchema))
+    deleteAccountForm: await superValidate(zod(deleteAccountSchema)),
+    users: await getUsers()
   };
 };
 
@@ -32,14 +42,15 @@ export const actions: Actions = {
       email_confirm: true,
       user_metadata: {
         role_id: '55d8bf75-4471-493f-ae1e-8ef1e1b65242',
-        status: form.data.status,
+        email: form.data.email,
         firstname: form.data.firstname,
         middlename: form.data.middlename,
         lastname: form.data.lastname,
         academic_rank: form.data.academic_rank,
         birth_date: form.data.birth_date,
         departments: form.data.departments,
-        gender: form.data.gender
+        gender: form.data.gender,
+        status: form.data.status
       }
     });
 

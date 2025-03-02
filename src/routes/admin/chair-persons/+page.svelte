@@ -83,7 +83,21 @@
     </Button>
   </section>
   <DataTable
-    data={generateMockData(60)}
+    data={data.users?.map((user) => ({
+      created_at: user.created_at,
+      user_id: user.user_id,
+      avatar_path: user.meta_data?.avatar_path,
+      email: user.meta_data?.email,
+      gender: user.meta_data?.gender,
+      status: user.meta_data?.status,
+      role_id: user.meta_data?.role_id,
+      lastname: user.meta_data?.lastname,
+      firstname: user.meta_data?.firstname,
+      birth_date: user.meta_data?.birth_date,
+      middlename: user.meta_data?.middlename,
+      departments: user.meta_data?.departments,
+      academic_rank: user.meta_data?.academic_rank
+    })) ?? []}
     {columns}
     ondblclick={(v) => {
       tableState.setActiveRow(v);

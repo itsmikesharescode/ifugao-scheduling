@@ -1,4 +1,4 @@
-import type { DynamicForm } from './types';
+import type { DynamicForm, MetaData } from './types';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -93,6 +93,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      roles_tb: {
+        Row: {
+          created_at: string;
+          description: string;
+          id: string;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          description: string;
+          id?: string;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          id?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
       schedules_tb: {
         Row: {
           created_at: string;
@@ -127,7 +148,7 @@ export type Database = {
           faculty_id?: number;
           id?: number;
           school_year?: string;
-          semeter?: string;
+          semester?: string;
           start_time?: string;
         };
         Relationships: [
@@ -182,6 +203,60 @@ export type Database = {
           departments?: number[];
           id?: number;
           name?: string;
+        };
+        Relationships: [];
+      };
+      users_role_tb: {
+        Row: {
+          created_at: string;
+          id: number;
+          role_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          role_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          role_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'users_role_tb_role_id_fkey';
+            columns: ['role_id'];
+            isOneToOne: false;
+            referencedRelation: 'roles_tb';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'users_role_tb_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users_tb';
+            referencedColumns: ['user_id'];
+          }
+        ];
+      };
+      users_tb: {
+        Row: {
+          created_at: string;
+          meta_data: MetaData;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          meta_data: MetaData;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          meta_data?: MetaData;
+          user_id?: string;
         };
         Relationships: [];
       };

@@ -2,28 +2,19 @@ import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { AccountsPageSchema } from './schema';
 import { DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
-import RowActions from './row-actions.svelte';
+import { RowActions, Departments, Avatar } from './components/index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 
 export const columns: ColumnDef<AccountsPageSchema>[] = [
   {
-    accessorKey: 'avatar',
+    accessorKey: 'avatar_path',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
         title: 'Avatar'
       });
     },
-    cell: ({ row }) => {
-      const firstNameSnip = createRawSnippet<[string]>((getFirstName) => {
-        return {
-          render: () =>
-            `<img src=${getFirstName()} alt="profile photo" class="size-10 bg-secondary rounded-full p-2" />`
-        };
-      });
-
-      return renderSnippet(firstNameSnip, row.getValue('avatar'));
-    },
+    cell: ({ row }) => renderComponent(Avatar<AccountsPageSchema>, { row }),
     enableSorting: true,
     enableHiding: true
   },
@@ -176,22 +167,14 @@ export const columns: ColumnDef<AccountsPageSchema>[] = [
   },
 
   {
-    accessorKey: 'department_name',
+    accessorKey: 'departments',
     header: ({ column }) => {
       return renderComponent(DTColumnHeader<AccountsPageSchema, unknown>, {
         column,
         title: 'Department'
       });
     },
-    cell: ({ row }) => {
-      const departmentSnip = createRawSnippet<[string]>((getDepartment) => {
-        return {
-          render: () => `<div class="w-[80px]">${getDepartment()}</div>`
-        };
-      });
-
-      return renderSnippet(departmentSnip, row.getValue('department_name'));
-    },
+    cell: ({ row }) => renderComponent(Departments<AccountsPageSchema>, { row }),
     enableSorting: true,
     enableHiding: true
   },
