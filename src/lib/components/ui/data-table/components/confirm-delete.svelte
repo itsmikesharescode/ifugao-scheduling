@@ -3,6 +3,8 @@
 </script>
 
 <script lang="ts" generics="TData">
+  import FormSpinner from '$lib/components/spinners/form-spinner.svelte';
+
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { Label } from '$lib/components/ui/label/index.js';
@@ -11,10 +13,11 @@
 
   interface Props {
     open: boolean;
-    selectedRows: Table<TData>;
+    onclick: () => void;
+    deleteAllLoader?: boolean;
   }
 
-  let { open = $bindable(), selectedRows }: Props = $props();
+  let { open = $bindable(), onclick, deleteAllLoader }: Props = $props();
 
   //TODO: implement atomic deletes based in selected id;s
 
@@ -30,14 +33,17 @@
       </AlertDialog.Description>
     </AlertDialog.Header>
 
-    <div class="grid w-full items-center gap-1.5">
+    <!-- <div class="grid w-full items-center gap-1.5">
       <Label for="confirmdelete">Confirm Deletion</Label>
       <Input id="confirmdelete" placeholder="Please type proceed" />
-    </div>
+    </div> -->
 
     <AlertDialog.Footer>
       <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-      <Button variant="destructive">Proceed</Button>
+      <Button variant="destructive" {onclick} disabled={deleteAllLoader} class="relative">
+        <FormSpinner isLoading={deleteAllLoader ?? false} class="bg-destructive" />
+        Proceed
+      </Button>
     </AlertDialog.Footer>
   </AlertDialog.Content>
 </AlertDialog.Root>

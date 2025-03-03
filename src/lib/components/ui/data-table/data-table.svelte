@@ -28,11 +28,20 @@
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     ondblclick?: (row: TData) => void;
+    onclick: () => void;
+    rowSelection?: RowSelectionState;
+    deleteAllLoader?: boolean;
   }
 
-  let { columns, data, ondblclick }: Props = $props();
+  let {
+    columns,
+    data,
+    ondblclick,
+    onclick,
+    rowSelection = $bindable(),
+    deleteAllLoader = $bindable()
+  }: Props = $props();
 
-  let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});
   let columnFilters = $state<ColumnFiltersState>([]);
   let sorting = $state<SortingState>([]);
@@ -50,7 +59,7 @@
         return columnVisibility;
       },
       get rowSelection() {
-        return rowSelection;
+        return rowSelection ?? {};
       },
       get columnFilters() {
         return columnFilters;
@@ -63,7 +72,7 @@
     enableRowSelection: true,
     onRowSelectionChange: (updater) => {
       if (typeof updater === 'function') {
-        rowSelection = updater(rowSelection);
+        rowSelection = updater(rowSelection ?? {});
       } else {
         rowSelection = updater;
       }
@@ -149,5 +158,5 @@
       </Table.Body>
     </Table.Root>
   </div>
-  <DTPagination {table} />
+  <DTPagination {table} {onclick} {deleteAllLoader} />
 </div>

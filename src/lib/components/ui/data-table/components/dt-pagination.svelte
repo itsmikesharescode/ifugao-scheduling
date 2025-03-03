@@ -1,4 +1,5 @@
 <script lang="ts" module>
+  import { page } from '$app/state';
   type TData = unknown;
 </script>
 
@@ -13,7 +14,13 @@
   import { Button } from '$lib/components/ui/button/index.js';
   import ConfirmDelete from './confirm-delete.svelte';
 
-  let { table }: { table: Table<TData> } = $props();
+  interface Props {
+    table: Table<TData>;
+    onclick: () => void;
+    deleteAllLoader?: boolean;
+  }
+
+  let { table, onclick, deleteAllLoader }: Props = $props();
 
   let open = $state(false);
 </script>
@@ -105,4 +112,4 @@
   </div>
 </div>
 
-<ConfirmDelete bind:open selectedRows={table} />
+<ConfirmDelete bind:open {onclick} {deleteAllLoader} />
