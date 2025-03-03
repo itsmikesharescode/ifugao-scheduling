@@ -70,7 +70,9 @@
     {@render labelTemplate({ label: 'Gender', value: user?.user_metadata.gender })}
     {@render labelTemplate({ label: 'Birth Date', value: user?.user_metadata.birth_date })}
 
-    <Button onclick={() => (editState = true)} class="ml-auto w-fit">Edit Information</Button>
+    <Button onclick={() => (editState = true)} variant="secondary" class="ml-auto w-fit"
+      >Edit Information</Button
+    >
   </div>
 {:else}
   <form method="POST" action="?/updateInfoEvent" use:enhance>
@@ -165,7 +167,8 @@
       <Form.FieldErrors />
     </Form.Field>
 
-    <div class="flex justify-end">
+    <div class="flex items-center justify-between">
+      <Button variant="secondary" onclick={() => (editState = false)}>Back</Button>
       <Form.Button disabled={$submitting} class="relative">
         {#if $submitting}
           <div class="absolute inset-0 flex items-center justify-center rounded-lg bg-primary">
