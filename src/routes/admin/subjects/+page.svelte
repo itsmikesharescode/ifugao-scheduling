@@ -4,17 +4,18 @@
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import { urlParamStacker } from '$lib/utils';
   import { columns } from './components/table/columns';
-  import { initTableState } from './components/table/state.svelte';
+  import { initTableState, useSubjectTableState } from './components/table/state.svelte';
   import Plus from 'lucide-svelte/icons/plus';
   import DepartmentPager from '$lib/components/select-picker/department-pager.svelte';
   import Label from '$lib/components/ui/label/label.svelte';
   import CreateSubject from './components/forms/create-subject/create-subject.svelte';
   import UpdateSubject from './components/forms/update-subject/update-subject.svelte';
   import DeleteSubject from './components/forms/delete-subject/delete-subject.svelte';
-
+  import { goto } from '$app/navigation';
   const { data } = $props();
 
   initTableState();
+  const tableState = useSubjectTableState();
 </script>
 
 <main class="flex flex-col gap-4">
@@ -30,7 +31,14 @@
     </Button>
   </section>
 
-  <DataTable data={data.subjects ?? []} {columns} />
+  <DataTable
+    data={data.subjects ?? []}
+    {columns}
+    ondblclick={(v) => {
+      tableState.setActiveRow(v);
+      goto(urlParamStacker('mode', 'update', page));
+    }}
+  />
 </main>
 
 <CreateSubject createSubForm={data.createSubForm} />

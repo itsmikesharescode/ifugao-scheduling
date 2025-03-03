@@ -18,11 +18,8 @@
 <script lang="ts">
   import { page } from '$app/state';
   import FormSpinner from '$lib/components/spinners/form-spinner.svelte';
-  import { useTableState } from '../../table/state.svelte';
 
   const { createSubForm }: Props = $props();
-
-  let tableState = useTableState();
 
   const form = superForm(createSubForm, {
     validators: zodClient(createSubSchema),
@@ -53,7 +50,6 @@
   {open}
   onOpenChange={() => {
     form.reset();
-    tableState.setActiveRow(null);
     goto(`${page.url.pathname}?${urlParamReducer('mode', page)}`);
   }}
 >

@@ -16,12 +16,12 @@
 
 <script lang="ts">
   import { page } from '$app/state';
-  import { useTableState } from '../../table/state.svelte';
+  import { useDepartmentTableState } from '../../table/state.svelte';
   import FormSpinner from '$lib/components/spinners/form-spinner.svelte';
 
   const { deleteDepForm }: Props = $props();
 
-  const tableState = useTableState();
+  const tableState = useDepartmentTableState();
 
   const form = superForm(deleteDepForm, {
     validators: zodClient(deleteDepSchema),

@@ -1,30 +1,11 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { SectionPageSchema } from './schema';
-import { DTCheckbox, DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
+import { DTColumnHeader } from '$lib/components/ui/data-table/components/index.js';
 import RowActions from './row-actions.svelte';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 
 export const columns: ColumnDef<SectionPageSchema>[] = [
-  {
-    id: 'select',
-    header: ({ table }) =>
-      renderComponent(DTCheckbox, {
-        checked: table.getIsAllPageRowsSelected(),
-        onCheckedChange: (value) => table.toggleAllPageRowsSelected(!!value),
-        'aria-label': 'Select all',
-        class: 'translate-y-[2px]'
-      }),
-    cell: ({ row }) =>
-      renderComponent(DTCheckbox, {
-        checked: row.getIsSelected(),
-        onCheckedChange: (value) => row.toggleSelected(!!value),
-        'aria-label': 'Select row',
-        class: 'translate-y-[2px]'
-      }),
-    enableSorting: false,
-    enableHiding: false
-  },
   {
     accessorKey: 'id',
     header: ({ column }) => {

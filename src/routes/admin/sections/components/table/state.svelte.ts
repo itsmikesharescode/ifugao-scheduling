@@ -19,6 +19,6 @@ export const initTableState = () => {
   return setContext(tableStateKey, new TableState());
 };
 
-export const useTableState = () => {
+export const useSectionTableState = () => {
   return getContext<ReturnType<typeof initTableState>>(tableStateKey);
 };

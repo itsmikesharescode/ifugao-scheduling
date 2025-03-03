@@ -1,7 +1,7 @@
 <script lang="ts">
   import DataTable from '$lib/components/ui/data-table/data-table.svelte';
   import { columns } from './components/table/columns';
-  import { initTableState } from './components/table/state.svelte';
+  import { initTableState, useSectionTableState } from './components/table/state.svelte';
   import { page } from '$app/state';
   import Button from '$lib/components/ui/button/button.svelte';
   import Plus from 'lucide-svelte/icons/plus';
@@ -11,36 +11,11 @@
   import CreateSection from './components/forms/create-section/create-section.svelte';
   import UpdateSection from './components/forms/update-section/update-section.svelte';
   import DeleteSection from './components/forms/delete-section/delete-section.svelte';
+  import { goto } from '$app/navigation';
   const { data } = $props();
 
   initTableState();
-
-  const generateMockData = (count: number) => {
-    const subjects = [
-      { code: 'GEO', name: 'Geometry' },
-      { MAT: 'MAT', name: 'Mathematics' },
-      { PHY: 'PHY', name: 'Physics' },
-      { CHE: 'CHE', name: 'Chemistry' },
-      { BIO: 'BIO', name: 'Biology' }
-    ];
-
-    return Array.from({ length: count }, (_, i) => {
-      const subject = subjects[Math.floor(Math.random() * subjects.length)];
-      return {
-        id: i,
-        created_at: new Date(
-          Date.now() - Math.random() * 5 * 365 * 24 * 60 * 60 * 1000
-        ).toISOString(),
-        name: `${subject.name} ${['Fundamentals', 'Principles', 'Advanced', 'Applied'][Math.floor(Math.random() * 4)]}`,
-        departments: Array.from(
-          {
-            length: Math.floor(Math.random() * 11) // Random array length 0-10
-          },
-          () => Math.floor(Math.random() * 9)
-        )
-      };
-    });
-  };
+  const tableState = useSectionTableState();
 </script>
 
 <main class="flex flex-col gap-4">
@@ -56,7 +31,14 @@
     </Button>
   </section>
 
-  <DataTable data={data.sections ?? []} {columns} />
+  <DataTable
+    data={data.sections ?? []}
+    {columns}
+    ondblclick={(v) => {
+      tableState.setActiveRow(v);
+      goto(urlParamStacker('mode', 'update', page));
+    }}
+  />
 </main>
 
 <CreateSection createSecForm={data.createSecForm} />

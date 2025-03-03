@@ -9,7 +9,7 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import FilePenLine from 'lucide-svelte/icons/file-pen-line';
   import FileX2 from 'lucide-svelte/icons/file-x-2';
-  import { useTableState } from './state.svelte';
+  import { useSectionTableState } from './state.svelte';
   import type { SectionPageSchema } from './schema';
   import { goto } from '$app/navigation';
   import { urlParamStacker } from '$lib/utils';
@@ -17,7 +17,7 @@
 
   let { row }: { row: Row<SectionPageSchema> } = $props();
 
-  const tableState = useTableState();
+  const tableState = useSectionTableState();
 </script>
 
 <DropdownMenu.Root>

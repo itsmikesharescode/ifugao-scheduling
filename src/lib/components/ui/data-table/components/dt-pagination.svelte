@@ -1,5 +1,4 @@
 <script lang="ts" module>
-  import { page } from '$app/state';
   type TData = unknown;
 </script>
 
@@ -8,40 +7,19 @@
   import ChevronLeft from 'lucide-svelte/icons/chevron-left';
   import ChevronsRight from 'lucide-svelte/icons/chevrons-right';
   import ChevronsLeft from 'lucide-svelte/icons/chevrons-left';
-  import FileX from 'lucide-svelte/icons/file-x';
   import type { Table } from '@tanstack/table-core';
   import * as Select from '$lib/components/ui/select/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
-  import ConfirmDelete from './confirm-delete.svelte';
 
   interface Props {
     table: Table<TData>;
-    onclick: () => void;
-    deleteAllLoader?: boolean;
   }
 
-  let { table, onclick, deleteAllLoader }: Props = $props();
-
-  let open = $state(false);
+  let { table }: Props = $props();
 </script>
 
 <div class="sticky bottom-2 flex flex-wrap items-center justify-between gap-2 px-2">
-  <div class="flex-1 text-sm text-muted-foreground">
-    <div class="max-w-fit bg-background">
-      <span>
-        {table.getFilteredSelectedRowModel().rows.length} of
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </span>
-
-      {#if table.getFilteredSelectedRowModel().rows.length > 1}
-        <Button variant="destructive" size="sm" onclick={() => (open = true)}>
-          Delete All Selected
-          <FileX class="ml-auto" />
-        </Button>
-      {/if}
-    </div>
-  </div>
-  <div class="flex items-start bg-background">
+  <div class="ml-auto flex items-start bg-background">
     <div class="flex flex-wrap items-center space-x-2">
       <p class="text-sm font-medium">Rows per page</p>
       <Select.Root
@@ -111,5 +89,3 @@
     </div>
   </div>
 </div>
-
-<ConfirmDelete bind:open {onclick} {deleteAllLoader} />

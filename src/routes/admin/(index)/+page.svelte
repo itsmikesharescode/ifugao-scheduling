@@ -8,28 +8,16 @@
   import CreateDepartment from './components/forms/create-department/create-department.svelte';
   import UpdateDepartment from './components/forms/update-department/update-department.svelte';
   import DeleteDepartment from './components/forms/delete-department/delete-department.svelte';
-  import { toast } from 'svelte-sonner';
-  import type { RowSelectionState } from '@tanstack/table-core';
-
-  const deleteAllSelectedDepartments = async (ids: number[]) => {
-    if (!page.data.supabase) return;
-
-    const { error } = await page.data.supabase.from('deparments_tb').delete().in('id', ids);
-    console.log(error);
-    if (error) return toast.error(error.message);
-
-    return toast.success('Departments deleted successfully');
-  };
+  import { goto } from '$app/navigation';
 </script>
 
 <script lang="ts">
-  import { initTableState } from './components/table/state.svelte';
-  import { invalidateAll } from '$app/navigation';
+  import { initTableState, useDepartmentTableState } from './components/table/state.svelte';
 
   const { data } = $props();
-  let deleteAllLoader = $state(false);
-  let rowSelection = $state<RowSelectionState>({});
+
   initTableState();
+  const tableState = useDepartmentTableState();
 </script>
 
 <main class="flex flex-col gap-4">
@@ -40,12 +28,9 @@
   <DataTable
     data={data.departments ?? []}
     {columns}
-    {deleteAllLoader}
-    bind:rowSelection
-    onclick={async () => {
-      const ids = Object.keys(rowSelection).map((v) => Number(v));
-      await deleteAllSelectedDepartments(ids);
-      await invalidateAll();
+    ondblclick={(v) => {
+      tableState.setActiveRow(v);
+      goto(urlParamStacker('mode', 'update', page));
     }}
   />
 </main>

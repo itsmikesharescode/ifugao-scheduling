@@ -28,24 +28,15 @@
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     ondblclick?: (row: TData) => void;
-    onclick: () => void;
-    rowSelection?: RowSelectionState;
-    deleteAllLoader?: boolean;
   }
 
-  let {
-    columns,
-    data,
-    ondblclick,
-    onclick,
-    rowSelection = $bindable(),
-    deleteAllLoader = $bindable()
-  }: Props = $props();
+  let { columns, data, ondblclick }: Props = $props();
 
   let columnVisibility = $state<VisibilityState>({});
   let columnFilters = $state<ColumnFiltersState>([]);
   let sorting = $state<SortingState>([]);
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
+  let rowSelection = $state<RowSelectionState>({});
 
   const table = createSvelteTable({
     get data() {
@@ -69,14 +60,6 @@
       }
     },
     columns,
-    enableRowSelection: true,
-    onRowSelectionChange: (updater) => {
-      if (typeof updater === 'function') {
-        rowSelection = updater(rowSelection ?? {});
-      } else {
-        rowSelection = updater;
-      }
-    },
     onSortingChange: (updater) => {
       if (typeof updater === 'function') {
         sorting = updater(sorting);
@@ -158,5 +141,5 @@
       </Table.Body>
     </Table.Root>
   </div>
-  <DTPagination {table} {onclick} {deleteAllLoader} />
+  <DTPagination {table} />
 </div>

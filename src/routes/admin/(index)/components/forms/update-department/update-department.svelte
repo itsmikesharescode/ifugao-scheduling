@@ -16,7 +16,7 @@
 </script>
 
 <script lang="ts">
-  import { useTableState } from '../../table/state.svelte';
+  import { useDepartmentTableState } from '../../table/state.svelte';
   import { page } from '$app/state';
 
   const { updateDepForm }: Props = $props();
@@ -43,7 +43,7 @@
 
   const { form: formData, enhance, submitting } = form;
 
-  const tableState = useTableState();
+  const tableState = useDepartmentTableState();
 
   const open = $derived(page.url.searchParams.get('mode') === 'update');
 

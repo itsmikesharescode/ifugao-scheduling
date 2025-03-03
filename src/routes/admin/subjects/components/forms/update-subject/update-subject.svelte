@@ -18,11 +18,11 @@
 <script lang="ts">
   import { page } from '$app/state';
   import FormSpinner from '$lib/components/spinners/form-spinner.svelte';
-  import { useTableState } from '../../table/state.svelte';
+  import { useSubjectTableState } from '../../table/state.svelte';
 
   const { updateSubForm }: Props = $props();
 
-  let tableState = useTableState();
+  let tableState = useSubjectTableState();
 
   const form = superForm(updateSubForm, {
     validators: zodClient(updateSubSchema),

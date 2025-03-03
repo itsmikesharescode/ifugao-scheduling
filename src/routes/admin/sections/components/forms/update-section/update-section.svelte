@@ -18,11 +18,11 @@
 
 <script lang="ts">
   import { page } from '$app/state';
-  import { useTableState } from '../../table/state.svelte';
+  import { useSectionTableState } from '../../table/state.svelte';
 
   const { updateSecForm }: Props = $props();
 
-  const tableState = useTableState();
+  const tableState = useSectionTableState();
 
   const form = superForm(updateSecForm, {
     validators: zodClient(updateSecSchema),

@@ -21,7 +21,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { parseDate } from '@internationalized/date';
-  import { useTableState } from '../../table/state.svelte';
+  import { useFacultyTableState } from '../../table/state.svelte';
 
   const { updateFacForm }: Props = $props();
 
@@ -49,7 +49,7 @@
 
   const open = $derived(page.url.searchParams.get('mode') === 'update');
 
-  const tableState = useTableState();
+  const tableState = useFacultyTableState();
 
   $effect(() => {
     if (open) {
