@@ -15,6 +15,7 @@
   import { toast } from 'svelte-sonner';
   import Button from '../ui/button/button.svelte';
   import FormSpinner from '../spinners/form-spinner.svelte';
+  import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
 
   const user = $derived(page.data.user);
 
@@ -51,7 +52,7 @@
           >
             <Avatar.Root class="h-8 w-8 rounded-lg">
               <Avatar.Image
-                src={user?.user_metadata?.avatar ?? ''}
+                src={`${PUBLIC_SUPABASE_STORAGE_URL}/${user?.user_metadata?.avatar_path}?t=${new Date()}`}
                 alt={user?.user_metadata?.firstname ?? ''}
               />
               <Avatar.Fallback class="rounded-lg">
@@ -76,7 +77,7 @@
           <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar.Root class="h-8 w-8 rounded-lg">
               <Avatar.Image
-                src={user?.user_metadata?.avatar ?? ''}
+                src={`${PUBLIC_SUPABASE_STORAGE_URL}/${user?.user_metadata?.avatar_path}?t=${new Date()}`}
                 alt={user?.user_metadata?.firstname ?? ''}
               />
               <Avatar.Fallback class="rounded-lg">

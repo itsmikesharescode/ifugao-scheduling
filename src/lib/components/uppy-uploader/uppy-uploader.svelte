@@ -60,8 +60,7 @@
           locale: {
             pluralize: (n) => (n === 1 ? 0 : 1),
             strings: {
-              dropPasteFiles:
-                'Drop or paste photo here or click %{browseFiles} to upload a profile picture',
+              dropPasteFiles: 'Drop or paste your profile photo here or click %{browseFiles}',
               browseFiles: 'Browse files'
             }
           }
