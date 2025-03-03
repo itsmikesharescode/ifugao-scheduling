@@ -5,12 +5,16 @@
 </script>
 
 <script lang="ts" generics="TData">
+  import { PUBLIC_SUPABASE_STORAGE_URL } from '$env/static/public';
   let { row }: { row: Row<AccountsPageSchema> } = $props();
 </script>
 
 <Avatar.Root>
   {#if row.original.avatar_path?.length}
-    <Avatar.Image src={row.original.avatar_path} alt={row.original.firstname} />
+    <Avatar.Image
+      src={`${PUBLIC_SUPABASE_STORAGE_URL}/${row.original.avatar_path}?${crypto.randomUUID()}`}
+      alt={row.original.firstname}
+    />
   {:else}
     <Avatar.Fallback>{row.original.firstname.charAt(0)}</Avatar.Fallback>
   {/if}
