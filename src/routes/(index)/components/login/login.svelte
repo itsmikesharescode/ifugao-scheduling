@@ -81,11 +81,11 @@
   </form>
 </section>
 
-<section class="flex flex-col items-center justify-center">
+<!-- <section class="flex flex-col items-center justify-center">
   <span class="text-sm text-muted-foreground">Don't have an account?</span>
   <Button href="?link=register" variant="link" class="text-sm">Register here</Button>
 </section>
 
 <section class="flex flex-col items-center justify-center">
   <Button href="?link=forgot-password" variant="link" class="text-sm">Forgot Password?</Button>
-</section>
+</section> -->
