@@ -11,10 +11,23 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  updateInfoEvent: async ({ request }) => {
+  updateInfoEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateInfoSchema));
 
     if (!form.valid) return fail(400, { form });
-    console.log(form.data);
+
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        firstname: form.data.firstname,
+        middlename: form.data.middlename,
+        lastname: form.data.lastname,
+        birth_date: form.data.birth_date,
+        gender: form.data.gender
+      }
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Information updated successfully' };
   }
 };
