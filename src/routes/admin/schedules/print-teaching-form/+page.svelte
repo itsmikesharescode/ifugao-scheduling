@@ -9,6 +9,7 @@
   import { Separator } from '$lib/components/ui/separator/index';
   import { page } from '$app/state';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+  import { leaders } from '../../schedules/print-schedules/+page.svelte';
 
   export const getScheduleById = async (id: number) => {
     if (!page.data.supabase) return null;
@@ -88,9 +89,9 @@
 
 {#snippet heading({ title, description }: { title: string; description: string })}
   <div class="grid grid-cols-[auto_1fr] items-end gap-2">
-    <span class="text-sm font-medium">{title}</span>
+    <span class="text-xs font-medium">{title}</span>
     <div class="w-full">
-      <span class="text-sm">{description}</span>
+      <span class="text-xs">{description}</span>
       <div class="border-b-[1px] border-muted-foreground"></div>
     </div>
   </div>
@@ -98,7 +99,7 @@
 
 {#snippet formatter({ title, class: className }: { title: string; class?: ClassNameValue })}
   <div class="flex items-center justify-center">
-    <span class={cn('text-sm', className)}>{title}</span>
+    <span class={cn('text-xs', className)}>{title}</span>
   </div>
 {/snippet}
 
@@ -175,7 +176,7 @@
       </span>
     </div>
   </section>
-  <Table.Root>
+  <Table.Root class="text-xs">
     <Table.Header>
       <Table.Row>
         <Table.Head class="border-2">
@@ -256,4 +257,21 @@
       </Table.Row>
     </Table.Body>
   </Table.Root>
+
+  <footer class="mt-20 flex flex-col gap-5">
+    <section class="grid grid-cols-[1fr_2fr_1fr] items-center gap-2 text-xs">
+      <span>Prepared by: </span>
+      <span>Recommending Approval: </span>
+      <span>Approved by: </span>
+    </section>
+
+    <section class="grid grid-cols-4 gap-5 text-xs">
+      {#each leaders as leader}
+        <div class="flex flex-col items-center justify-center">
+          <span class="underline">{leader.name}</span>
+          <span class="font-medium">{leader.position}</span>
+        </div>
+      {/each}
+    </section>
+  </footer>
 </main>
