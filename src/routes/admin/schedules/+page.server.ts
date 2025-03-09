@@ -37,6 +37,8 @@ export const actions: Actions = {
   updateSchedEvent: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(updateSchedSchema));
 
+    console.log(form.data);
+
     if (!form.valid) return fail(400, { form });
 
     const { error } = await supabase

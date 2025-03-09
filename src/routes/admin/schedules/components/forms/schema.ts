@@ -27,12 +27,7 @@ const baseSchema = {
     start_time: z.string().min(1, 'Start time is required'),
     end_time: z.string().min(1, 'End time is required')
   }),
-  dynamic_form: z
-    .array(loadProfSchema)
-    .min(1, 'At least one subject entry is required')
-    .refine((items) => new Set(items.map((i) => i.code)).size === items.length, {
-      message: 'Duplicate subject codes found'
-    })
+  dynamic_form: z.array(loadProfSchema).min(1, 'At least one subject entry is required')
 };
 
 export const createSchedSchema = z.object(baseSchema);
