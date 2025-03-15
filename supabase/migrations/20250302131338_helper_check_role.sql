@@ -1,13 +1,14 @@
-drop function if exists helper_check_role(uuid);
+DROP FUNCTION IF EXISTS helper_check_role(UUID);
 
-create or replace function helper_check_role(client_id uuid) returns varchar as $$
-declare
-    role_name varchar;
-begin
-    select name into role_name
-    from public.roles_tb
-    where id = client_id;
+CREATE OR REPLACE FUNCTION helper_check_role(client_id UUID) 
+RETURNS VARCHAR AS $$
+DECLARE
+    role_name VARCHAR;
+BEGIN
+    SELECT name INTO role_name
+    FROM public.roles_tb
+    WHERE id = client_id;
     
-    return role_name;
-end;
-$$ language plpgsql security definer;
+    RETURN role_name;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
