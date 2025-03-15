@@ -72,6 +72,134 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."fn_add_schedule"("faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) RETURNS "text"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+DECLARE
+    day_value TEXT;
+    day_array TEXT[];
+    new_subject_id TEXT;
+    new_start_time TIME;
+    new_end_time TIME;
+BEGIN
+    -- Convert JSONB array to text array for easier processing
+    SELECT array_agg(value::TEXT) INTO day_array FROM jsonb_array_elements_text(days);
+    
+    -- Extract subject_id from dynamic_form
+    new_subject_id := (dynamic_form->0->>'subject_id');
+    
+    -- Extract only the time component (ignoring date)
+    new_start_time := start_time::TIME;
+    new_end_time := end_time::TIME;
+    
+    -- Check for time conflicts
+    FOR day_value IN SELECT unnest(day_array) LOOP
+        IF EXISTS (
+            SELECT 1 FROM schedules_tb
+            WHERE schedules_tb.faculty_id = fn_add_schedule.faculty_id
+            AND day_value = ANY(SELECT jsonb_array_elements_text(schedules_tb.days))
+            AND (
+                -- Check if new schedule overlaps with existing schedule, comparing only TIME components
+                (new_start_time < schedules_tb.end_time::TIME AND new_end_time > schedules_tb.start_time::TIME)
+            )
+        ) THEN
+            RAISE EXCEPTION 'Time conflict found for %. Faculty already has a schedule during this time range.', day_value
+            USING ERRCODE = '23505';  -- unique_violation error code
+        END IF;
+    END LOOP;
+    
+    -- If no conflicts, insert the new schedule
+    INSERT INTO schedules_tb (
+        faculty_id,
+        department_id,
+        semester,
+        school_year,
+        days,
+        start_time,
+        end_time,
+        dynamic_form
+    ) VALUES (
+        faculty_id,
+        department_id,
+        semester,
+        school_year,
+        days,
+        start_time,
+        end_time,
+        dynamic_form
+    );
+    
+    RETURN 'Schedule added successfully';
+END;
+$$;
+
+
+ALTER FUNCTION "public"."fn_add_schedule"("faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."fn_edit_schedule"("schedule_id" numeric, "faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) RETURNS "text"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+DECLARE
+    day_value TEXT;
+    day_array TEXT[];
+    new_subject_id TEXT;
+    new_start_time TIME;
+    new_end_time TIME;
+BEGIN
+    -- Convert JSONB array to text array for easier processing
+    SELECT array_agg(value::TEXT) INTO day_array FROM jsonb_array_elements_text(days);
+    
+    -- Extract subject_id from dynamic_form
+    new_subject_id := (dynamic_form->0->>'subject_id');
+    
+    -- Extract only the time component (ignoring date)
+    new_start_time := start_time::TIME;
+    new_end_time := end_time::TIME;
+    
+    -- Check for time conflicts, excluding the current schedule being edited
+    FOR day_value IN SELECT unnest(day_array) LOOP
+        IF EXISTS (
+            SELECT 1 FROM schedules_tb
+            WHERE schedules_tb.faculty_id = fn_edit_schedule.faculty_id
+            AND schedules_tb.id != fn_edit_schedule.schedule_id  -- Exclude current schedule
+            AND day_value = ANY(SELECT jsonb_array_elements_text(schedules_tb.days))
+            AND (
+                -- Check if new schedule overlaps with existing schedule, comparing only TIME components
+                (new_start_time < schedules_tb.end_time::TIME AND new_end_time > schedules_tb.start_time::TIME)
+            )
+        ) THEN
+            RAISE EXCEPTION 'Time conflict found for %. Faculty already has a schedule during this time range.', day_value
+            USING ERRCODE = '23505';  -- unique_violation error code
+        END IF;
+    END LOOP;
+    
+    -- If no conflicts, update the existing schedule
+    UPDATE schedules_tb SET
+        faculty_id = fn_edit_schedule.faculty_id,
+        department_id = fn_edit_schedule.department_id,
+        semester = fn_edit_schedule.semester,
+        school_year = fn_edit_schedule.school_year,
+        days = fn_edit_schedule.days,
+        start_time = fn_edit_schedule.start_time,
+        end_time = fn_edit_schedule.end_time,
+        dynamic_form = fn_edit_schedule.dynamic_form
+    WHERE id = fn_edit_schedule.schedule_id;
+    
+    -- Check if the update affected any rows
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Schedule with ID % not found', schedule_id
+        USING ERRCODE = '02000';  -- no_data error code
+    END IF;
+    
+    RETURN 'Schedule updated successfully';
+END;
+$$;
+
+
+ALTER FUNCTION "public"."fn_edit_schedule"("schedule_id" numeric, "faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."helper_admin_setter"() RETURNS "void"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -426,7 +554,42 @@ ALTER TABLE ONLY "public"."users_tb"
 
 
 
+CREATE POLICY "Allow all if auth" ON "public"."faculties_tb" TO "authenticated" USING (true) WITH CHECK (true);
+
+
+
+CREATE POLICY "Allow all if auth" ON "public"."schedules_tb" TO "authenticated" USING (true) WITH CHECK (true);
+
+
+
+CREATE POLICY "Allow all if auth" ON "public"."sections_tb" TO "authenticated" USING (true) WITH CHECK (true);
+
+
+
+CREATE POLICY "Allow all if auth" ON "public"."subjects_tb" TO "authenticated" USING (true) WITH CHECK (true);
+
+
+
+CREATE POLICY "Allow all if authenticated" ON "public"."deparments_tb" TO "authenticated" USING (true) WITH CHECK (true);
+
+
+
+ALTER TABLE "public"."deparments_tb" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."faculties_tb" ENABLE ROW LEVEL SECURITY;
+
+
 ALTER TABLE "public"."roles_tb" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."schedules_tb" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."sections_tb" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."subjects_tb" ENABLE ROW LEVEL SECURITY;
 
 
 ALTER TABLE "public"."users_role_tb" ENABLE ROW LEVEL SECURITY;
@@ -627,6 +790,18 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
+
+
+
+GRANT ALL ON FUNCTION "public"."fn_add_schedule"("faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) TO "anon";
+GRANT ALL ON FUNCTION "public"."fn_add_schedule"("faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."fn_add_schedule"("faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."fn_edit_schedule"("schedule_id" numeric, "faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) TO "anon";
+GRANT ALL ON FUNCTION "public"."fn_edit_schedule"("schedule_id" numeric, "faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."fn_edit_schedule"("schedule_id" numeric, "faculty_id" numeric, "days" "jsonb", "department_id" bigint, "dynamic_form" "jsonb", "school_year" character varying, "semester" character varying, "start_time" timestamp without time zone, "end_time" timestamp without time zone) TO "service_role";
 
 
 

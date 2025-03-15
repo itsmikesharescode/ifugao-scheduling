@@ -1,4 +1,4 @@
-import type { DynamicForm, MetaData } from './types';
+import type { DynamicForm, MetaData } from '$lib/types';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -258,6 +258,33 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      fn_add_schedule: {
+        Args: {
+          faculty_id: number;
+          days: string[];
+          department_id: number;
+          dynamic_form: DynamicForm[];
+          school_year: string;
+          semester: string;
+          start_time: string;
+          end_time: string;
+        };
+        Returns: string;
+      };
+      fn_edit_schedule: {
+        Args: {
+          schedule_id: number;
+          faculty_id: number;
+          days: string[];
+          department_id: number;
+          dynamic_form: DynamicForm[];
+          school_year: string;
+          semester: string;
+          start_time: string;
+          end_time: string;
+        };
+        Returns: string;
+      };
       helper_admin_setter: {
         Args: Record<PropertyKey, never>;
         Returns: undefined;
